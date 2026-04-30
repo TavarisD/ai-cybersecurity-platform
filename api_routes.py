@@ -14,7 +14,7 @@ from metrics_store import get_metrics
 from alert_system import get_alerts
 from blacklist_store import get_blacklist
 from live_processing import attacker_stats
-
+import stripe
 from cyber_agent import analyze_security_log
 from feature_extraction import extract_features
 from anomaly_detector import detect_anomaly
@@ -882,6 +882,54 @@ def analyze_log_api(
     return {
         "result": result,
         "user_id": user.id
+    }
+
+@router.post("/create-checkout-session")
+def create_checkout_session(current_user: User = Depends(get_current_user)):
+    stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+
+    price_id = os.getenv("STRIPE_PRICE_ID")
+    app_url = os.getenv("APP_URL")
+
+    if not price_id or not app_url:
+        raise HTTPException(
+            status_code=500,
+            detail="Stripe environment variables are missing"
+        )
+
+    session = stripe.checkout.Session.create(
+        mode="subscription",
+        payment_method_types=["card"],
+        line_items=[
+            {
+                "price": price_id,
+                "quantity": 1
+            }
+        ],
+        success_url=f"{app_url}/success",
+        cancel_url=f"{app_url}/cancel",
+        customer_email=current_user.email,
+        metadata={
+            "user_id": str(current_user.id)
+        }
+    )
+
+    return {
+        "url": session.url
+    }
+
+
+@router.get("/success")
+def payment_success():
+    return {
+        "message": "Payment successful. Pro upgrade webhook will be added next."
+    }
+
+
+@router.get("/cancel")
+def payment_cancel():
+    return {
+        "message": "Payment cancelled."
     }
 
 @router.post("/upgrade-plan")
