@@ -1,0 +1,15 @@
+fastapi
+uvicorn
+python-dotenv
+python-multipart
+openai
+anthropic
+scikit-learn
+numpy
+pydantic
+sqlalchemy
+psycopg2-binary
+passlib[bcrypt]
+python-jose[cryptography]
+bcrypt==3.2.2
+gunicorn
