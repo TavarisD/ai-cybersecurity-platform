@@ -6,3 +6,4 @@ cyber_platform.db
 events.json
 blacklist.json
 test.log
+node_modules/
