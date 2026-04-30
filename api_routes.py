@@ -29,6 +29,7 @@ from api_key_auth import get_user_by_api_key
 
 
 router = APIRouter()
+stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 
 class IngestLogRequest(BaseModel):
     log_text: str
@@ -885,38 +886,24 @@ def analyze_log_api(
     }
 
 @router.post("/create-checkout-session")
-def create_checkout_session(current_user: User = Depends(get_current_user)):
-    stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
-
-    price_id = os.getenv("STRIPE_PRICE_ID")
-    app_url = os.getenv("APP_URL")
-
-    if not price_id or not app_url:
-        raise HTTPException(
-            status_code=500,
-            detail="Stripe environment variables are missing"
+def create_checkout_session(user=Depends(get_current_user)):
+    try:
+        session = stripe.checkout.Session.create(
+            payment_method_types=["card"],
+            mode="subscription",
+            line_items=[{
+                "price": os.getenv("STRIPE_PRICE_ID"),
+                "quantity": 1,
+            }],
+            success_url=os.getenv("APP_URL") + "/dashboard",
+            cancel_url=os.getenv("APP_URL") + "/dashboard",
         )
 
-    session = stripe.checkout.Session.create(
-        mode="subscription",
-        payment_method_types=["card"],
-        line_items=[
-            {
-                "price": price_id,
-                "quantity": 1
-            }
-        ],
-        success_url=f"{app_url}/success",
-        cancel_url=f"{app_url}/cancel",
-        customer_email=current_user.email,
-        metadata={
-            "user_id": str(current_user.id)
-        }
-    )
+        return {"url": session.url}
 
-    return {
-        "url": session.url
-    }
+    except Exception as e:
+        print("STRIPE ERROR:", str(e))  # 👈 IMPORTANT
+        return {"error": str(e)}
 
 
 @router.get("/success")
