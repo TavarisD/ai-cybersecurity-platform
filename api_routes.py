@@ -1,5 +1,5 @@
 import asyncio
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException,  Request
 from sqlalchemy.orm import Session
 from database import get_db
 from models import User, LogRecord, BlacklistEntry
@@ -19,7 +19,6 @@ from cyber_agent import analyze_security_log
 from feature_extraction import extract_features
 from anomaly_detector import detect_anomaly
 from ai_analyzer import analyzer_with_ai
-
 from ai_router import ai_router
 import secrets
 from fastapi import Header
@@ -891,6 +890,7 @@ def create_checkout_session(user=Depends(get_current_user)):
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             mode="subscription",
+            customer_email=user.email,
             line_items=[{
                 "price": os.getenv("STRIPE_PRICE_ID"),
                 "quantity": 1,
@@ -967,3 +967,34 @@ def regenerate_api_key(
         "message": "API key regenerated",
         "api_key": new_key
     }
+
+@router.post("/stripe-webhook")
+async def stripe_webhook(request: Request):
+    payload = await request.body()
+
+    try:
+        event = stripe.Event.construct_from(
+            await request.json(), stripe.api_key
+        )
+
+        if event["type"] == "checkout.session.completed":
+            session = event["data"]["object"]
+
+            email = session.get("customer_email")
+
+            print("PAYMENT SUCCESS FOR:", email)
+
+            # 🔥 Upgrade user to Pro here
+            from database import get_db
+            db = next(get_db())
+
+            user = db.query(User).filter(User.email == email).first()
+            if user:
+                user.plan = "pro"
+                db.commit()
+
+        return {"status": "success"}
+
+    except Exception as e:
+        print("WEBHOOK ERROR:", str(e))
+        return {"error": str(e)}
