@@ -891,6 +891,10 @@ def create_checkout_session(user=Depends(get_current_user)):
             payment_method_types=["card"],
             mode="subscription",
             customer_email=user.email,
+            metadata={
+                "user_id": str(user.id),
+                "email": user.email
+            },
             line_items=[{
                 "price": os.getenv("STRIPE_PRICE_ID"),
                 "quantity": 1,
@@ -969,29 +973,35 @@ def regenerate_api_key(
     }
 
 @router.post("/stripe-webhook")
-async def stripe_webhook(request: Request):
-    payload = await request.body()
-
+async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     try:
         event = stripe.Event.construct_from(
-            await request.json(), stripe.api_key
+            await request.json(),
+            stripe.api_key
         )
 
         if event["type"] == "checkout.session.completed":
             session = event["data"]["object"]
 
-            email = session.get("customer_email")
+            metadata = session.get("metadata", {})
+            user_id = metadata.get("user_id")
+            email = session.get("customer_email") or metadata.get("email")
 
-            print("PAYMENT SUCCESS FOR:", email)
+            user = None
 
-            # 🔥 Upgrade user to Pro here
-            from database import get_db
-            db = next(get_db())
+            if user_id:
+                user = db.query(User).filter(User.id == int(user_id)).first()
 
-            user = db.query(User).filter(User.email == email).first()
+            if not user and email:
+                user = db.query(User).filter(User.email == email).first()
+
             if user:
                 user.plan = "pro"
+                user.billing_status = "active"
                 db.commit()
+                print(f"PAYMENT SUCCESS FOR USER {user.id} - {user.email}")
+            else:
+                print("PAYMENT SUCCESS BUT USER NOT FOUND:", email, user_id)
 
         return {"status": "success"}
 
