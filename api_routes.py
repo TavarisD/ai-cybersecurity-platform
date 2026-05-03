@@ -975,10 +975,7 @@ def regenerate_api_key(
 @router.post("/stripe-webhook")
 async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     try:
-        event = stripe.Event.construct_from(
-            await request.json(),
-            stripe.api_key
-        )
+        event = await request.json()
 
         if event["type"] == "checkout.session.completed":
             session = event["data"]["object"]
