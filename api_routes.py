@@ -890,6 +890,7 @@ def create_checkout_session(user=Depends(get_current_user)):
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             mode="subscription",
+            client_reference_id=str(user.id),
             customer_email=user.email,
             metadata={
                 "user_id": str(user.id),
@@ -981,8 +982,9 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             session = event["data"]["object"]
 
             metadata = session.get("metadata", {})
-            user_id = metadata.get("user_id")
+            user_id = session.get("client_reference_id") or metadata.get("user_id")
             email = session.get("customer_email") or metadata.get("email")
+            subscription_id = session.get("subscription")
 
             user = None
 
@@ -995,6 +997,10 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
             if user:
                 user.plan = "pro"
                 user.billing_status = "active"
+
+                if hasattr(user, "stripe_subscription_id"):
+                    user.stripe_subscription_id = subscription_id
+
                 db.commit()
                 print(f"PAYMENT SUCCESS FOR USER {user.id} - {user.email}")
             else:
