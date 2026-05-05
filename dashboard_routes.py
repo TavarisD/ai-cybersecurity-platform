@@ -78,29 +78,37 @@ def dashboard():
         </div>
 
         <div class="card">
-        <h2>Billing / Plan</h2>
+            <h2>Billing / Plan</h2>
 
-        <p>
-            Current Plan:
-            <span id="current-plan">Loading...</span>
-        </p>
+            <p>
+                Current Plan:
+                <span id="current-plan">Loading...</span>
+                <span id="pro-badge"></span>
+            </p>
 
-        <p>
-            Billing Status:
-            <span id="billing-status">Loading...</span>
-        </p>
+            <p>
+                Billing Status:
+                <span id="billing-status">Loading...</span>
+            </p>
 
-        <p>
-            API Key:
-            <span id="api-key">Loading...</span>
-        </p>
+            <div style="margin-top:15px;">
+                <strong>Daily Usage:</strong>
+                <div style="background:#0f172a; border-radius:10px; overflow:hidden; margin-top:8px; border:1px solid #334155;">
+                    <div id="usage-bar" style="height:14px; width:0%; background:#22c55e;"></div>
+                </div>
+                <small id="usage-text">Loading usage...</small>
+            </div>
 
-        <button onclick="toggleApiKey()">Reveal / Hide API Key</button>
-        <button onclick="copyApiKey()">Copy API Key</button>
-        <button onclick="regenerateApiKey()">Regenerate API Key</button>
+            <div id="upgrade-section" style="margin-top:15px;"></div>
 
-        <button onclick="upgradePlan()">Upgrade to Pro</button>
-        <button onclick="downgradePlan()">Downgrade to Free</button>
+            <p style="margin-top:20px;">
+                API Key:
+                <span id="api-key">Loading...</span>
+            </p>
+
+            <button onclick="toggleApiKey()">Reveal / Hide API Key</button>
+            <button onclick="copyApiKey()">Copy API Key</button>
+            <button onclick="regenerateApiKey()">Regenerate API Key</button>
         </div>
 
         <div class="card">
@@ -213,12 +221,52 @@ def dashboard():
                 }
             });
 
+            const billingRes = await fetch("/billing-status", {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            });
+
+            const billing = await billingRes.json();
+
             const data = await response.json();
             console.log("dashboard-data:", data);
 
             document.getElementById("userEmail").innerText = data.email;
             document.getElementById("totalLogs").innerText = data.total_logs;
             document.getElementById("anomalyCount").innerText = data.anomaly_count;
+            document.getElementById("current-plan").innerText = billing.plan;
+            document.getElementById("billing-status").innerText = billing.billing_status;
+
+            const percent = (billing.usage_count / billing.daily_limit) * 100;
+
+            document.getElementById("usage-bar").style.width = percent + "%";
+            document.getElementById("usage-text").innerText =
+                `${billing.usage_count} / ${billing.daily_limit} used (${billing.remaining} remaining)`;
+
+            if (billing.plan === "pro") {
+                document.getElementById("pro-badge").innerHTML =
+                    `<span style="color:#22c55e; font-weight:bold; margin-left:10px;">PRO ✓</span>`;
+
+                document.getElementById("upgrade-section").innerHTML =
+                    `<div style="color:#22c55e; font-weight:bold;">You are on Pro.</div>`;
+            } else {
+                document.getElementById("pro-badge").innerHTML = "";
+
+                document.getElementById("upgrade-section").innerHTML = `
+                    <button onclick="upgradeToPro()" style="
+                        background:#ef4444;
+                        color:white;
+                        padding:12px;
+                        border:none;
+                        border-radius:8px;
+                        font-weight:bold;
+                        cursor:pointer;
+                    ">
+                        Upgrade to Pro 🚀
+                    </button>
+                `;
+            }
 
             const logsContainer = document.getElementById("logs");
             logsContainer.innerHTML = "";
@@ -315,6 +363,25 @@ def dashboard():
             document.getElementById("api-key").innerText =
                 "••••••••" + fullApiKey.slice(-4);
                     }
+
+                    async function upgradeToPro() {
+                        const token = localStorage.getItem("token");
+
+                        const response = await fetch("/create-checkout-session", {
+                            method: "POST",
+                            headers: {
+                                "Authorization": "Bearer " + token
+                            }
+                        });
+
+                        const data = await response.json();
+
+                        if (data.url) {
+                            window.location.href = data.url;
+                        } else {
+                            alert("Error creating checkout session");
+                        }
+                    }            
 
         async function upgradePlan() {
             const token = localStorage.getItem("token");
