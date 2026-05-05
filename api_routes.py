@@ -945,9 +945,17 @@ def upgrade_plan(
 def billing_status(
     current_user: User = Depends(get_current_user)
 ):
+    if current_user.plan == "pro":
+        daily_limit = 1000
+    else:
+        daily_limit = 20
+
     return {
         "plan": current_user.plan,
-        "billing_status": current_user.billing_status
+        "billing_status": current_user.billing_status,
+        "usage_count": current_user.usage_count,
+        "daily_limit": daily_limit,
+        "remaining": max(daily_limit - current_user.usage_count, 0)
     }
 
 @router.get("/my-api-key")
