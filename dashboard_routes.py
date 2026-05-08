@@ -1243,12 +1243,17 @@ def live_dashboard():
         
             window.onload = async () => {
                 await loadInitialLogs();
+
+                setInterval(() => {
+                    loadInitialLogs();
+                }, 3000);
+
                 loadChart();
                 loadAlerts();
                 loadBlacklistCount();
                 loadTopAttacker();
 
-                connectWebSocket();
+                // connectWebSocket();
             };
         </script>
 
