@@ -130,6 +130,7 @@ Body:
 
                 <button onclick="copyWebhookExample()">Copy Example Request</button>
                 <button onclick="copyPowerShellExample()">Copy PowerShell Example</button>
+                <button onclick="copyCurlExample()">Copy curl Example</button>
             </div>
         </div>
 
@@ -193,6 +194,16 @@ Body:
 
         let fullApiKey = "";
         let apiKeyVisible = false;
+
+        function copyCurlExample() {
+    const example = `curl -X POST "https://ai-cybersecurity-platform-production.up.railway.app/webhook/log-api-key" \\
+-H "Content-Type: application/json" \\
+-H "X-API-Key: YOUR_API_KEY" \\
+-d "{\\"event\\":\\"Failed login attempt\\",\\"source\\":\\"external-firewall\\",\\"ip\\":\\"203.0.113.45\\",\\"severity\\":\\"high\\"}"`;
+
+    navigator.clipboard.writeText(example);
+    alert("curl example copied!");
+}
 
         function logout() {
             localStorage.removeItem("token");
