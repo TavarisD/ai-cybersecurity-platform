@@ -1216,7 +1216,33 @@ def live_dashboard():
                 loadAlerts();
                 loadBlacklistCount();
         }
+            let socket;
 
+            function connectWebSocket() {
+                const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+                const wsUrl = protocol + window.location.host + "/ws/logs";
+
+                socket = new WebSocket(wsUrl);
+
+                socket.onopen = () => {
+                    console.log("WebSocket connected");
+                };
+
+                socket.onmessage = (event) => {
+                    const data = JSON.parse(event.data);
+                    console.log("WS MESSAGE:", data);
+
+                    if (data.type === "new_log") {
+                        loadInitialLogs();
+                    }
+                };
+
+                socket.onclose = () => {
+                    console.log("WebSocket disconnected, reconnecting...");
+                    setTimeout(connectWebSocket, 3000);
+                };
+            }
+        
             window.onload = async () => {
                 await loadInitialLogs();
                 loadChart();
