@@ -1223,6 +1223,8 @@ def live_dashboard():
                 loadAlerts();
                 loadBlacklistCount();
                 loadTopAttacker();
+
+                connectWebSocket();
             };
         </script>
 
