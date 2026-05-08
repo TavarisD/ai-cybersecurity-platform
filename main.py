@@ -64,7 +64,7 @@ async def websocket_endpoint(websocket: WebSocket):
 
     try:
         while True:
-            await websocket.receive_text()  # Keep connection alive
+            await asyncio.sleep(30)  # Keep connection alive
     except Exception:
         if websocket in app_state.clients:
             app_state.clients.remove(websocket)
