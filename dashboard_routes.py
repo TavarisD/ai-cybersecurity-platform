@@ -109,6 +109,27 @@ def dashboard():
             <button onclick="toggleApiKey()">Reveal / Hide API Key</button>
             <button onclick="copyApiKey()">Copy API Key</button>
             <button onclick="regenerateApiKey()">Regenerate API Key</button>
+            <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
+                <h3>External Log Ingestion</h3>
+                <p>Send logs from external systems using your API key.</p>
+
+                <pre style="white-space:pre-wrap; background:#020617; padding:12px; border-radius:8px; color:#38bdf8;">POST /webhook/log-api-key
+
+Headers:
+Content-Type: application/json
+X-API-Key: YOUR_API_KEY
+
+Body:
+{
+  "event": "Failed login attempt",
+  "source": "external-firewall",
+  "ip": "203.0.113.45",
+  "severity": "high"
+}
+</pre>
+
+                <button onclick="copyWebhookExample()">Copy Example Request</button>
+            </div>
         </div>
 
         <div class="card">
@@ -131,6 +152,25 @@ def dashboard():
         </div>
 
         <script>
+        function copyWebhookExample() {
+            const example = `POST /webhook/log-api-key
+
+Headers:
+Content-Type: application/json
+X-API-Key: YOUR_API_KEY
+
+Body:
+{
+  "event": "Failed login attempt",
+  "source": "external-firewall",
+  "ip": "203.0.113.45",
+  "severity": "high"
+}`;
+
+    navigator.clipboard.writeText(example);
+    alert("Example copied!");
+}
+
         let fullApiKey = "";
         let apiKeyVisible = false;
 
@@ -418,7 +458,10 @@ def dashboard():
         let socket;
 
         function connectWebSocket() {
-            socket = new WebSocket("ws://127.0.0.1:8000/ws/logs");
+            const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
+            const wsUrl = protocol + window.location.host + "/ws/logs";
+
+            socket = new WebSocket(wsUrl);
 
             socket.onopen = () => {
                 console.log("WebSocket connected");
