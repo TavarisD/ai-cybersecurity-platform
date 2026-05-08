@@ -129,6 +129,7 @@ Body:
 </pre>
 
                 <button onclick="copyWebhookExample()">Copy Example Request</button>
+                <button onclick="copyPowerShellExample()">Copy PowerShell Example</button>
             </div>
         </div>
 
@@ -152,6 +153,25 @@ Body:
         </div>
 
         <script>
+        function copyPowerShellExample() {
+    const example = `$headers = @{
+  "Content-Type" = "application/json"
+  "X-API-Key" = "YOUR_API_KEY"
+}
+
+$body = @{
+  event = "Failed login attempt"
+  source = "external-firewall"
+  ip = "203.0.113.45"
+  severity = "high"
+} | ConvertTo-Json
+
+Invoke-RestMethod -Uri "https://ai-cybersecurity-platform-production.up.railway.app/webhook/log-api-key" -Method POST -Headers $headers -Body $body`;
+
+    navigator.clipboard.writeText(example);
+    alert("PowerShell example copied!");
+}
+
         function copyWebhookExample() {
             const example = `POST /webhook/log-api-key
 
