@@ -482,15 +482,13 @@ Body:
             };
         }
 
-        window.onload = async () => {
-            await loadInitialLogs();
-            loadChart();
-            loadAlerts();
-            loadBlacklistCount();
-            loadTopAttacker();
+        window.onload = function() {
+            loadDashboard();
+            loadBillingStatus();
+            loadApiKey();
 
             setInterval(() => {
-                loadInitialLogs();
+                loadDashboard();
             }, 5000);
         };
         </script>
