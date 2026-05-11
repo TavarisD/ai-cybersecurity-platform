@@ -674,6 +674,38 @@ def get_my_log_by_id(
         "result": record.result,
         "created_at": record.created_at
     }
+@router.get("/source-analytics")
+def source_analytics(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    records = (
+        db.query(LogRecord)
+        .filter(LogRecord.user_id == current_user.id)
+        .all()
+    )
+
+    source_counts = {}
+
+    for record in records:
+        raw = record.raw_log.lower()
+
+        source = "unknown"
+
+        if "from source " in raw:
+            try:
+                source = raw.split("from source ", 1)[1].split()[0]
+            except:
+                pass
+
+        if source not in source_counts:
+            source_counts[source] = 0
+
+        source_counts[source] += 1
+
+    return {
+        "sources": source_counts
+    }
 
 @router.get("/dashboard-data")
 def get_dashboard_data(
