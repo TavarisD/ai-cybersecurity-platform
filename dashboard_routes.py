@@ -533,17 +533,12 @@ Body:
             const sources = data.sources || {};
 
             const entries = Object.entries(sources);
-            const totalSources = entries.length;
 
-            let topSource = "None";
+            document.getElementById("total-sources").innerText = data.total_sources || 0;
+            document.getElementById("top-source").innerText =
+                data.top_source ? `${data.top_source} (${data.top_source_count} logs)` : "None";
 
-            if (entries.length > 0) {
-                entries.sort((a, b) => b[1] - a[1]);
-                topSource = `${entries[0][0]} (${entries[0][1]} logs)`;
-            }
-
-            document.getElementById("total-sources").innerText = totalSources;
-            document.getElementById("top-source").innerText = topSource;
+            entries.sort((a, b) => b[1] - a[1]);
 
             const sourceList = document.getElementById("source-list");
             sourceList.innerHTML = "";
