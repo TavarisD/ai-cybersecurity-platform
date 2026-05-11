@@ -703,7 +703,19 @@ def source_analytics(
 
         source_counts[source] += 1
 
+    total_logs = sum(source_counts.values())
+
+    top_source = None
+    top_count = 0
+
+    if source_counts:
+        top_source, top_count = max(source_counts.items(), key=lambda item: item[1])
+
     return {
+        "total_logs": total_logs,
+        "total_sources": len(source_counts),
+        "top_source": top_source,
+        "top_source_count": top_count,
         "sources": source_counts
     }
 
