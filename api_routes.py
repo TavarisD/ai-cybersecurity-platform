@@ -235,6 +235,9 @@ def webhook_log_api_key(
 
     log_text = request.event
 
+    if request.source:
+        log_text += f" from source {request.source}"
+
     if request.ip:
         log_text += f" from {request.ip}"
 
