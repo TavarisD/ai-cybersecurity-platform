@@ -114,13 +114,8 @@ def dashboard():
                 <p>Send logs from external systems using your API key.</p>
 
                 <pre style="white-space:pre-wrap; background:#020617; padding:12px; border-radius:8px; color:#38bdf8;">POST /webhook/log-api-key
-            <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
-                <h3>Source Analytics</h3>
-                <p>Total Sources: <span id="total-sources">Loading...</span></p>
-                <p>Most Active Source: <span id="top-source">Loading...</span></p>
-                <div id="source-list"></div>
-            </div>
 
+                
 Headers:
 Content-Type: application/json
 X-API-Key: YOUR_API_KEY
@@ -137,6 +132,12 @@ Body:
                 <button onclick="copyWebhookExample()">Copy Example Request</button>
                 <button onclick="copyPowerShellExample()">Copy PowerShell Example</button>
                 <button onclick="copyCurlExample()">Copy curl Example</button>
+            </div>
+            <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
+                <h3>Source Analytics</h3>
+                <p>Total Sources: <span id="total-sources">Loading...</span></p>
+                <p>Most Active Source: <span id="top-source">Loading...</span></p>
+                <div id="source-list"></div>
             </div>
         </div>
 
