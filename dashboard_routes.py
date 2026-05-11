@@ -114,6 +114,12 @@ def dashboard():
                 <p>Send logs from external systems using your API key.</p>
 
                 <pre style="white-space:pre-wrap; background:#020617; padding:12px; border-radius:8px; color:#38bdf8;">POST /webhook/log-api-key
+            <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
+                <h3>Source Analytics</h3>
+                <p>Total Sources: <span id="total-sources">Loading...</span></p>
+                <p>Most Active Source: <span id="top-source">Loading...</span></p>
+                <div id="source-list"></div>
+            </div>
 
 Headers:
 Content-Type: application/json
@@ -513,13 +519,54 @@ Body:
             };
         }
 
+        async function loadSourceAnalytics() {
+            const token = localStorage.getItem("token");
+
+            const response = await fetch("/source-analytics", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            const data = await response.json();
+            const sources = data.sources || {};
+
+            const entries = Object.entries(sources);
+            const totalSources = entries.length;
+
+            let topSource = "None";
+
+            if (entries.length > 0) {
+                entries.sort((a, b) => b[1] - a[1]);
+                topSource = `${entries[0][0]} (${entries[0][1]} logs)`;
+            }
+
+            document.getElementById("total-sources").innerText = totalSources;
+            document.getElementById("top-source").innerText = topSource;
+
+            const sourceList = document.getElementById("source-list");
+            sourceList.innerHTML = "";
+
+            entries.forEach(([source, count]) => {
+                const item = document.createElement("div");
+                item.style.padding = "8px";
+                item.style.marginTop = "8px";
+                item.style.background = "#1e293b";
+                item.style.borderRadius = "8px";
+                item.innerText = `${source}: ${count} logs`;
+                sourceList.appendChild(item);
+            });
+        }
+
         window.onload = function() {
             loadDashboard();
             loadBillingStatus();
             loadApiKey();
+            loadSourceAnalytics();
 
             setInterval(() => {
                 loadDashboard();
+                loadSourceAnalytics();
             }, 5000);
         };
         </script>
