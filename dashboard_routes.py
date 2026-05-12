@@ -688,21 +688,46 @@ Body:
             if (!suspiciousSources.length) {
                 suspiciousBox.innerHTML += "<div>No suspicious sources detected</div>";
             } else {
-                suspiciousBox.innerHTML += `
-                    <div style="
-                        margin-top:10px;
-                        padding:12px;
-                        background:#312e81;
-                        border-radius:10px;
-                        border:1px solid #7c3aed;
-                    ">
+                suspiciousSources.forEach(source => {
+                    suspiciousBox.innerHTML += `
                         <div style="
-                            display:flex;
-                            justify-content:space-between;
-                            align-items:center;
-                            margin-bottom:8px;
+                            margin-top:10px;
+                            padding:12px;
+                            background:#312e81;
+                            border-radius:10px;
+                            border:1px solid #7c3aed;
                         ">
-                            <strong>${source.source}</strong>
+                            <div style="
+                                display:flex;
+                                justify-content:space-between;
+                                align-items:center;
+                                margin-bottom:8px;
+                            ">
+                                <strong>${source.source}</strong>
+
+                                <span style="
+                                    background:
+                                        ${source.risk_level === "critical" ? "#dc2626" :
+                                        source.risk_level === "high" ? "#ea580c" :
+                                        "#ca8a04"};
+                                    color:white;
+                                    padding:4px 10px;
+                                    border-radius:999px;
+                                    font-size:12px;
+                                    font-weight:bold;
+                                ">
+                                    ${(source.risk_level || "medium").toUpperCase()}
+                                </span>
+                            </div>
+
+                            <div>Score: ${source.score}</div>
+                            <div style="margin-top:6px; opacity:0.9;">
+                                ${source.reason}
+                            </div>
+                        </div>
+                    `;
+                });
+            }
 
                             <span style="
                                 background:
