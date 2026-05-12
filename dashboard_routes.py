@@ -134,9 +134,39 @@ Body:
                 <button onclick="copyCurlExample()">Copy curl Example</button>
             </div>
             <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
-                <h3>Source Analytics</h3>
-                <p>Noisy Sources: <span id="noisy-count">0</span></p>
-                <p>Suspicious Sources: <span id="suspicious-count">0</span></p>
+                <h3>Ingestion Monitoring</h3>
+
+                <div style="
+                    display:grid;
+                    grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+                    gap:12px;
+                    margin-top:15px;
+                ">
+                    <div style="background:#020617; padding:12px; border-radius:10px; border:1px solid #334155;">
+                        <div style="color:#94a3b8; font-size:12px;">Logs Today</div>
+                        <div id="logs-today" style="font-size:24px; font-weight:bold;">Loading...</div>
+                    </div>
+
+                    <div style="background:#020617; padding:12px; border-radius:10px; border:1px solid #334155;">
+                        <div style="color:#94a3b8; font-size:12px;">Total Sources</div>
+                        <div id="total-sources" style="font-size:24px; font-weight:bold;">Loading...</div>
+                    </div>
+
+                    <div style="background:#020617; padding:12px; border-radius:10px; border:1px solid #334155;">
+                        <div style="color:#94a3b8; font-size:12px;">Noisy Sources</div>
+                        <div id="noisy-count" style="font-size:24px; font-weight:bold;">0</div>
+                    </div>
+
+                    <div style="background:#020617; padding:12px; border-radius:10px; border:1px solid #334155;">
+                        <div style="color:#94a3b8; font-size:12px;">Suspicious Sources</div>
+                        <div id="suspicious-count" style="font-size:24px; font-weight:bold;">0</div>
+                    </div>
+                </div>
+
+                <p style="margin-top:15px;">
+                    Most Active Source:
+                    <strong><span id="top-source">Loading...</span></strong>
+                </p>
 
                 <div id="noisy-sources-box" style="
                     margin-top:15px;
@@ -152,9 +182,6 @@ Body:
                     border-radius:8px;
                     border:1px solid #7c3aed;
                 "></div>
-                <p>Logs Today: <span id="logs-today">Loading...</span></p>
-                <p>Total Sources: <span id="total-sources">Loading...</span></p>
-                <p>Most Active Source: <span id="top-source">Loading...</span></p>
                 <div id="source-list"></div>
             </div>
         </div>
