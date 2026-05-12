@@ -135,6 +135,7 @@ Body:
             </div>
             <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
                 <h3>Source Analytics</h3>
+                <p>Logs Today: <span id="logs-today">Loading...</span></p>
                 <p>Total Sources: <span id="total-sources">Loading...</span></p>
                 <p>Most Active Source: <span id="top-source">Loading...</span></p>
                 <div id="source-list"></div>
@@ -535,6 +536,7 @@ Body:
             const entries = Object.entries(sources);
 
             document.getElementById("total-sources").innerText = data.total_sources || 0;
+            document.getElementById("logs-today").innerText = data.logs_today || 0;
             document.getElementById("top-source").innerText =
                 data.top_source ? `${data.top_source} (${data.top_source_count} logs)` : "None";
 
