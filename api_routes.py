@@ -728,19 +728,50 @@ def source_analytics(
                     "reason": "High ingestion volume"
                 })
 
-            if count >= 10:
+            score = 0
+
+            # volume score
+            score += count * 2
+
+            # inspect logs from this source
+            matching_records = [
+                r for r in records
+                if parse_result(r.result).get("source", "unknown") == source
+            ]
+
+            for r in matching_records:
+                parsed = parse_result(r.result)
+
+                # severity score
+                if parsed.get("severity") == "high":
+                    score += 15
+
+                if parsed.get("severity") == "critical":
+                    score += 30
+
+                # blacklist bonus
+                if parsed.get("is_blacklisted"):
+                    score += 25
+
+                # anomaly bonus
+                if parsed.get("anomaly") is True:
+                    score += 10
+
+                # attack weighting
+                attack_type = parsed.get("attack_type", "")
+
+                if attack_type == "sql_injection":
+                    score += 20
+
+                if attack_type == "failed_login":
+                    score += 8
+
+            if score >= 40:
                 suspicious_sources.append({
                     "source": source,
                     "count": count,
-                    "score": 80,
-                    "reason": "Very high event volume from one source"
-                })
-            elif count >= 5:
-                suspicious_sources.append({
-                    "source": source,
-                    "count": count,
-                    "score": 50,
-                    "reason": "Moderate event volume from one source"
+                    "score": score,
+                    "reason": "Suspicious activity detected from source"
                 })
 
     return {
