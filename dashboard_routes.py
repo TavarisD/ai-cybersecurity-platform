@@ -403,7 +403,9 @@ Body:
                     <strong>Source:</strong> ${parsedResult.source || "manual"}<br>
                     <strong>Ingestion:</strong> ${parsedResult.ingestion_method || "manual_dashboard"}<br>
                     <strong>Received:</strong> ${parsedResult.received_at || log.created_at}<br>
-                    <strong>Result:</strong> ${log.result}<br>
+                    <strong>Anomaly:</strong> ${parsedResult.anomaly === true ? "YES" : "NO"}<br>
+                    <strong>Attack Type:</strong> ${parsedResult.attack_type || "unknown"}<br>
+                    <strong>Analysis:</strong> ${parsedResult.analysis || parsedResult.ai_analysis || "No analysis available"}<br>
                     <small>${log.created_at}</small>
                 `;
 
