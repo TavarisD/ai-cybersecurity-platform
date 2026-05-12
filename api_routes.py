@@ -686,8 +686,12 @@ def source_analytics(
     )
 
     source_counts = {}
+    today = datetime.utcnow().date()
+    logs_today = 0
 
     for record in records:
+        if record.created_at and record.created_at.date() == today:
+            logs_today += 1
         raw = record.raw_log.lower()
 
         source = "unknown"
@@ -713,6 +717,7 @@ def source_analytics(
 
     return {
         "total_logs": total_logs,
+        "logs_today": logs_today,
         "total_sources": len(source_counts),
         "top_source": top_source,
         "top_source_count": top_count,
