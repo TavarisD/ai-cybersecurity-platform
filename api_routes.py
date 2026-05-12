@@ -766,11 +766,21 @@ def source_analytics(
                 if attack_type == "failed_login":
                     score += 8
 
+            risk_level = "low"
+
+            if score >= 100:
+                risk_level = "critical"
+            elif score >= 70:
+                risk_level = "high"
+            elif score >= 40:
+                risk_level = "medium"
+
             if score >= 40:
                 suspicious_sources.append({
                     "source": source,
                     "count": count,
                     "score": score,
+                    "risk_level": risk_level,
                     "reason": "Suspicious activity detected from source"
                 })
 
