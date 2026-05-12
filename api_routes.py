@@ -700,15 +700,9 @@ def source_analytics(
     for record in records:
         if record.created_at and record.created_at.date() == today:
             logs_today += 1
-        raw = record.raw_log.lower()
+        parsed = parse_result(record.result)
 
-        source = "unknown"
-
-        if "from source " in raw:
-            try:
-                source = raw.split("from source ", 1)[1].split()[0]
-            except:
-                pass
+        source = parsed.get("source", "unknown")
 
         if source not in source_counts:
             source_counts[source] = 0
