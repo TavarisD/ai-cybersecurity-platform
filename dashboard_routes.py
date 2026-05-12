@@ -425,7 +425,21 @@ Body:
                     </span><br>
                     <strong>Received:</strong> ${parsedResult.received_at || log.created_at}<br>
                     <strong>Anomaly:</strong> ${parsedResult.anomaly === true ? "YES" : "NO"}<br>
-                    <strong>Attack Type:</strong> ${parsedResult.attack_type || "unknown"}<br>
+                    <strong>Attack Type:</strong> ${parsedResult.attack_type || "unknown"}<br><strong>Severity:</strong>
+                    <span style="
+                        background:
+                            ${(parsedResult.severity || "").toLowerCase() === "critical" ? "#dc2626" :
+                            (parsedResult.severity || "").toLowerCase() === "high" ? "#ea580c" :
+                            (parsedResult.severity || "").toLowerCase() === "medium" ? "#ca8a04" :
+                            "#475569"};
+                        color:white;
+                        padding:3px 8px;
+                        border-radius:999px;
+                        font-size:12px;
+                        font-weight:bold;
+                    ">
+                        ${(parsedResult.severity || "low").toUpperCase()}
+                    </span><br>
                     <strong>Analysis:</strong> ${parsedResult.analysis || parsedResult.ai_analysis || "No analysis available"}<br>
                     <small>${log.created_at}</small>
                 `;
