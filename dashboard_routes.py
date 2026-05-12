@@ -390,8 +390,19 @@ Body:
                 item.style.background = "#1a1a2e";
                 item.style.borderRadius = "8px";
 
+                let parsedResult = {};
+
+                try {
+                    parsedResult = JSON.parse(log.result);
+                } catch (e) {
+                    parsedResult = {};
+                }
+
                 item.innerHTML = `
                     <strong>Log:</strong> ${log.raw_log}<br>
+                    <strong>Source:</strong> ${parsedResult.source || "manual"}<br>
+                    <strong>Ingestion:</strong> ${parsedResult.ingestion_method || "manual_dashboard"}<br>
+                    <strong>Received:</strong> ${parsedResult.received_at || log.created_at}<br>
                     <strong>Result:</strong> ${log.result}<br>
                     <small>${log.created_at}</small>
                 `;
