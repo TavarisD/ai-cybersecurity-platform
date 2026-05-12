@@ -135,6 +135,23 @@ Body:
             </div>
             <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
                 <h3>Source Analytics</h3>
+                <p>Noisy Sources: <span id="noisy-count">0</span></p>
+                <p>Suspicious Sources: <span id="suspicious-count">0</span></p>
+
+                <div id="noisy-sources-box" style="
+                    margin-top:15px;
+                    background:#020617;
+                    padding:12px;
+                    border-radius:8px;
+                "></div>
+
+                <div id="suspicious-sources-box" style="
+                    margin-top:15px;
+                    background:#1e1b4b;
+                    padding:12px;
+                    border-radius:8px;
+                    border:1px solid #7c3aed;
+                "></div>
                 <p>Logs Today: <span id="logs-today">Loading...</span></p>
                 <p>Total Sources: <span id="total-sources">Loading...</span></p>
                 <p>Most Active Source: <span id="top-source">Loading...</span></p>
@@ -541,7 +558,11 @@ Body:
                 data.top_source ? `${data.top_source} (${data.top_source_count} logs)` : "None";
 
             entries.sort((a, b) => b[1] - a[1]);
+            const noisySources = data.noisy_sources || [];
+            const suspiciousSources = data.suspicious_sources || [];
 
+            document.getElementById("noisy-count").innerText = noisySources.length;
+            document.getElementById("suspicious-count").innerText = suspiciousSources.length;
             const sourceList = document.getElementById("source-list");
             sourceList.innerHTML = "";
 
@@ -555,7 +576,43 @@ Body:
                 sourceList.appendChild(item);
             });
         }
+        const noisyBox = document.getElementById("noisy-sources-box");
+        noisyBox.innerHTML = "<h4>Noisy Sources</h4>";
 
+        if (!noisySources.length) {
+            noisyBox.innerHTML += "<div>No noisy sources detected</div>";
+        } else {
+            noisySources.forEach(source => {
+                noisyBox.innerHTML += `
+                    <div style="margin-top:8px;">
+                        <strong>${source.source}</strong>
+                        — ${source.count} logs
+                    </div>
+                `;
+            });
+        }
+
+        const suspiciousBox = document.getElementById("suspicious-sources-box");
+        suspiciousBox.innerHTML = "<h4>Suspicious Sources</h4>";
+
+        if (!suspiciousSources.length) {
+            suspiciousBox.innerHTML += "<div>No suspicious sources detected</div>";
+        } else {
+            suspiciousSources.forEach(source => {
+                suspiciousBox.innerHTML += `
+                    <div style="
+                        margin-top:10px;
+                        padding:10px;
+                        background:#312e81;
+                        border-radius:8px;
+                    ">
+                        <strong>${source.source}</strong><br>
+                        Score: ${source.score}<br>
+                        ${source.reason}
+                    </div>
+                `;
+            });
+        }
         window.onload = function() {
             loadDashboard();
             loadBillingStatus();
