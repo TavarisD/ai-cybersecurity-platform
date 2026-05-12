@@ -400,7 +400,18 @@ Body:
 
                 item.innerHTML = `
                     <strong>Log:</strong> ${log.raw_log}<br>
-                    <strong>Source:</strong> ${parsedResult.source || "manual"}<br>
+                    <strong>Source:</strong> 
+                    <span style="
+                        background:#0f172a;
+                        color:#38bdf8;
+                        padding:3px 8px;
+                        border-radius:999px;
+                        font-size:12px;
+                        font-weight:bold;
+                        border:1px solid #38bdf8;
+                    ">
+                        ${(parsedResult.source || "manual").toUpperCase()}
+                    </span><br>
                     <strong>Ingestion:</strong> 
                     <span style="
                         background:${parsedResult.ingestion_method === "api_key_webhook" ? "#22c55e" : "#64748b"};
