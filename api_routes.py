@@ -774,6 +774,9 @@ def source_analytics(
                     "reason": "Suspicious activity detected from source"
                 })
 
+    suspicious_sources.sort(key=lambda item: item["score"], reverse=True)
+    noisy_sources.sort(key=lambda item: item["count"], reverse=True)
+
     return {
         "total_logs": total_logs,
         "logs_today": logs_today,
