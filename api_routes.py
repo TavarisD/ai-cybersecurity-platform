@@ -1021,6 +1021,23 @@ def upgrade_plan(
         "plan": current_user.plan
     }
 
+@router.post("/downgrade-plan")
+def downgrade_plan(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    current_user.plan = "free"
+    current_user.billing_status = "inactive"
+
+    db.commit()
+    db.refresh(current_user)
+
+    return {
+        "message": "Plan downgraded to free",
+        "plan": current_user.plan,
+        "billing_status": current_user.billing_status
+    }
+
 @router.get("/billing-status")
 def billing_status(
     current_user: User = Depends(get_current_user)
