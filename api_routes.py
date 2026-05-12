@@ -246,6 +246,10 @@ def webhook_log_api_key(
 
     result = analyze_security_log(log_text)
 
+    result["ingestion_method"] = "api_key_webhook"
+    result["source"] = request.source
+    result["received_at"] = datetime.utcnow().isoformat()
+
     record = LogRecord(
         user_id=current_user.id,
         raw_log=log_text,
