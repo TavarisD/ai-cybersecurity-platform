@@ -688,19 +688,43 @@ Body:
             if (!suspiciousSources.length) {
                 suspiciousBox.innerHTML += "<div>No suspicious sources detected</div>";
             } else {
-                suspiciousSources.forEach(source => {
-                    suspiciousBox.innerHTML += `
+                suspiciousBox.innerHTML += `
+                    <div style="
+                        margin-top:10px;
+                        padding:12px;
+                        background:#312e81;
+                        border-radius:10px;
+                        border:1px solid #7c3aed;
+                    ">
                         <div style="
-                            margin-top:10px;
-                            padding:10px;
-                            background:#312e81;
-                            border-radius:8px;
+                            display:flex;
+                            justify-content:space-between;
+                            align-items:center;
+                            margin-bottom:8px;
                         ">
-                            <strong>${source.source}</strong><br>
-                            Score: ${source.score}<br>
+                            <strong>${source.source}</strong>
+
+                            <span style="
+                                background:
+                                    ${source.risk_level === "critical" ? "#dc2626" :
+                                    source.risk_level === "high" ? "#ea580c" :
+                                    "#ca8a04"};
+                                color:white;
+                                padding:4px 10px;
+                                border-radius:999px;
+                                font-size:12px;
+                                font-weight:bold;
+                            ">
+                                ${(source.risk_level || "medium").toUpperCase()}
+                            </span>
+                        </div>
+
+                        <div>Score: ${source.score}</div>
+                        <div style="margin-top:6px; opacity:0.9;">
                             ${source.reason}
                         </div>
-                    `;
+                    </div>
+                `;
                 });
             }
             }
