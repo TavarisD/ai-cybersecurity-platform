@@ -401,7 +401,17 @@ Body:
                 item.innerHTML = `
                     <strong>Log:</strong> ${log.raw_log}<br>
                     <strong>Source:</strong> ${parsedResult.source || "manual"}<br>
-                    <strong>Ingestion:</strong> ${parsedResult.ingestion_method || "manual_dashboard"}<br>
+                    <strong>Ingestion:</strong> 
+                    <span style="
+                        background:${parsedResult.ingestion_method === "api_key_webhook" ? "#22c55e" : "#64748b"};
+                        color:white;
+                        padding:3px 8px;
+                        border-radius:999px;
+                        font-size:12px;
+                        font-weight:bold;
+                    ">
+                        ${parsedResult.ingestion_method === "api_key_webhook" ? "API WEBHOOK" : "MANUAL"}
+                    </span><br>
                     <strong>Received:</strong> ${parsedResult.received_at || log.created_at}<br>
                     <strong>Anomaly:</strong> ${parsedResult.anomaly === true ? "YES" : "NO"}<br>
                     <strong>Attack Type:</strong> ${parsedResult.attack_type || "unknown"}<br>
