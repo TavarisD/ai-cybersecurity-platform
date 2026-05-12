@@ -263,10 +263,14 @@ def webhook_log_api_key(
         )
 
     return {
-        "message": "Webhook (API key) log received",
-        "log_id": record.id,
-        "analysis": result
-    }
+    "status": "success",
+    "message": "Webhook log received successfully",
+    "log_id": record.id,
+    "source": request.source,
+    "ip": request.ip,
+    "severity": request.severity,
+    "analysis": result
+}
 
 @router.get("/health")
 def health():
