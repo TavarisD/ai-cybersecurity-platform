@@ -728,31 +728,7 @@ Body:
                     `;
                 });
             }
-
-                            <span style="
-                                background:
-                                    ${source.risk_level === "critical" ? "#dc2626" :
-                                    source.risk_level === "high" ? "#ea580c" :
-                                    "#ca8a04"};
-                                color:white;
-                                padding:4px 10px;
-                                border-radius:999px;
-                                font-size:12px;
-                                font-weight:bold;
-                            ">
-                                ${(source.risk_level || "medium").toUpperCase()}
-                            </span>
-                        </div>
-
-                        <div>Score: ${source.score}</div>
-                        <div style="margin-top:6px; opacity:0.9;">
-                            ${source.reason}
-                        </div>
-                    </div>
-                `;
-                });
-            }
-            }
+        }
 
         window.onload = function() {
             loadDashboard();
