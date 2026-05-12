@@ -712,8 +712,34 @@ def source_analytics(
     top_source = None
     top_count = 0
 
+    noisy_sources = []
+    suspicious_sources = []
+
     if source_counts:
         top_source, top_count = max(source_counts.items(), key=lambda item: item[1])
+
+        for source, count in source_counts.items():
+            if count >= 5:
+                noisy_sources.append({
+                    "source": source,
+                    "count": count,
+                    "reason": "High ingestion volume"
+                })
+
+            if count >= 10:
+                suspicious_sources.append({
+                    "source": source,
+                    "count": count,
+                    "score": 80,
+                    "reason": "Very high event volume from one source"
+                })
+            elif count >= 5:
+                suspicious_sources.append({
+                    "source": source,
+                    "count": count,
+                    "score": 50,
+                    "reason": "Moderate event volume from one source"
+                })
 
     return {
         "total_logs": total_logs,
@@ -721,7 +747,9 @@ def source_analytics(
         "total_sources": len(source_counts),
         "top_source": top_source,
         "top_source_count": top_count,
-        "sources": source_counts
+        "sources": source_counts,
+        "noisy_sources": noisy_sources,
+        "suspicious_sources": suspicious_sources
     }
 
 @router.get("/dashboard-data")
