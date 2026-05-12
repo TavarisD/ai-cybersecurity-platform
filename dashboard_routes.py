@@ -344,8 +344,23 @@ Body:
                 document.getElementById("pro-badge").innerHTML =
                     `<span style="color:#22c55e; font-weight:bold; margin-left:10px;">PRO ✓</span>`;
 
-                document.getElementById("upgrade-section").innerHTML =
-                    `<div style="color:#22c55e; font-weight:bold;">You are on Pro.</div>`;
+                document.getElementById("upgrade-section").innerHTML = `
+                    <div style="color:#22c55e; font-weight:bold; margin-bottom:10px;">
+                        You are on Pro.
+                    </div>
+
+                    <button onclick="downgradePlan()" style="
+                        background:#64748b;
+                        color:white;
+                        padding:12px;
+                        border:none;
+                        border-radius:8px;
+                        font-weight:bold;
+                        cursor:pointer;
+                    ">
+                        Downgrade to Free
+                    </button>
+                `;
             } else {
                 document.getElementById("pro-badge").innerHTML = "";
 
