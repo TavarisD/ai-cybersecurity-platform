@@ -1162,3 +1162,25 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     except Exception as e:
         print("WEBHOOK ERROR:", str(e))
         return {"error": str(e)}
+
+@router.get("/ingestion-activity")
+def ingestion_activity():
+    return {
+        "status": "success",
+        "activity": [
+            {
+                "source": "firewall",
+                "event": "Failed login attempt from 203.0.113.45",
+                "status": "received",
+                "severity": "HIGH",
+                "timestamp": "recent"
+            },
+            {
+                "source": "auth",
+                "event": "Multiple failed login attempts detected",
+                "status": "processed",
+                "severity": "MEDIUM",
+                "timestamp": "recent"
+            }
+        ]
+    }
