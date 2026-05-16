@@ -218,6 +218,26 @@ Body:
                             <div style="opacity:0.7;">Loading errors...</div>
                         </div>
                     </div>
+                        <div style="
+                            margin-top:20px;
+                            background:#020617;
+                            padding:15px;
+                            border-radius:10px;
+                            border:1px solid #334155;
+                        ">
+                        
+                            <h3>Source Health Status</h3>
+
+                            <div id="source-health-box" style="
+                                margin-top:15px;
+                                display:flex;
+                                flex-direction:column;
+                                gap:12px;
+                            ">
+                                <div style="opacity:0.7;">Loading source health...</div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -769,7 +789,64 @@ Body:
                     `;
                 });
             }
+            const healthBox = document.getElementById("source-health-box");
+            const healthSources = data.source_health || [];
+
+            if (healthBox) {
+                healthBox.innerHTML = "";
+
+                if (!healthSources.length) {
+                    healthBox.innerHTML = "<div>No source health data yet</div>";
+                } else {
+                    healthSources.forEach(source => {
+                        const item = document.createElement("div");
+
+                        let statusColor = "#22c55e";
+
+                        if (source.status === "degraded") {
+                            statusColor = "#ca8a04";
+                        }
+
+                        if (source.status === "suspicious" || source.status === "offline") {
+                            statusColor = "#dc2626";
+                        }
+
+                        item.style.background = "#0f172a";
+                        item.style.padding = "12px";
+                        item.style.borderRadius = "10px";
+                        item.style.border = "1px solid #334155";
+
+                        item.innerHTML = `
+                            <div style="
+                                display:flex;
+                                justify-content:space-between;
+                                align-items:center;
+                            ">
+                                <strong>${source.source}</strong>
+
+                                <span style="
+                                    background:${statusColor};
+                                    color:white;
+                                    padding:4px 10px;
+                                    border-radius:999px;
+                                    font-size:12px;
+                                    font-weight:bold;
+                                ">
+                                    ${(source.status || "healthy").toUpperCase()}
+                                </span>
+                            </div>
+
+                            <small style="opacity:0.7;">
+                                ${source.count} logs processed
+                            </small>
+                        `;
+
+                        healthBox.appendChild(item);
+                    });
+                }
+            }
         }
+
 
         async function loadIngestionActivity() {
             const response = await fetch("/ingestion-activity");
