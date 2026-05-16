@@ -200,6 +200,24 @@ Body:
                     ">
                         <div style="opacity:0.7;">Loading activity...</div>
                     </div>
+                    <div style="
+                        margin-top:20px;
+                        background:#450a0a;
+                        padding:15px;
+                        border-radius:10px;
+                        border:1px solid #dc2626;
+                    ">
+                        <h3>Ingestion Errors</h3>
+
+                        <div id="ingestion-errors-box" style="
+                            margin-top:15px;
+                            display:flex;
+                            flex-direction:column;
+                            gap:12px;
+                        ">
+                            <div style="opacity:0.7;">Loading errors...</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -821,17 +839,53 @@ Body:
             });
         }
 
+        async function loadIngestionErrors() {
+            const response = await fetch("/ingestion-errors");
+            const data = await response.json();
+
+            const box = document.getElementById("ingestion-errors-box");
+            if (!box) return;
+
+            box.innerHTML = "";
+
+            const errors = data.errors || [];
+
+            if (!errors.length) {
+                box.innerHTML = "<div>No ingestion errors detected</div>";
+                return;
+            }
+
+            errors.forEach(error => {
+                const row = document.createElement("div");
+
+                row.style.background = "#7f1d1d";
+                row.style.padding = "12px";
+                row.style.borderRadius = "10px";
+                row.style.border = "1px solid #ef4444";
+
+                row.innerHTML = `
+                    <strong>${error.source}</strong><br>
+                    <div>${error.error}</div>
+                    <small>Status: ${error.status} • ${error.timestamp}</small>
+                `;
+
+                box.appendChild(row);
+            });
+        }
+
         window.onload = function() {
             loadDashboard();
             loadBillingStatus();
             loadApiKey();
             loadSourceAnalytics();
             loadIngestionActivity();
+            loadIngestionErrors();
 
             setInterval(() => {
                 loadDashboard();
                 loadSourceAnalytics();
                 loadIngestionActivity();
+                loadIngestionErrors();
             }, 5000);
         };
         </script>
