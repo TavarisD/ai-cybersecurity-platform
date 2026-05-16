@@ -29,6 +29,14 @@ from api_key_auth import get_user_by_api_key
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
+ingestion_errors = []
+
+ingestion_errors.append({
+    "source": "webhook",
+    "error": "Test ingestion error",
+    "status": "failed",
+    "timestamp": "recent"
+})
 
 class IngestLogRequest(BaseModel):
     log_text: str
@@ -1196,4 +1204,12 @@ def ingestion_activity(
     return {
         "status": "success",
         "activity": activity
+    }
+
+@router.get("/ingestion-errors")
+def get_ingestion_errors():
+    return {
+        "status": "success",
+        "total_errors": len(ingestion_errors),
+        "errors": ingestion_errors[-10:]
     }
