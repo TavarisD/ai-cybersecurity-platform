@@ -31,12 +31,6 @@ router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 ingestion_errors = []
 
-ingestion_errors.append({
-    "source": "webhook",
-    "error": "Test ingestion error",
-    "status": "failed",
-    "timestamp": "recent"
-})
 
 class IngestLogRequest(BaseModel):
     log_text: str
@@ -238,51 +232,62 @@ def webhook_log_api_key(
     current_user: User = Depends(get_user_by_api_key),
     db: Session = Depends(get_db)
 ):
-    require_pro_plan(current_user)
-    check_and_update_usage(current_user, db)
+    try:
+        require_pro_plan(current_user)
+        check_and_update_usage(current_user, db)
 
-    log_text = request.event
+        log_text = request.event
 
-    if request.source:
-        log_text += f" from source {request.source}"
+        if request.source:
+            log_text += f" from source {request.source}"
 
-    if request.ip:
-        log_text += f" from {request.ip}"
+        if request.ip:
+            log_text += f" from {request.ip}"
 
-    if request.severity:
-        log_text += f" severity {request.severity}"
+        if request.severity:
+            log_text += f" severity {request.severity}"
 
-    result = analyze_security_log(log_text)
+        result = analyze_security_log(log_text)
 
-    result["ingestion_method"] = "api_key_webhook"
-    result["source"] = request.source
-    result["received_at"] = datetime.utcnow().isoformat()
+        result["ingestion_method"] = "api_key_webhook"
+        result["source"] = request.source
+        result["received_at"] = datetime.utcnow().isoformat()
 
-    record = LogRecord(
-        user_id=current_user.id,
-        raw_log=log_text,
-        result=json.dumps(result)
-    )
-
-    db.add(record)
-    db.commit()
-    db.refresh(record)
-
-    if app_state.main_loop:
-        app_state.main_loop.call_soon_threadsafe(
-            asyncio.create_task,
-            broadcast_dashboard_update(log_text)
+        record = LogRecord(
+            user_id=current_user.id,
+            raw_log=log_text,
+            result=json.dumps(result)
         )
 
-    return {
-    "status": "success",
-    "message": "Webhook log received successfully",
-    "log_id": record.id,
-    "source": request.source,
-    "ip": request.ip,
-    "severity": request.severity,
-    "analysis": result
-}
+        db.add(record)
+        db.commit()
+        db.refresh(record)
+
+        if app_state.main_loop:
+            app_state.main_loop.call_soon_threadsafe(
+                asyncio.create_task,
+                broadcast_dashboard_update(log_text)
+            )
+
+        return {
+            "status": "success",
+            "message": "Webhook log received successfully",
+            "log_id": record.id,
+            "source": request.source,
+            "ip": request.ip,
+            "severity": request.severity,
+            "analysis": result
+        }
+
+    except Exception as e:
+        ingestion_errors.append({
+            "source": getattr(request, "source", "webhook"),
+            "error": str(e),
+            "status": "failed",
+            "timestamp": datetime.utcnow().isoformat()
+        })
+
+        raise
 
 @router.get("/health")
 def health():
