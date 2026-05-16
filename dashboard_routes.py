@@ -385,6 +385,11 @@ Body:
             document.getElementById("usage-text").innerText =
                 `${billing.usage_count} / ${billing.daily_limit} used (${billing.remaining} remaining)`;
 
+                if (billing.remaining <= 3 && billing.plan !== "pro") {
+                    document.getElementById("usage-text").innerHTML += 
+                        " ⚠️ <span style='color:#f87171; font-weight:bold;'>Almost at daily limit</span>";
+                }
+
             if (billing.plan === "pro") {
                 document.getElementById("pro-badge").innerHTML =
                     `<span style="color:#22c55e; font-weight:bold; margin-left:10px;">PRO ✓</span>`;
