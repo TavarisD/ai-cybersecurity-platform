@@ -729,6 +729,7 @@ def source_analytics(
 
     noisy_sources = []
     suspicious_sources = []
+    source_health = []
 
     if source_counts:
         top_source, top_count = max(source_counts.items(), key=lambda item: item[1])
@@ -788,6 +789,23 @@ def source_analytics(
             elif score >= 40:
                 risk_level = "medium"
 
+            health_status = "healthy"
+
+            if count >= 15:
+                health_status = "degraded"
+
+            if count >= 30:
+                health_status = "offline"
+
+            if score >= 70:
+                health_status = "suspicious"
+
+            source_health.append({
+                "source": source,
+                "status": health_status,
+                "count": count
+            })    
+
             if score >= 40:
                 suspicious_sources.append({
                     "source": source,
@@ -808,7 +826,8 @@ def source_analytics(
         "top_source_count": top_count,
         "sources": source_counts,
         "noisy_sources": noisy_sources,
-        "suspicious_sources": suspicious_sources
+        "suspicious_sources": suspicious_sources,
+        "source_health": source_health,
     }
 
 @router.get("/dashboard-data")
