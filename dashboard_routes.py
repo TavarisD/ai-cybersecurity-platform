@@ -183,6 +183,24 @@ Body:
                     border:1px solid #7c3aed;
                 "></div>
                 <div id="source-list"></div>
+                <div style="
+                    margin-top:20px;
+                    background:#020617;
+                    padding:15px;
+                    border-radius:10px;
+                    border:1px solid #334155;
+                ">
+                    <h3>Live Ingestion Activity</h3>
+
+                    <div id="ingestion-activity-box" style="
+                        margin-top:15px;
+                        display:flex;
+                        flex-direction:column;
+                        gap:12px;
+                    ">
+                        <div style="opacity:0.7;">Loading activity...</div>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -730,15 +748,85 @@ Body:
             }
         }
 
+        async function loadIngestionActivity() {
+            const response = await fetch("/ingestion-activity");
+
+            const data = await response.json();
+
+            const box = document.getElementById("ingestion-activity-box");
+
+            if (!box) return;
+
+            box.innerHTML = "";
+
+            const activity = data.activity || [];
+
+            if (!activity.length) {
+                box.innerHTML = "<div>No ingestion activity yet</div>";
+                return;
+            }
+
+            activity.forEach(item => {
+                const row = document.createElement("div");
+
+                let severityColor = "#475569";
+
+                if ((item.severity || "").toLowerCase() === "high") {
+                    severityColor = "#dc2626";
+                } else if ((item.severity || "").toLowerCase() === "medium") {
+                    severityColor = "#ca8a04";
+                }
+
+                row.style.background = "#0f172a";
+                row.style.padding = "12px";
+                row.style.borderRadius = "10px";
+                row.style.border = "1px solid #334155";
+
+                row.innerHTML = `
+                    <div style="
+                        display:flex;
+                        justify-content:space-between;
+                        align-items:center;
+                        margin-bottom:8px;
+                    ">
+                        <strong>${item.source}</strong>
+
+                        <span style="
+                            background:${severityColor};
+                            color:white;
+                            padding:4px 10px;
+                            border-radius:999px;
+                            font-size:12px;
+                            font-weight:bold;
+                        ">
+                            ${(item.severity || "LOW").toUpperCase()}
+                        </span>
+                    </div>
+
+                    <div style="margin-bottom:6px;">
+                        ${item.event}
+                    </div>
+
+                    <small style="opacity:0.7;">
+                        Status: ${item.status} • ${item.timestamp}
+                    </small>
+                `;
+
+                box.appendChild(row);
+            });
+        }
+
         window.onload = function() {
             loadDashboard();
             loadBillingStatus();
             loadApiKey();
             loadSourceAnalytics();
+            loadIngestionActivity();
 
             setInterval(() => {
                 loadDashboard();
                 loadSourceAnalytics();
+                loadIngestionActivity();
             }, 5000);
         };
         </script>
