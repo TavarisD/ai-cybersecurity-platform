@@ -1164,23 +1164,36 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
         return {"error": str(e)}
 
 @router.get("/ingestion-activity")
-def ingestion_activity():
+def ingestion_activity(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    records = (
+        db.query(LogRecord)
+        .filter(LogRecord.user_id == current_user.id)
+        .order_by(LogRecord.id.desc())
+        .limit(10)
+        .all()
+    )
+
+    activity = []
+
+    for record in records:
+        parsed = parse_result(record.result)
+
+        activity.append({
+            "source": parsed.get("source", "unknown"),
+            "event": record.raw_log,
+            "status": "processed",
+            "severity": parsed.get("severity", "LOW"),
+            "timestamp": (
+                record.created_at.strftime("%H:%M:%S")
+                if record.created_at
+                else "unknown"
+            )
+        })
+
     return {
         "status": "success",
-        "activity": [
-            {
-                "source": "firewall",
-                "event": "Failed login attempt from 203.0.113.45",
-                "status": "received",
-                "severity": "HIGH",
-                "timestamp": "recent"
-            },
-            {
-                "source": "auth",
-                "event": "Multiple failed login attempts detected",
-                "status": "processed",
-                "severity": "MEDIUM",
-                "timestamp": "recent"
-            }
-        ]
+        "activity": activity
     }
