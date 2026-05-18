@@ -930,6 +930,28 @@ Body:
                                     ${source.spike_detected ? "YES" : "NO"}
                                 </strong>
                             </div>
+                            <div style="
+                                margin-top:10px;
+                                height:10px;
+                                background:#1e293b;
+                                border-radius:999px;
+                                overflow:hidden;
+                            ">
+                                <div style="
+                                    height:100%;
+                                    width:${Math.min(Math.abs(source.growth_percent || 0), 100)}%;
+                                    background:${escalationColor};
+                                    transition:width 0.4s ease;
+                                "></div>
+                            </div>
+
+                            <div style="
+                                margin-top:6px;
+                                font-size:12px;
+                                opacity:0.7;
+                            ">
+                                Activity Growth Monitor
+                            </div>
                         `;
 
                         trendBox.appendChild(item);
