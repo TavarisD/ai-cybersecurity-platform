@@ -237,6 +237,24 @@ Body:
                                 <div style="opacity:0.7;">Loading source health...</div>
                             </div>
                         </div>
+                        <div style="
+                            margin-top:20px;
+                            background:#020617;
+                            padding:15px;
+                            border-radius:10px;
+                            border:1px solid #334155;
+                        ">
+                            <h3>Source Trend Analytics</h3>
+
+                            <div id="source-trend-box" style="
+                                margin-top:15px;
+                                display:flex;
+                                flex-direction:column;
+                                gap:12px;
+                            ">
+                                <div style="opacity:0.7;">Loading source trends...</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -791,6 +809,7 @@ Body:
             }
             const healthBox = document.getElementById("source-health-box");
             const healthSources = data.source_health || [];
+            const trendBox = document.getElementById("source-trend-box");
 
             if (healthBox) {
                 healthBox.innerHTML = "";
@@ -844,12 +863,89 @@ Body:
                         healthBox.appendChild(item);
                     });
                 }
+            
+        }
+
+        if (trendBox) {
+                trendBox.innerHTML = "";
+
+                if (!healthSources.length) {
+                    trendBox.innerHTML = "<div>No source trend data yet</div>";
+                } else {
+                    healthSources.forEach(source => {
+                        const item = document.createElement("div");
+
+                        let escalationColor = "#22c55e";
+
+                        if (source.escalation_level === "elevated") {
+                            escalationColor = "#ca8a04";
+                        }
+
+                        if (source.escalation_level === "high") {
+                            escalationColor = "#ea580c";
+                        }
+
+                        if (source.escalation_level === "critical") {
+                            escalationColor = "#dc2626";
+                        }
+
+                        item.style.background = "#0f172a";
+                        item.style.padding = "12px";
+                        item.style.borderRadius = "10px";
+                        item.style.border = `1px solid ${escalationColor}`;
+
+                        item.innerHTML = `
+                            <div style="
+                                display:flex;
+                                justify-content:space-between;
+                                align-items:center;
+                                margin-bottom:8px;
+                            ">
+                                <strong>${source.source}</strong>
+
+                                <span style="
+                                    background:${escalationColor};
+                                    color:white;
+                                    padding:4px 10px;
+                                    border-radius:999px;
+                                    font-size:12px;
+                                    font-weight:bold;
+                                ">
+                                    ${(source.escalation_level || "normal").toUpperCase()}
+                                </span>
+                            </div>
+
+                            <div style="font-size:14px; margin-bottom:6px;">
+                                Recent Events: <strong>${source.recent_events}</strong> |
+                                Older Events: <strong>${source.older_events}</strong>
+                            </div>
+
+                            <div style="font-size:14px; margin-bottom:6px;">
+                                Growth: <strong>${source.growth_percent}%</strong>
+                            </div>
+
+                            <div style="font-size:14px;">
+                                Spike Detected:
+                                <strong style="color:${source.spike_detected ? "#dc2626" : "#22c55e"};">
+                                    ${source.spike_detected ? "YES" : "NO"}
+                                </strong>
+                            </div>
+                        `;
+
+                        trendBox.appendChild(item);
+                    });
+                }
             }
         }
 
-
         async function loadIngestionActivity() {
-            const response = await fetch("/ingestion-activity");
+            const token = localStorage.getItem("token");
+
+            const response = await fetch("/ingestion-activity", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
 
             const data = await response.json();
 
@@ -917,7 +1013,13 @@ Body:
         }
 
         async function loadIngestionErrors() {
-            const response = await fetch("/ingestion-errors");
+            const token = localStorage.getItem("token");
+
+            const response = await fetch("/ingestion-errors", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
             const data = await response.json();
 
             const box = document.getElementById("ingestion-errors-box");
