@@ -707,20 +707,35 @@ def source_analytics(
     )
 
     source_counts = {}
+    source_trends = {}
     today = datetime.utcnow().date()
     logs_today = 0
+    total_logs = 0
 
-    for record in records:
+    halfway = max(len(records) // 2, 1)
+
+    for index, record in enumerate(records):
         if record.created_at and record.created_at.date() == today:
             logs_today += 1
-        parsed = parse_result(record.result)
 
+        parsed = parse_result(record.result)
         source = parsed.get("source", "unknown")
 
         if source not in source_counts:
             source_counts[source] = 0
 
         source_counts[source] += 1
+
+        if source not in source_trends:
+            source_trends[source] = {
+                "recent_events": 0,
+                "older_events": 0
+            }
+
+        if index >= halfway:
+            source_trends[source]["recent_events"] += 1
+        else:
+            source_trends[source]["older_events"] += 1
 
     total_logs = sum(source_counts.values())
 
@@ -743,11 +758,8 @@ def source_analytics(
                 })
 
             score = 0
-
-            # volume score
             score += count * 2
 
-            # inspect logs from this source
             matching_records = [
                 r for r in records
                 if parse_result(r.result).get("source", "unknown") == source
@@ -756,22 +768,18 @@ def source_analytics(
             for r in matching_records:
                 parsed = parse_result(r.result)
 
-                # severity score
-                if parsed.get("severity") == "high":
+                if str(parsed.get("severity", "")).lower() == "high":
                     score += 15
 
-                if parsed.get("severity") == "critical":
+                if str(parsed.get("severity", "")).lower() == "critical":
                     score += 30
 
-                # blacklist bonus
                 if parsed.get("is_blacklisted"):
                     score += 25
 
-                # anomaly bonus
                 if parsed.get("anomaly") is True:
                     score += 10
 
-                # attack weighting
                 attack_type = parsed.get("attack_type", "")
 
                 if attack_type == "sql_injection":
@@ -800,11 +808,38 @@ def source_analytics(
             if score >= 70:
                 health_status = "suspicious"
 
+            trend = source_trends.get(source, {})
+            older = trend.get("older_events", 0)
+            recent = trend.get("recent_events", 0)
+
+            if older == 0 and recent > 0:
+                growth = 100
+            elif older > 0:
+                growth = round(((recent - older) / older) * 100, 2)
+            else:
+                growth = 0
+
+            spike_detected = recent >= older * 2 and recent >= 5
+
+            escalation_level = "normal"
+
+            if score >= 100 or spike_detected:
+                escalation_level = "critical"
+            elif score >= 70:
+                escalation_level = "high"
+            elif count >= 10 or growth >= 50:
+                escalation_level = "elevated"
+
             source_health.append({
                 "source": source,
                 "status": health_status,
-                "count": count
-            })    
+                "count": count,
+                "recent_events": recent,
+                "older_events": older,
+                "growth_percent": growth,
+                "spike_detected": spike_detected,
+                "escalation_level": escalation_level
+            })
 
             if score >= 40:
                 suspicious_sources.append({
