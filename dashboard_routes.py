@@ -245,6 +245,32 @@ Body:
                             border:1px solid #334155;
                         ">
                             <h3>Source Trend Analytics</h3>
+                            <div style="
+                                display:grid;
+                                grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
+                                gap:12px;
+                                margin-top:15px;
+                            ">
+                                <div style="background:#450a0a; padding:12px; border-radius:10px; border:1px solid #dc2626;">
+                                    <div style="color:#fecaca; font-size:12px;">Critical Escalations</div>
+                                    <div id="critical-escalations" style="font-size:24px; font-weight:bold;">0</div>
+                                </div>
+
+                                <div style="background:#431407; padding:12px; border-radius:10px; border:1px solid #ea580c;">
+                                    <div style="color:#fed7aa; font-size:12px;">Spike Alerts</div>
+                                    <div id="spike-alerts" style="font-size:24px; font-weight:bold;">0</div>
+                                </div>
+
+                                <div style="background:#422006; padding:12px; border-radius:10px; border:1px solid #ca8a04;">
+                                    <div style="color:#fef3c7; font-size:12px;">Elevated Sources</div>
+                                    <div id="elevated-sources" style="font-size:24px; font-weight:bold;">0</div>
+                                </div>
+
+                                <div style="background:#052e16; padding:12px; border-radius:10px; border:1px solid #22c55e;">
+                                    <div style="color:#bbf7d0; font-size:12px;">Normal Sources</div>
+                                    <div id="normal-sources" style="font-size:24px; font-weight:bold;">0</div>
+                                </div>
+                            </div>
 
                             <div id="source-trend-box" style="
                                 margin-top:15px;
@@ -809,6 +835,15 @@ Body:
             }
             const healthBox = document.getElementById("source-health-box");
             const healthSources = data.source_health || [];
+            const criticalEscalations = healthSources.filter(s => s.escalation_level === "critical").length;
+            const spikeAlerts = healthSources.filter(s => s.spike_detected === true).length;
+            const elevatedSources = healthSources.filter(s => s.escalation_level === "elevated").length;
+            const normalSources = healthSources.filter(s => s.escalation_level === "normal").length;
+
+            document.getElementById("critical-escalations").innerText = criticalEscalations;
+            document.getElementById("spike-alerts").innerText = spikeAlerts;
+            document.getElementById("elevated-sources").innerText = elevatedSources;
+            document.getElementById("normal-sources").innerText = normalSources;
             const trendBox = document.getElementById("source-trend-box");
 
             if (healthBox) {
