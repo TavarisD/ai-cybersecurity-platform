@@ -708,6 +708,20 @@ Body:
 
         let socket;
 
+        function formatRelativeTime(timestamp) {
+            if (!timestamp) return "unknown";
+
+            const then = new Date(timestamp);
+            const now = new Date();
+            const diffSeconds = Math.floor((now - then) / 1000);
+
+            if (diffSeconds < 60) return `${diffSeconds}s ago`;
+            if (diffSeconds < 3600) return `${Math.floor(diffSeconds / 60)}m ago`;
+            if (diffSeconds < 86400) return `${Math.floor(diffSeconds / 3600)}h ago`;
+
+            return `${Math.floor(diffSeconds / 86400)}d ago`;
+        }
+
         function connectWebSocket() {
             const protocol = window.location.protocol === "https:" ? "wss://" : "ws://";
             const wsUrl = protocol + window.location.host + "/ws/logs";
@@ -962,7 +976,18 @@ Body:
                             <div style="font-size:14px; margin-bottom:6px;">
                                 Last Seen:
                                 <strong>
-                                    ${source.last_seen ? new Date(source.last_seen).toLocaleString() : "unknown"}
+                                    ${formatRelativeTime(source.last_seen)}
+                                </strong>
+                            </div>
+                            <div style="font-size:13px; margin-bottom:6px; opacity:0.85;">
+                                Risk Reason:
+                                <strong>
+                                    ${
+                                        source.escalation_level === "critical" ? "Critical activity or spike detected" :
+                                        source.escalation_level === "high" ? "High suspicious activity score" :
+                                        source.escalation_level === "elevated" ? "Growing or noisy source activity" :
+                                        "Normal source behavior"
+                                    }
                                 </strong>
                             </div>
 
