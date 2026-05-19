@@ -854,11 +854,29 @@ def source_analytics(
             elif count >= 10 or growth >= 50:
                 escalation_level = "elevated"
 
+            last_seen_value = source_last_seen.get(source)
+            source_uptime_status = "unknown"
+
+            if last_seen_value:
+                try:
+                    last_seen_dt = datetime.fromisoformat(last_seen_value)
+                    minutes_since_seen = (datetime.utcnow() - last_seen_dt).total_seconds() / 60
+
+                    if minutes_since_seen <= 10:
+                        source_uptime_status = "active"
+                    elif minutes_since_seen <= 60:
+                        source_uptime_status = "stale"
+                    else:
+                        source_uptime_status = "inactive"
+                except Exception:
+                    source_uptime_status = "unknown"
+
             source_health.append({
                 "source": source,
                 "status": health_status,
                 "count": count,
                 "last_seen": source_last_seen.get(source),
+                "uptime_status": source_uptime_status,
                 "recent_events": recent,
                 "older_events": older,
                 "growth_percent": growth,
