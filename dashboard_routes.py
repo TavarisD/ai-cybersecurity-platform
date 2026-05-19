@@ -983,10 +983,28 @@ Body:
                             escalationColor = "#dc2626";
                         }
 
-                        item.style.background = "#0f172a";
+                        let cardBackground = "#0f172a";
+
+                        if (source.uptime_status === "stale") {
+                            cardBackground = "#1f1a0a";
+                        }
+
+                        if (source.uptime_status === "inactive") {
+                            cardBackground = "#2a0f0f";
+                        }
+
+                        item.style.background = cardBackground;
                         item.style.padding = "12px";
                         item.style.borderRadius = "10px";
                         item.style.border = `1px solid ${escalationColor}`;
+
+                        if (source.uptime_status === "inactive") {
+                            item.style.boxShadow = "0 0 14px rgba(220, 38, 38, 0.35)";
+                        } else if (source.uptime_status === "stale") {
+                            item.style.boxShadow = "0 0 12px rgba(202, 138, 4, 0.25)";
+                        } else {
+                            item.style.boxShadow = "none";
+                        }
 
                         item.innerHTML = `
                             <div style="
