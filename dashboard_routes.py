@@ -992,9 +992,16 @@ Body:
                             </div>
 
                             <div style="font-size:14px; margin-bottom:6px;">
-                                Last Seen:
-                                <strong>
-                                    ${formatRelativeTime(source.last_seen)}
+                                Uptime:
+                                <strong style="
+                                    color:${
+                                        source.uptime_status === "active" ? "#22c55e" :
+                                        source.uptime_status === "stale" ? "#ca8a04" :
+                                        source.uptime_status === "inactive" ? "#dc2626" :
+                                        "#94a3b8"
+                                    };
+                                ">
+                                    ${(source.uptime_status || "unknown").toUpperCase()}
                                 </strong>
                             </div>
                             <div style="font-size:13px; margin-bottom:6px; opacity:0.85;">
