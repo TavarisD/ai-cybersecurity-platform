@@ -708,6 +708,7 @@ def source_analytics(
 
     source_counts = {}
     source_trends = {}
+    source_last_seen = {}
     today = datetime.utcnow().date()
     logs_today = 0
     total_logs = 0
@@ -720,7 +721,7 @@ def source_analytics(
 
         parsed = parse_result(record.result)
         source = parsed.get("source")
-
+        
         if not source:
             if parsed.get("ingestion_method") == "api_key_webhook":
                 source = "api-webhook"
@@ -728,6 +729,9 @@ def source_analytics(
                 source = "external-source"
             else:
                 source = "manual-entry"
+
+        if record.created_at:
+            source_last_seen[source] = record.created_at.isoformat()
 
         if source not in source_counts:
             source_counts[source] = 0
@@ -854,6 +858,7 @@ def source_analytics(
                 "source": source,
                 "status": health_status,
                 "count": count,
+                "last_seen": source_last_seen.get(source),
                 "recent_events": recent,
                 "older_events": older,
                 "growth_percent": growth,
