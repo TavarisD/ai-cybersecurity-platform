@@ -1196,19 +1196,35 @@ Body:
             });
         }
 
+        let dashboardRefreshing = false;
+
+        async function refreshDashboardSafely() {
+            if (dashboardRefreshing) {
+                console.log("Dashboard refresh skipped: previous refresh still running");
+                return;
+            }
+
+            dashboardRefreshing = true;
+
+            try {
+                await loadDashboard();
+                await loadSourceAnalytics();
+                await loadIngestionActivity();
+                await loadIngestionErrors();
+            } catch (error) {
+                console.error("Dashboard refresh error:", error);
+            } finally {
+                dashboardRefreshing = false;
+            }
+        }
+
         window.onload = function() {
-            loadDashboard();
+            refreshDashboardSafely();
             loadBillingStatus();
             loadApiKey();
-            loadSourceAnalytics();
-            loadIngestionActivity();
-            loadIngestionErrors();
 
             setInterval(() => {
-                loadDashboard();
-                loadSourceAnalytics();
-                loadIngestionActivity();
-                loadIngestionErrors();
+                refreshDashboardSafely();
             }, 5000);
         };
         </script>
