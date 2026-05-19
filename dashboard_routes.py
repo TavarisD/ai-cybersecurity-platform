@@ -750,13 +750,31 @@ Body:
         async function loadSourceAnalytics() {
             const token = localStorage.getItem("token");
 
-            const response = await fetch("/source-analytics", {
-                headers: {
-                    "Authorization": "Bearer " + token
-                }
-            });
+            let data = {};
 
-            const data = await response.json();
+            try {
+                const response = await fetch("/source-analytics", {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Source analytics request failed");
+                }
+
+                data = await response.json();
+            } catch (error) {
+                console.error("Source analytics error:", error);
+
+                document.getElementById("logs-today").innerText = "Error";
+                document.getElementById("total-sources").innerText = "Error";
+                document.getElementById("top-source").innerText = "Unavailable";
+                document.getElementById("source-trend-box").innerHTML =
+                    "<div style='color:#f87171;'>Could not load source analytics.</div>";
+
+                return;
+            }
             const sources = data.sources || {};
 
             const entries = Object.entries(sources);
