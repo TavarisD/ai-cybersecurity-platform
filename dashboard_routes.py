@@ -245,6 +245,18 @@ Body:
                             border:1px solid #334155;
                         ">
                             <h3>Source Trend Analytics</h3>
+                            <div id="source-uptime-warning" style="
+                                display:none;
+                                margin-top:12px;
+                                padding:12px;
+                                border-radius:10px;
+                                background:#431407;
+                                border:1px solid #f97316;
+                                color:#fed7aa;
+                                font-weight:bold;
+                            ">
+                                Source uptime warning
+                            </div>
                             <div style="
                                 display:grid;
                                 grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
@@ -867,6 +879,21 @@ Body:
             }
             const healthBox = document.getElementById("source-health-box");
             const healthSources = data.source_health || [];
+            const uptimeWarningBox = document.getElementById("source-uptime-warning");
+
+            const staleOrInactiveSources = healthSources.filter(source =>
+                source.uptime_status === "stale" || source.uptime_status === "inactive"
+            );
+
+            if (uptimeWarningBox) {
+                if (staleOrInactiveSources.length > 0) {
+                    uptimeWarningBox.style.display = "block";
+                    uptimeWarningBox.innerText =
+                        `⚠️ ${staleOrInactiveSources.length} source(s) are stale or inactive`;
+                } else {
+                    uptimeWarningBox.style.display = "none";
+                }
+            }
             const criticalEscalations = healthSources.filter(s => s.escalation_level === "critical").length;
             const spikeAlerts = healthSources.filter(s => s.spike_detected === true).length;
             const elevatedSources = healthSources.filter(s => s.escalation_level === "elevated").length;
@@ -989,6 +1016,13 @@ Body:
 
                             <div style="font-size:14px; margin-bottom:6px;">
                                 Growth: <strong>${source.growth_percent}%</strong>
+                            </div>
+
+                            <div style="font-size:14px; margin-bottom:6px;">
+                                Last Seen:
+                                <strong>
+                                    ${formatRelativeTime(source.last_seen)}
+                                </strong>
                             </div>
 
                             <div style="font-size:14px; margin-bottom:6px;">
