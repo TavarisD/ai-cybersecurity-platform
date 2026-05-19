@@ -1140,12 +1140,31 @@ Body:
         async function loadIngestionErrors() {
             const token = localStorage.getItem("token");
 
-            const response = await fetch("/ingestion-errors", {
-                headers: {
-                    "Authorization": "Bearer " + token
+            let data = {};
+
+            try {
+                const response = await fetch("/ingestion-errors", {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Ingestion errors request failed");
                 }
-            });
-            const data = await response.json();
+
+                data = await response.json();
+            } catch (error) {
+                console.error("Ingestion errors error:", error);
+
+                const box = document.getElementById("ingestion-errors-box");
+                if (box) {
+                    box.innerHTML =
+                        "<div style='color:#fecaca;'>Could not load ingestion errors.</div>";
+                }
+
+                return;
+            }
 
             const box = document.getElementById("ingestion-errors-box");
             if (!box) return;
