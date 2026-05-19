@@ -272,6 +272,18 @@ Body:
                             ">
                                 Source uptime warning
                             </div>
+                            <div id="source-risk-warning" style="
+                                display:none;
+                                margin-top:12px;
+                                padding:12px;
+                                border-radius:10px;
+                                background:#450a0a;
+                                border:1px solid #dc2626;
+                                color:#fecaca;
+                                font-weight:bold;
+                            ">
+                                Source risk warning
+                            </div>
                             <div style="
                                 display:grid;
                                 grid-template-columns:repeat(auto-fit, minmax(160px, 1fr));
@@ -895,6 +907,7 @@ Body:
             const healthBox = document.getElementById("source-health-box");
             const healthSources = data.source_health || [];
             const uptimeWarningBox = document.getElementById("source-uptime-warning");
+            const riskWarningBox = document.getElementById("source-risk-warning");
 
             const staleOrInactiveSources = healthSources.filter(source =>
                 source.uptime_status === "stale" || source.uptime_status === "inactive"
@@ -909,6 +922,21 @@ Body:
                     uptimeWarningBox.style.display = "none";
                 }
             }
+
+            const highRiskSources = healthSources.filter(source =>
+                source.escalation_level === "high" || source.escalation_level === "critical"
+            );
+
+            if (riskWarningBox) {
+                if (highRiskSources.length > 0) {
+                    riskWarningBox.style.display = "block";
+                    riskWarningBox.innerText =
+                        `🚨 ${highRiskSources.length} source(s) have high or critical risk escalation`;
+                } else {
+                    riskWarningBox.style.display = "none";
+                }
+            }
+
             const criticalEscalations = healthSources.filter(s => s.escalation_level === "critical").length;
             const spikeAlerts = healthSources.filter(s => s.spike_detected === true).length;
             const elevatedSources = healthSources.filter(s => s.escalation_level === "elevated").length;
