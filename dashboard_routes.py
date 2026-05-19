@@ -1112,6 +1112,22 @@ Body:
                                     ${(source.uptime_status || "unknown").toUpperCase()}
                                 </strong>
                             </div>
+
+                            <div style="font-size:13px; margin-bottom:6px; opacity:0.85;">
+                                Trend Warning:
+                                <strong>
+                                    ${
+                                        source.spike_detected ? "Sudden activity spike detected" :
+                                        source.growth_percent >= 100 ? "Activity doubled compared to previous window" :
+                                        source.growth_percent >= 50 ? "Activity rising quickly" :
+                                        source.growth_percent <= -50 ? "Activity dropped sharply" :
+                                        source.growth_percent > 0 ? "Activity increasing" :
+                                        source.growth_percent < 0 ? "Activity decreasing" :
+                                        "Activity stable"
+                                    }
+                                </strong>
+                            </div>
+
                             <div style="font-size:13px; margin-bottom:6px; opacity:0.85;">
                                 Risk Reason:
                                 <strong>
