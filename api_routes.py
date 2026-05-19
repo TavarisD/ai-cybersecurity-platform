@@ -719,7 +719,15 @@ def source_analytics(
             logs_today += 1
 
         parsed = parse_result(record.result)
-        source = parsed.get("source", "unknown")
+        source = parsed.get("source")
+
+        if not source:
+            if parsed.get("ingestion_method") == "api_key_webhook":
+                source = "api-webhook"
+            elif "source" in record.raw_log.lower():
+                source = "external-source"
+            else:
+                source = "manual-entry"
 
         if source not in source_counts:
             source_counts[source] = 0
@@ -760,10 +768,22 @@ def source_analytics(
             score = 0
             score += count * 2
 
-            matching_records = [
-                r for r in records
-                if parse_result(r.result).get("source", "unknown") == source
-            ]
+            matching_records = []
+
+            for r in records:
+                parsed_r = parse_result(r.result)
+                parsed_source = parsed_r.get("source")
+
+                if not parsed_source:
+                    if parsed_r.get("ingestion_method") == "api_key_webhook":
+                        parsed_source = "api-webhook"
+                    elif "source" in r.raw_log.lower():
+                        parsed_source = "external-source"
+                    else:
+                        parsed_source = "manual-entry"
+
+                if parsed_source == source:
+                    matching_records.append(r)
 
             for r in matching_records:
                 parsed = parse_result(r.result)
@@ -1249,7 +1269,14 @@ def ingestion_activity(
         parsed = parse_result(record.result)
 
         activity.append({
-            "source": parsed.get("source", "unknown"),
+            "source": (
+                parsed.get("source")
+                or (
+                    "api-webhook"
+                    if parsed.get("ingestion_method") == "api_key_webhook"
+                    else "manual-entry"
+                )
+            ),
             "event": record.raw_log,
             "status": "processed",
             "severity": parsed.get("severity", "LOW"),
