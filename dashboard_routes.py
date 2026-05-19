@@ -1048,13 +1048,31 @@ Body:
         async function loadIngestionActivity() {
             const token = localStorage.getItem("token");
 
-            const response = await fetch("/ingestion-activity", {
-                headers: {
-                    "Authorization": "Bearer " + token
-                }
-            });
+            let data = {};
 
-            const data = await response.json();
+            try {
+                const response = await fetch("/ingestion-activity", {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Ingestion activity request failed");
+                }
+
+                data = await response.json();
+            } catch (error) {
+                console.error("Ingestion activity error:", error);
+
+                const box = document.getElementById("ingestion-activity-box");
+                if (box) {
+                    box.innerHTML =
+                        "<div style='color:#f87171;'>Could not load ingestion activity.</div>";
+                }
+
+                return;
+            }
 
             const box = document.getElementById("ingestion-activity-box");
 
