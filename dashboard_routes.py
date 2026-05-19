@@ -959,6 +959,13 @@ Body:
                                 Growth: <strong>${source.growth_percent}%</strong>
                             </div>
 
+                            <div style="font-size:14px; margin-bottom:6px;">
+                                Last Seen:
+                                <strong>
+                                    ${source.last_seen ? new Date(source.last_seen).toLocaleString() : "unknown"}
+                                </strong>
+                            </div>
+
                             <div style="font-size:14px;">
                                 Spike Detected:
                                 <strong style="color:${source.spike_detected ? "#dc2626" : "#22c55e"};">
