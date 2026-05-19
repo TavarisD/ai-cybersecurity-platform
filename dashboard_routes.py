@@ -995,7 +995,28 @@ Body:
                                 align-items:center;
                                 margin-bottom:8px;
                             ">
-                                <strong>${source.source}</strong>
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span style="
+                                        width:10px;
+                                        height:10px;
+                                        border-radius:999px;
+                                        display:inline-block;
+                                        background:${
+                                            source.uptime_status === "active" ? "#22c55e" :
+                                            source.uptime_status === "stale" ? "#ca8a04" :
+                                            source.uptime_status === "inactive" ? "#dc2626" :
+                                            "#94a3b8"
+                                        };
+                                        box-shadow:${
+                                            source.uptime_status === "active" ? "0 0 10px #22c55e" :
+                                            source.uptime_status === "stale" ? "0 0 10px #ca8a04" :
+                                            source.uptime_status === "inactive" ? "0 0 10px #dc2626" :
+                                            "none"
+                                        };
+                                    "></span>
+
+                                    <strong>${source.source}</strong>
+                                </div>
 
                                 <span style="
                                     background:${escalationColor};
