@@ -52,6 +52,21 @@ def dashboard():
                 border-radius: 12px;
                 margin-bottom: 20px;
             }
+
+            @keyframes heartbeatPulse {
+                0% {
+                    transform: scale(1);
+                    opacity: 0.8;
+                }
+                50% {
+                    transform: scale(1.35);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(1);
+                    opacity: 0.8;
+                }
+            }
         </style>
     </head>
         <body>
@@ -1031,6 +1046,12 @@ Body:
                                             source.uptime_status === "inactive" ? "0 0 10px #dc2626" :
                                             "none"
                                         };
+
+                                        animation:${
+                                            source.uptime_status === "active" ? "heartbeatPulse 1.5s infinite" :
+                                            "none"
+                                        };
+
                                     "></span>
 
                                     <strong>${source.source}</strong>
