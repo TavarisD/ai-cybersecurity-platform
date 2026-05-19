@@ -1015,7 +1015,21 @@ Body:
                             </div>
 
                             <div style="font-size:14px; margin-bottom:6px;">
-                                Growth: <strong>${source.growth_percent}%</strong>
+                                Growth:
+                                <strong style="
+                                    color:${
+                                        source.growth_percent > 0 ? "#22c55e" :
+                                        source.growth_percent < 0 ? "#38bdf8" :
+                                        "#94a3b8"
+                                    };
+                                ">
+                                    ${
+                                        source.growth_percent > 0 ? "▲" :
+                                        source.growth_percent < 0 ? "▼" :
+                                        "■"
+                                    }
+                                    ${source.growth_percent}%
+                                </strong>
                             </div>
 
                             <div style="font-size:14px; margin-bottom:6px;">
