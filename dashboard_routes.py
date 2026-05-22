@@ -1218,6 +1218,26 @@ Body:
                                 : ""
                             }
 
+                            <div style="
+                                margin-top:10px;
+                                padding:10px;
+                                border-radius:8px;
+                                background:#020617;
+                                border:1px solid #334155;
+                                font-size:13px;
+                                opacity:0.95;
+                            ">
+                                <strong>Investigation Notes:</strong><br>
+                                ${
+                                    source.escalation_level === "critical" ? "Check source logs, recent failed attempts, blacklist status, and possible blocking action." :
+                                    source.escalation_level === "high" ? "Review recent events, compare activity growth, and verify whether this source is expected." :
+                                    source.uptime_status === "inactive" ? "Confirm the source is still online and sending telemetry." :
+                                    source.uptime_status === "stale" ? "Check ingestion heartbeat and API/webhook connection." :
+                                    source.spike_detected ? "Inspect the spike window and compare it with normal source behavior." :
+                                    "No immediate action required. Continue routine monitoring."
+                                }
+                            </div>
+
                             <div style="font-size:14px;">
                                 Spike Detected:
                                 <strong style="color:${source.spike_detected ? "#dc2626" : "#22c55e"};">
