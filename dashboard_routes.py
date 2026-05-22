@@ -1187,6 +1187,37 @@ Body:
                                 </strong>
                             </div>
 
+                            ${
+                                source.escalation_level === "critical" || source.escalation_level === "high"
+                                ? `
+                                    <div style="
+                                        margin-top:10px;
+                                        padding:10px;
+                                        border-radius:8px;
+                                        background:${
+                                            source.escalation_level === "critical"
+                                                ? "rgba(220,38,38,0.18)"
+                                                : "rgba(234,88,12,0.18)"
+                                        };
+                                        border:1px solid ${
+                                            source.escalation_level === "critical"
+                                                ? "#dc2626"
+                                                : "#ea580c"
+                                        };
+                                        color:white;
+                                        font-size:13px;
+                                        font-weight:bold;
+                                    ">
+                                        ${
+                                            source.escalation_level === "critical"
+                                                ? "🚨 Immediate SOC investigation recommended"
+                                                : "⚠️ Elevated monitoring recommended"
+                                        }
+                                    </div>
+                                `
+                                : ""
+                            }
+
                             <div style="font-size:14px;">
                                 Spike Detected:
                                 <strong style="color:${source.spike_detected ? "#dc2626" : "#22c55e"};">
