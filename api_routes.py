@@ -100,6 +100,9 @@ def should_blacklist(log_text: str, result: dict):
 
     return False, None
 
+def should_send_email_alert(escalation_level: str, spike_detected: bool) -> bool:
+    return escalation_level in ["high", "critical"] or spike_detected is True
+
 async def broadcast_dashboard_update(log_text: str):
     disconnected = []
 
