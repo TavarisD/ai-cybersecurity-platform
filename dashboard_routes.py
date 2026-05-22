@@ -1093,7 +1093,12 @@ Body:
                                     font-size:12px;
                                     font-weight:bold;
                                 ">
-                                    ${(source.escalation_level || "normal").toUpperCase()}
+                                    ${
+                                        source.escalation_level === "critical" ? "CRITICAL RESPONSE" :
+                                        source.escalation_level === "high" ? "HIGH PRIORITY" :
+                                        source.escalation_level === "elevated" ? "ELEVATED WATCH" :
+                                        "NORMAL WATCH"
+                                    }
                                 </span>
                             </div>
 
