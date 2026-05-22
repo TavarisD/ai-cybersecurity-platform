@@ -103,6 +103,12 @@ def should_blacklist(log_text: str, result: dict):
 def should_send_email_alert(escalation_level: str, spike_detected: bool) -> bool:
     return escalation_level in ["high", "critical"] or spike_detected is True
 
+def log_email_alert_placeholder(source: str, escalation_level: str, spike_detected: bool):
+    print("EMAIL ALERT PLACEHOLDER")
+    print(f"Source: {source}")
+    print(f"Escalation Level: {escalation_level}")
+    print(f"Spike Detected: {spike_detected}")
+
 async def broadcast_dashboard_update(log_text: str):
     disconnected = []
 
@@ -873,6 +879,9 @@ def source_analytics(
                         source_uptime_status = "inactive"
                 except Exception:
                     source_uptime_status = "unknown"
+
+            if should_send_email_alert(escalation_level, spike_detected):
+                log_email_alert_placeholder(source, escalation_level, spike_detected)
 
             source_health.append({
                 "source": source,
