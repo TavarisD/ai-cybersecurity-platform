@@ -1188,6 +1188,36 @@ Body:
                                     ${source.spike_detected ? "YES" : "NO"}
                                 </strong>
                             </div>
+
+                            <div style="margin-top:10px; font-size:12px; opacity:0.8;">
+                                Source Risk Score
+                            </div>
+
+                            <div style="
+                                margin-top:6px;
+                                height:12px;
+                                background:#1e293b;
+                                border-radius:999px;
+                                overflow:hidden;
+                                border:1px solid #334155;
+                            ">
+                                <div style="
+                                    height:100%;
+                                    width:${
+                                        source.escalation_level === "critical" ? "100%" :
+                                        source.escalation_level === "high" ? "75%" :
+                                        source.escalation_level === "elevated" ? "50%" :
+                                        "20%"
+                                    };
+                                    background:${
+                                        source.escalation_level === "critical" ? "#dc2626" :
+                                        source.escalation_level === "high" ? "#ea580c" :
+                                        source.escalation_level === "elevated" ? "#ca8a04" :
+                                        "#22c55e"
+                                    };
+                                    transition:width 0.4s ease;
+                                "></div>
+                            </div>
                             <div style="
                                 margin-top:10px;
                                 height:10px;
