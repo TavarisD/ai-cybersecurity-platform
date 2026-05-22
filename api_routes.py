@@ -30,7 +30,7 @@ from api_key_auth import get_user_by_api_key
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 ingestion_errors = []
-
+email_alert_events = []
 
 class IngestLogRequest(BaseModel):
     log_text: str
@@ -104,10 +104,18 @@ def should_send_email_alert(escalation_level: str, spike_detected: bool) -> bool
     return escalation_level in ["high", "critical"] or spike_detected is True
 
 def log_email_alert_placeholder(source: str, escalation_level: str, spike_detected: bool):
+    alert_event = {
+        "source": source,
+        "escalation_level": escalation_level,
+        "spike_detected": spike_detected,
+        "timestamp": datetime.utcnow().isoformat(),
+        "status": "email_pending"
+    }
+
+    email_alert_events.append(alert_event)
+
     print("EMAIL ALERT PLACEHOLDER")
-    print(f"Source: {source}")
-    print(f"Escalation Level: {escalation_level}")
-    print(f"Spike Detected: {spike_detected}")
+    print(alert_event)
 
 async def broadcast_dashboard_update(log_text: str):
     disconnected = []
