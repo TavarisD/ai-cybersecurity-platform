@@ -1168,6 +1168,20 @@ Body:
                                 </strong>
                             </div>
 
+                            <div style="font-size:13px; margin-bottom:6px; opacity:0.85;">
+                                Recommended Action:
+                                <strong>
+                                    ${
+                                        source.escalation_level === "critical" ? "Investigate immediately and consider blocking this source" :
+                                        source.escalation_level === "high" ? "Review recent activity and monitor closely" :
+                                        source.uptime_status === "inactive" ? "Check whether this source stopped sending logs" :
+                                        source.uptime_status === "stale" ? "Verify ingestion connection and source heartbeat" :
+                                        source.spike_detected ? "Inspect recent spike activity for anomalies" :
+                                        "Continue monitoring"
+                                    }
+                                </strong>
+                            </div>
+
                             <div style="font-size:14px;">
                                 Spike Detected:
                                 <strong style="color:${source.spike_detected ? "#dc2626" : "#22c55e"};">
