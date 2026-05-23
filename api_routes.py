@@ -104,7 +104,12 @@ def should_blacklist(log_text: str, result: dict):
 def should_send_email_alert(escalation_level: str, spike_detected: bool) -> bool:
     return escalation_level in ["high", "critical"] or spike_detected is True
 
-def log_email_alert_placeholder(source: str, escalation_level: str, spike_detected: bool):
+def log_email_alert_placeholder(
+    source: str,
+    escalation_level: str,
+    spike_detected: bool,
+    db: Session | None = None
+):
     cooldown_key = f"{source}:{escalation_level}"
     now = datetime.utcnow()
 
@@ -126,6 +131,17 @@ def log_email_alert_placeholder(source: str, escalation_level: str, spike_detect
 
     email_alert_events.append(alert_event)
     email_alert_cooldowns[cooldown_key] = now
+
+    if db:
+        db_alert = EmailAlertEvent(
+            source=source,
+            escalation_level=escalation_level,
+            spike_detected=str(spike_detected).lower(),
+            status="email_pending"
+        )
+
+        db.add(db_alert)
+        db.commit()
 
     print("EMAIL ALERT PLACEHOLDER")
     print(alert_event)
