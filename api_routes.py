@@ -1423,3 +1423,31 @@ def test_email_alert(
         "status": "success",
         "message": "Test email alert event created"
     }
+
+@router.post("/acknowledge-alert/{alert_id}")
+def acknowledge_alert(
+    alert_id: int,
+    db: Session = Depends(get_db)
+):
+    alert = (
+        db.query(EmailAlertEvent)
+        .filter(EmailAlertEvent.id == alert_id)
+        .first()
+    )
+
+    if not alert:
+        raise HTTPException(status_code=404, detail="Alert not found")
+
+    alert.status = "acknowledged"
+    alert.acknowledged_at = datetime.utcnow()
+
+    db.commit()
+    db.refresh(alert)
+
+    return {
+        "status": "success",
+        "message": "Alert acknowledged",
+        "alert_id": alert.id,
+        "alert_status": alert.status,
+        "acknowledged_at": alert.acknowledged_at.isoformat() if alert.acknowledged_at else None
+    }
