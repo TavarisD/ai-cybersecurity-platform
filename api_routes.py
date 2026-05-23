@@ -1378,23 +1378,45 @@ def get_ingestion_errors():
     }
 
 @router.get("/email-alerts")
-def get_email_alerts():
-    last_alert = email_alert_events[-1] if email_alert_events else None
+def get_email_alerts(db: Session = Depends(get_db)):
+    db_alerts = (
+        db.query(EmailAlertEvent)
+        .order_by(EmailAlertEvent.id.desc())
+        .limit(20)
+        .all()
+    )
+
+    alerts = [
+        {
+            "id": alert.id,
+            "source": alert.source,
+            "escalation_level": alert.escalation_level,
+            "spike_detected": alert.spike_detected,
+            "status": alert.status,
+            "created_at": alert.created_at.isoformat() if alert.created_at else None
+        }
+        for alert in db_alerts
+    ]
+
+    last_alert = alerts[0] if alerts else None
 
     return {
         "status": "success",
-        "total_alerts": len(email_alert_events),
+        "total_alerts": len(alerts),
         "active_cooldowns": len(email_alert_cooldowns),
         "last_alert": last_alert,
-        "alerts": email_alert_events[-20:]
+        "alerts": alerts
     }
 
 @router.post("/test-email-alert")
-def test_email_alert():
+def test_email_alert(
+    db: Session = Depends(get_db)
+):
     log_email_alert_placeholder(
         source="test-source",
         escalation_level="critical",
-        spike_detected=True
+        spike_detected=True,
+        db=db
     )
 
     return {
