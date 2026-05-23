@@ -2,7 +2,7 @@ import asyncio
 from fastapi import APIRouter, Depends, HTTPException,  Request
 from sqlalchemy.orm import Session
 from database import get_db
-from models import User, LogRecord, BlacklistEntry
+from models import User, LogRecord, BlacklistEntry, EmailAlertEvent
 from schemas import UserCreate, UserOut, UserLogin
 from auth import hash_password, verify_password, create_access_token, get_current_user
 import os
