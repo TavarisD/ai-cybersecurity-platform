@@ -1361,5 +1361,6 @@ def get_email_alerts():
     return {
         "status": "success",
         "total_alerts": len(email_alert_events),
+        "active_cooldowns": len(email_alert_cooldowns),
         "alerts": email_alert_events[-20:]
     }
