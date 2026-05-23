@@ -1367,3 +1367,16 @@ def get_email_alerts():
         "last_alert": last_alert,
         "alerts": email_alert_events[-20:]
     }
+
+@router.post("/test-email-alert")
+def test_email_alert():
+    log_email_alert_placeholder(
+        source="test-source",
+        escalation_level="critical",
+        spike_detected=True
+    )
+
+    return {
+        "status": "success",
+        "message": "Test email alert event created"
+    }
