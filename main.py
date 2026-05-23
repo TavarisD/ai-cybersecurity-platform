@@ -13,6 +13,7 @@ import app_state
 from state_loader import restore_state
 
 from database import engine, Base
+from sqlalchemy import text
 import models
 
 
@@ -21,6 +22,33 @@ load_dotenv()
 
 app = FastAPI()
 Base.metadata.create_all(bind=engine)
+
+with engine.connect() as conn:
+    try:
+        conn.execute(
+            text(
+                """
+                ALTER TABLE email_alert_events
+                ADD COLUMN acknowledged_at TIMESTAMP NULL
+                """
+            )
+        )
+    except:
+        pass
+
+    try:
+        conn.execute(
+            text(
+                """
+                ALTER TABLE email_alert_events
+                ADD COLUMN resolved_at TIMESTAMP NULL
+                """
+            )
+        )
+    except:
+        pass
+
+    conn.commit()
 app.include_router(dashboard_router)
 app.include_router(api_router)
 
