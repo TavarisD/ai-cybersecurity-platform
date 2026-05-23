@@ -1342,3 +1342,11 @@ def get_ingestion_errors():
         "total_errors": len(ingestion_errors),
         "errors": ingestion_errors[-10:]
     }
+
+@router.get("/email-alerts")
+def get_email_alerts():
+    return {
+        "status": "success",
+        "total_alerts": len(email_alert_events),
+        "alerts": email_alert_events[-20:]
+    }
