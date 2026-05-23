@@ -1358,9 +1358,12 @@ def get_ingestion_errors():
 
 @router.get("/email-alerts")
 def get_email_alerts():
+    last_alert = email_alert_events[-1] if email_alert_events else None
+
     return {
         "status": "success",
         "total_alerts": len(email_alert_events),
         "active_cooldowns": len(email_alert_cooldowns),
+        "last_alert": last_alert,
         "alerts": email_alert_events[-20:]
     }
