@@ -1451,3 +1451,31 @@ def acknowledge_alert(
         "alert_status": alert.status,
         "acknowledged_at": alert.acknowledged_at.isoformat() if alert.acknowledged_at else None
     }
+
+@router.post("/resolve-alert/{alert_id}")
+def resolve_alert(
+    alert_id: int,
+    db: Session = Depends(get_db)
+):
+    alert = (
+        db.query(EmailAlertEvent)
+        .filter(EmailAlertEvent.id == alert_id)
+        .first()
+    )
+
+    if not alert:
+        raise HTTPException(status_code=404, detail="Alert not found")
+
+    alert.status = "resolved"
+    alert.resolved_at = datetime.utcnow()
+
+    db.commit()
+    db.refresh(alert)
+
+    return {
+        "status": "success",
+        "message": "Alert resolved",
+        "alert_id": alert.id,
+        "alert_status": alert.status,
+        "resolved_at": alert.resolved_at.isoformat() if alert.resolved_at else None
+    }
