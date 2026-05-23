@@ -31,6 +31,7 @@ router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
 ingestion_errors = []
 email_alert_events = []
+email_alert_cooldowns = {}
 
 class IngestLogRequest(BaseModel):
     log_text: str
@@ -104,15 +105,27 @@ def should_send_email_alert(escalation_level: str, spike_detected: bool) -> bool
     return escalation_level in ["high", "critical"] or spike_detected is True
 
 def log_email_alert_placeholder(source: str, escalation_level: str, spike_detected: bool):
+    cooldown_key = f"{source}:{escalation_level}"
+    now = datetime.utcnow()
+
+    last_sent = email_alert_cooldowns.get(cooldown_key)
+
+    if last_sent:
+        minutes_since_last = (now - last_sent).total_seconds() / 60
+
+        if minutes_since_last < 15:
+            return
+
     alert_event = {
         "source": source,
         "escalation_level": escalation_level,
         "spike_detected": spike_detected,
-        "timestamp": datetime.utcnow().isoformat(),
+        "timestamp": now.isoformat(),
         "status": "email_pending"
     }
 
     email_alert_events.append(alert_event)
+    email_alert_cooldowns[cooldown_key] = now
 
     print("EMAIL ALERT PLACEHOLDER")
     print(alert_event)
