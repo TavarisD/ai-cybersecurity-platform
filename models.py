@@ -47,4 +47,7 @@ class EmailAlertEvent(Base):
 
     status = Column(String, default="pending")
 
+    acknowledged_at = Column(DateTime, nullable=True)
+    resolved_at = Column(DateTime, nullable=True)
+
     created_at = Column(DateTime, default=datetime.utcnow)
