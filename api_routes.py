@@ -918,7 +918,12 @@ def source_analytics(
                     source_uptime_status = "unknown"
 
             if should_send_email_alert(escalation_level, spike_detected):
-                log_email_alert_placeholder(source, escalation_level, spike_detected)
+                log_email_alert_placeholder(
+                    source,
+                    escalation_level,
+                    spike_detected,
+                    db
+                )
 
             source_health.append({
                 "source": source,
