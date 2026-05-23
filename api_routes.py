@@ -1479,3 +1479,43 @@ def resolve_alert(
         "alert_status": alert.status,
         "resolved_at": alert.resolved_at.isoformat() if alert.resolved_at else None
     }
+
+@router.get("/incident-summary")
+def incident_summary(
+    db: Session = Depends(get_db)
+):
+    total = db.query(EmailAlertEvent).count()
+
+    active = (
+        db.query(EmailAlertEvent)
+        .filter(
+            EmailAlertEvent.status.in_(
+                ["email_pending", "acknowledged"]
+            )
+        )
+        .count()
+    )
+
+    resolved = (
+        db.query(EmailAlertEvent)
+        .filter(
+            EmailAlertEvent.status == "resolved"
+        )
+        .count()
+    )
+
+    critical = (
+        db.query(EmailAlertEvent)
+        .filter(
+            EmailAlertEvent.escalation_level == "critical",
+            EmailAlertEvent.status != "resolved"
+        )
+        .count()
+    )
+
+    return {
+        "total_incidents": total,
+        "active_incidents": active,
+        "resolved_incidents": resolved,
+        "critical_open_incidents": critical
+    }
