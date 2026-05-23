@@ -259,6 +259,53 @@ Body:
                             border-radius:10px;
                             border:1px solid #334155;
                         ">
+                            <div style="
+                                margin-top:20px;
+                                display:grid;
+                                grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+                                gap:12px;
+                                ">
+
+                                <div style="
+                                background:#450a0a;
+                                padding:12px;
+                                border-radius:10px;
+                                border:1px solid #dc2626;
+                                ">
+                                <div style="font-size:12px;">Open Incidents</div>
+                                <div id="open-incidents"
+                                style="font-size:24px;font-weight:bold;">
+                                0
+                                </div>
+                                </div>
+
+                                <div style="
+                                background:#422006;
+                                padding:12px;
+                                border-radius:10px;
+                                border:1px solid #ca8a04;
+                                ">
+                                <div style="font-size:12px;">Critical Open</div>
+                                <div id="ack-incidents"
+                                style="font-size:24px;font-weight:bold;">
+                                0
+                                </div>
+                                </div>
+
+                                <div style="
+                                background:#052e16;
+                                padding:12px;
+                                border-radius:10px;
+                                border:1px solid #22c55e;
+                                ">
+                                <div style="font-size:12px;">Resolved</div>
+                                <div id="resolved-incidents"
+                                style="font-size:24px;font-weight:bold;">
+                                0
+                                </div>
+                                </div>
+
+                                </div>
                             <h3>Source Trend Analytics</h3>
                             <div id="source-uptime-warning" style="
                                 display:none;
@@ -1455,6 +1502,36 @@ Body:
             });
         }
 
+        async function loadIncidentSummary() {
+            const token = localStorage.getItem("token");
+
+            try {
+                const response = await fetch("/incident-summary", {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Incident summary failed");
+                }
+
+                const data = await response.json();
+
+                document.getElementById("open-incidents").innerText =
+                    data.active_incidents || 0;
+
+                document.getElementById("ack-incidents").innerText =
+                    data.critical_open_incidents || 0;
+
+                document.getElementById("resolved-incidents").innerText =
+                    data.resolved_incidents || 0;
+
+            } catch(error) {
+                console.error("Incident summary error:", error);
+            }
+        }
+
         let dashboardRefreshing = false;
 
         async function refreshDashboardSafely() {
@@ -1470,6 +1547,7 @@ Body:
                 await loadSourceAnalytics();
                 await loadIngestionActivity();
                 await loadIngestionErrors();
+                await loadIncidentSummary();
             } catch (error) {
                 console.error("Dashboard refresh error:", error);
             } finally {
