@@ -286,7 +286,7 @@ Body:
                                 border:1px solid #ca8a04;
                                 ">
                                 <div style="font-size:12px;">Critical Open</div>
-                                <div id="ack-incidents"
+                                <div id="critical-open-incidents"
                                 style="font-size:24px;font-weight:bold;">
                                 0
                                 </div>
@@ -306,6 +306,26 @@ Body:
                                 </div>
 
                                 </div>
+                                
+                            <div style="
+                                margin-top:20px;
+                                background:#020617;
+                                padding:15px;
+                                border-radius:10px;
+                                border:1px solid #334155;
+                            ">
+                                <h3>SOC Incident Queue</h3>
+
+                                <div id="incident-queue-box" style="
+                                    margin-top:15px;
+                                    display:flex;
+                                    flex-direction:column;
+                                    gap:12px;
+                                ">
+                                    <div style="opacity:0.7;">Loading incident queue...</div>
+                                </div>
+                            </div>
+
                             <h3>Source Trend Analytics</h3>
                             <div id="source-uptime-warning" style="
                                 display:none;
@@ -1521,7 +1541,7 @@ Body:
                 document.getElementById("open-incidents").innerText =
                     data.active_incidents || 0;
 
-                document.getElementById("ack-incidents").innerText =
+                document.getElementById("critical-open-incidents").innerText =
                     data.critical_open_incidents || 0;
 
                 document.getElementById("resolved-incidents").innerText =
@@ -1530,6 +1550,173 @@ Body:
             } catch(error) {
                 console.error("Incident summary error:", error);
             }
+        }
+
+        async function loadIncidentQueue() {
+            const token = localStorage.getItem("token");
+
+            try {
+                const response = await fetch("/incident-queue", {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Incident queue failed");
+                }
+
+                const data = await response.json();
+                const box = document.getElementById("incident-queue-box");
+
+                if (!box) return;
+
+                box.innerHTML = "";
+
+                const incidents = data.incidents || [];
+
+                if (!incidents.length) {
+                    box.innerHTML = "<div>No open incidents</div>";
+                    return;
+                }
+
+                incidents.forEach(incident => {
+                    const row = document.createElement("div");
+
+                    let borderColor = "#334155";
+                    let badgeColor = "#64748b";
+
+                    if (incident.escalation_level === "critical") {
+                        borderColor = "#dc2626";
+                        badgeColor = "#dc2626";
+                    } else if (incident.escalation_level === "high") {
+                        borderColor = "#ea580c";
+                        badgeColor = "#ea580c";
+                    } else if (incident.escalation_level === "elevated") {
+                        borderColor = "#ca8a04";
+                        badgeColor = "#ca8a04";
+                    }
+
+                    row.style.background = "#0f172a";
+                    row.style.padding = "12px";
+                    row.style.borderRadius = "10px";
+                    row.style.border = `1px solid ${borderColor}`;
+
+                    row.innerHTML = `
+                        <div style="
+                            display:flex;
+                            justify-content:space-between;
+                            align-items:center;
+                            gap:12px;
+                            flex-wrap:wrap;
+                        ">
+                            <div>
+                                <strong>Incident #${incident.id}</strong>
+                                <div style="font-size:13px; opacity:0.8; margin-top:4px;">
+                                    Source: ${incident.source}
+                                </div>
+                            </div>
+
+                            <span style="
+                                background:${badgeColor};
+                                color:white;
+                                padding:4px 10px;
+                                border-radius:999px;
+                                font-size:12px;
+                                font-weight:bold;
+                            ">
+                                ${(incident.escalation_level || "normal").toUpperCase()}
+                            </span>
+                        </div>
+
+                        <div style="margin-top:10px; font-size:14px;">
+                            Status:
+                            <strong>${(incident.status || "unknown").toUpperCase()}</strong>
+                        </div>
+
+                        <div style="margin-top:6px; font-size:13px; opacity:0.8;">
+                            Created: ${incident.created_at || "unknown"}
+                        </div>
+
+                        <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+                            <button onclick="acknowledgeIncident(${incident.id})" style="
+                                width:auto;
+                                background:#ca8a04;
+                                color:white;
+                                padding:8px 12px;
+                                border-radius:8px;
+                                border:none;
+                                font-weight:bold;
+                                cursor:pointer;
+                            ">
+                                Acknowledge
+                            </button>
+
+                            <button onclick="resolveIncident(${incident.id})" style="
+                                width:auto;
+                                background:#22c55e;
+                                color:white;
+                                padding:8px 12px;
+                                border-radius:8px;
+                                border:none;
+                                font-weight:bold;
+                                cursor:pointer;
+                            ">
+                                Resolve
+                            </button>
+                        </div>
+                    `;
+
+                    box.appendChild(row);
+                });
+
+            } catch(error) {
+                console.error("Incident queue error:", error);
+
+                const box = document.getElementById("incident-queue-box");
+                if (box) {
+                    box.innerHTML =
+                        "<div style='color:#f87171;'>Could not load incident queue.</div>";
+                }
+            }
+        }
+
+        async function acknowledgeIncident(id) {
+            const token = localStorage.getItem("token");
+
+            const response = await fetch(`/acknowledge-alert/${id}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (!response.ok) {
+                alert("Could not acknowledge incident");
+                return;
+            }
+
+            await loadIncidentSummary();
+            await loadIncidentQueue();
+        }
+
+        async function resolveIncident(id) {
+            const token = localStorage.getItem("token");
+
+            const response = await fetch(`/resolve-alert/${id}`, {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (!response.ok) {
+                alert("Could not resolve incident");
+                return;
+            }
+
+            await loadIncidentSummary();
+            await loadIncidentQueue();
         }
 
         let dashboardRefreshing = false;
@@ -1548,6 +1735,7 @@ Body:
                 await loadIngestionActivity();
                 await loadIngestionErrors();
                 await loadIncidentSummary();
+                await loadIncidentQueue();
             } catch (error) {
                 console.error("Dashboard refresh error:", error);
             } finally {
