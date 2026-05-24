@@ -1519,3 +1519,33 @@ def incident_summary(
         "resolved_incidents": resolved,
         "critical_open_incidents": critical
     }
+
+@router.get("/incident-queue")
+def incident_queue(
+    db: Session = Depends(get_db)
+):
+    incidents = (
+        db.query(EmailAlertEvent)
+        .filter(EmailAlertEvent.status != "resolved")
+        .order_by(EmailAlertEvent.id.desc())
+        .limit(20)
+        .all()
+    )
+
+    return {
+        "status": "success",
+        "total_open": len(incidents),
+        "incidents": [
+            {
+                "id": incident.id,
+                "source": incident.source,
+                "escalation_level": incident.escalation_level,
+                "spike_detected": incident.spike_detected,
+                "status": incident.status,
+                "created_at": incident.created_at.isoformat() if incident.created_at else None,
+                "acknowledged_at": incident.acknowledged_at.isoformat() if incident.acknowledged_at else None,
+                "resolved_at": incident.resolved_at.isoformat() if incident.resolved_at else None
+            }
+            for incident in incidents
+        ]
+    }
