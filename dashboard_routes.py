@@ -1738,7 +1738,7 @@ Body:
                         </div>
 
                         <div style="margin-top:6px; font-size:13px; opacity:0.8;">
-                            Created: ${incident.created_at || "unknown"}
+                            Created: ${formatRelativeTime(incident.created_at)}
                         </div>
 
                         <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
