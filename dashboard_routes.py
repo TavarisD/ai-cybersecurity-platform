@@ -1892,6 +1892,20 @@ Body:
                         <div style="font-size:13px; opacity:0.85; margin-top:6px;">
                             Resolved: ${formatRelativeTime(incident.resolved_at)}
                         </div>
+
+                        <div style="
+                            margin-top:10px;
+                            padding:10px;
+                            background:#022c22;
+                            border-radius:8px;
+                            border:1px solid #10b981;
+                            font-size:13px;
+                        ">
+                            <strong>SOC Timeline:</strong><br>
+                            Created: ${formatRelativeTime(incident.created_at)}<br>
+                            Acknowledged: ${formatRelativeTime(incident.acknowledged_at)}<br>
+                            Resolved: ${formatRelativeTime(incident.resolved_at)}
+                        </div>
                     `;
 
                     box.appendChild(row);
