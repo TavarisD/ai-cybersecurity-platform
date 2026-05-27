@@ -1979,6 +1979,7 @@ Body:
                 await loadIngestionErrors();
                 await loadIncidentSummary();
                 await loadIncidentQueue();
+                await loadResolvedIncidentHistory();
             } catch (error) {
                 console.error("Dashboard refresh error:", error);
             } finally {
