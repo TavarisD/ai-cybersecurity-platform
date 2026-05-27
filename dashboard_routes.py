@@ -929,12 +929,13 @@ Body:
                 console.log("WebSocket connected");
             };
 
-            socket.onmessage = (event) => {
+            socket.onmessage = async (event) => {
                 const data = JSON.parse(event.data);
 
                 if (data.type === "new_log") {
                     console.log("New log received:", data.log);
-                    loadDashboard();
+
+                    await refreshDashboardSafely();
                 }
             };
 
