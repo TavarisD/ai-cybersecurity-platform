@@ -398,6 +398,25 @@ Body:
                                 </div>
                             </div>
 
+                            <div style="
+                                margin-top:20px;
+                                background:#052e16;
+                                padding:15px;
+                                border-radius:10px;
+                                border:1px solid #22c55e;
+                            ">
+                                <h3>Resolved Incident History</h3>
+
+                                <div id="resolved-incident-history-box" style="
+                                    margin-top:15px;
+                                    display:flex;
+                                    flex-direction:column;
+                                    gap:12px;
+                                ">
+                                    <div style="opacity:0.7;">Loading resolved incidents...</div>
+                                </div>
+                            </div>
+
                             <h3>Source Trend Analytics</h3>
                             <div id="source-uptime-warning" style="
                                 display:none;
@@ -1826,6 +1845,69 @@ Body:
             }
         }
 
+        async function loadResolvedIncidentHistory() {
+            const token = localStorage.getItem("token");
+
+            try {
+                const response = await fetch("/resolved-incidents", {
+                    headers: {
+                        "Authorization": "Bearer " + token
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error("Resolved incidents failed");
+                }
+
+                const data = await response.json();
+                const box = document.getElementById("resolved-incident-history-box");
+
+                if (!box) return;
+
+                box.innerHTML = "";
+
+                const incidents = data.incidents || [];
+
+                if (!incidents.length) {
+                    box.innerHTML = "<div>No resolved incidents yet</div>";
+                    return;
+                }
+
+                incidents.forEach(incident => {
+                    const row = document.createElement("div");
+
+                    row.style.background = "#064e3b";
+                    row.style.padding = "12px";
+                    row.style.borderRadius = "10px";
+                    row.style.border = "1px solid #22c55e";
+
+                    row.innerHTML = `
+                        <strong>Incident #${incident.id}</strong>
+                        <div style="font-size:13px; opacity:0.85; margin-top:6px;">
+                            Source: ${incident.source}
+                        </div>
+                        <div style="font-size:13px; opacity:0.85; margin-top:6px;">
+                            Severity: ${(incident.escalation_level || "normal").toUpperCase()}
+                        </div>
+                        <div style="font-size:13px; opacity:0.85; margin-top:6px;">
+                            Resolved: ${formatRelativeTime(incident.resolved_at)}
+                        </div>
+                    `;
+
+                    box.appendChild(row);
+                });
+
+            } catch(error) {
+                console.error("Resolved incident history error:", error);
+
+                const box = document.getElementById("resolved-incident-history-box");
+                if (box) {
+                    box.innerHTML =
+                        "<div style='color:#fecaca;'>Could not load resolved incident history.</div>";
+                }
+            }
+        }
+
         async function acknowledgeIncident(id) {
             const token = localStorage.getItem("token");
 
@@ -1843,6 +1925,7 @@ Body:
 
             await loadIncidentSummary();
             await loadIncidentQueue();
+            await loadResolvedIncidentHistory();
         }
 
         async function resolveIncident(id) {
@@ -1862,6 +1945,7 @@ Body:
 
             await loadIncidentSummary();
             await loadIncidentQueue();
+            await loadResolvedIncidentHistory();
         }
 
         let dashboardRefreshing = false;
