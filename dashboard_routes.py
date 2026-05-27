@@ -316,6 +316,78 @@ Body:
                             ">
                                 <h3>SOC Incident Queue</h3>
 
+                                <div style="
+                                    margin-top:12px;
+                                    display:flex;
+                                    gap:10px;
+                                    flex-wrap:wrap;
+                                ">
+                                    <button onclick="setIncidentFilter('all')" style="
+                                        width:auto;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        background:#334155;
+                                        color:white;
+                                        font-weight:bold;
+                                        cursor:pointer;
+                                    ">
+                                        All
+                                    </button>
+
+                                    <button onclick="setIncidentFilter('open')" style="
+                                        width:auto;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        background:#1d4ed8;
+                                        color:white;
+                                        font-weight:bold;
+                                        cursor:pointer;
+                                    ">
+                                        Open
+                                    </button>
+
+                                    <button onclick="setIncidentFilter('acknowledged')" style="
+                                        width:auto;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        background:#ca8a04;
+                                        color:white;
+                                        font-weight:bold;
+                                        cursor:pointer;
+                                    ">
+                                        Acknowledged
+                                    </button>
+
+                                    <button onclick="setIncidentFilter('critical')" style="
+                                        width:auto;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        background:#dc2626;
+                                        color:white;
+                                        font-weight:bold;
+                                        cursor:pointer;
+                                    ">
+                                        Critical
+                                    </button>
+
+                                    <button onclick="setIncidentFilter('resolved')" style="
+                                        width:auto;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        background:#16a34a;
+                                        color:white;
+                                        font-weight:bold;
+                                        cursor:pointer;
+                                    ">
+                                        Resolved
+                                    </button>
+                                </div>
+
                                 <div id="incident-queue-box" style="
                                     margin-top:15px;
                                     display:flex;
@@ -1552,6 +1624,13 @@ Body:
             }
         }
 
+        let incidentFilter = "all";
+
+        function setIncidentFilter(filter) {
+            incidentFilter = filter;
+            loadIncidentQueue();
+        }
+
         async function loadIncidentQueue() {
             const token = localStorage.getItem("token");
 
@@ -1573,7 +1652,31 @@ Body:
 
                 box.innerHTML = "";
 
-                const incidents = data.incidents || [];
+                let incidents = data.incidents || [];
+
+                if (incidentFilter === "open") {
+                    incidents = incidents.filter(i =>
+                        i.status === "email_pending"
+                    );
+                }
+
+                if (incidentFilter === "acknowledged") {
+                    incidents = incidents.filter(i =>
+                        i.status === "acknowledged"
+                    );
+                }
+
+                if (incidentFilter === "critical") {
+                    incidents = incidents.filter(i =>
+                        i.escalation_level === "critical"
+                    );
+                }
+
+                if (incidentFilter === "resolved") {
+                    incidents = incidents.filter(i =>
+                        i.status === "resolved"
+                    );
+                }
 
                 if (!incidents.length) {
                     box.innerHTML = "<div>No open incidents</div>";
