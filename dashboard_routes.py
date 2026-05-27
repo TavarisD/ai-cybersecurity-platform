@@ -1742,31 +1742,73 @@ Body:
                         </div>
 
                         <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
-                            <button onclick="acknowledgeIncident(${incident.id})" style="
-                                width:auto;
-                                background:#ca8a04;
-                                color:white;
-                                padding:8px 12px;
-                                border-radius:8px;
-                                border:none;
-                                font-weight:bold;
-                                cursor:pointer;
-                            ">
-                                Acknowledge
-                            </button>
 
-                            <button onclick="resolveIncident(${incident.id})" style="
-                                width:auto;
-                                background:#22c55e;
-                                color:white;
-                                padding:8px 12px;
-                                border-radius:8px;
-                                border:none;
-                                font-weight:bold;
-                                cursor:pointer;
-                            ">
-                                Resolve
-                            </button>
+                            ${
+                                incident.status === "email_pending"
+                                ? `
+                                    <button onclick="acknowledgeIncident(${incident.id})" style="
+                                        width:auto;
+                                        background:#ca8a04;
+                                        color:white;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        font-weight:bold;
+                                        cursor:pointer;
+                                    ">
+                                        Acknowledge
+                                    </button>
+                                `
+                                : `
+                                    <button disabled style="
+                                        width:auto;
+                                        background:#78716c;
+                                        color:white;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        font-weight:bold;
+                                        opacity:0.7;
+                                        cursor:not-allowed;
+                                    ">
+                                        Acknowledged
+                                    </button>
+                                `
+                            }
+
+                            ${
+                                incident.status !== "resolved"
+                                ? `
+                                    <button onclick="resolveIncident(${incident.id})" style="
+                                        width:auto;
+                                        background:#22c55e;
+                                        color:white;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        font-weight:bold;
+                                        cursor:pointer;
+                                    ">
+                                        Resolve
+                                    </button>
+                                `
+                                : `
+                                    <button disabled style="
+                                        width:auto;
+                                        background:#78716c;
+                                        color:white;
+                                        padding:8px 12px;
+                                        border-radius:8px;
+                                        border:none;
+                                        font-weight:bold;
+                                        opacity:0.7;
+                                        cursor:not-allowed;
+                                    ">
+                                        Resolved
+                                    </button>
+                                `
+                            }
+
                         </div>
                     `;
 
