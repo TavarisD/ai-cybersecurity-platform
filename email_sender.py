@@ -1,6 +1,5 @@
 import os
-import smtplib
-from email.message import EmailMessage
+import resend
 
 
 def send_security_alert_email(
@@ -9,25 +8,18 @@ def send_security_alert_email(
     spike_detected: bool,
     timestamp: str | None = None
 ):
-    smtp_host = os.getenv("SMTP_HOST")
-    smtp_port = int(os.getenv("SMTP_PORT", "587"))
-    smtp_username = os.getenv("SMTP_USERNAME")
-    smtp_password = os.getenv("SMTP_PASSWORD")
-    alert_from = os.getenv("ALERT_FROM_EMAIL")
+    resend_api_key = os.getenv("RESEND_API_KEY")
+    alert_from = os.getenv("ALERT_FROM_EMAIL", "onboarding@resend.dev")
     alert_to = os.getenv("ALERT_TO_EMAIL")
 
-    if not all([
-        smtp_host,
-        smtp_username,
-        smtp_password,
-        alert_from,
-        alert_to
-    ]):
-        print("EMAIL SEND SKIPPED: missing SMTP environment variables")
+    if not resend_api_key or not alert_to:
+        print("EMAIL SEND SKIPPED: missing Resend environment variables")
         return {
             "sent": False,
-            "reason": "missing_smtp_environment_variables"
+            "reason": "missing_resend_environment_variables"
         }
+
+    resend.api_key = resend_api_key
 
     subject = f"Cybersecurity Alert: {escalation_level.upper()} escalation from {source}"
 
@@ -43,29 +35,28 @@ Recommended Action:
 Review this source in the SOC dashboard and investigate recent activity.
 """
 
-    message = EmailMessage()
-    message["From"] = alert_from
-    message["To"] = alert_to
-    message["Subject"] = subject
-    message.set_content(body)
-
     try:
-        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
-            server.starttls(timeout=10)
-            server.login(smtp_username, smtp_password)
-            server.send_message(message)
+        response = resend.Emails.send({
+            "from": alert_from,
+            "to": [alert_to],
+            "subject": subject,
+            "text": body
+        })
 
-        print("EMAIL ALERT SENT:", subject)
+        print("RESEND EMAIL ALERT SENT:", response)
 
         return {
             "sent": True,
-            "reason": "email_sent"
+            "reason": "email_sent",
+            "provider": "resend",
+            "response": response
         }
 
     except Exception as e:
-        print("EMAIL SEND FAILED:", str(e))
+        print("RESEND EMAIL SEND FAILED:", str(e))
 
         return {
             "sent": False,
-            "reason": str(e)
+            "reason": str(e),
+            "provider": "resend"
         }
