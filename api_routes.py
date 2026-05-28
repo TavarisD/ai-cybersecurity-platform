@@ -919,22 +919,12 @@ def source_analytics(
                     source_uptime_status = "unknown"
 
             if should_send_email_alert(escalation_level, spike_detected):
-
-                email_result = send_security_alert_email(
-                    source=source,
-                    escalation_level=escalation_level,
-                    spike_detected=spike_detected,
-                    timestamp=datetime.utcnow().isoformat()
-                )
-
                 log_email_alert_placeholder(
                     source,
                     escalation_level,
                     spike_detected,
                     db
                 )
-
-                print("EMAIL DELIVERY RESULT:", email_result)
 
             source_health.append({
                 "source": source,
