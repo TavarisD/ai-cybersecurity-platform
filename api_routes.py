@@ -1580,3 +1580,18 @@ def resolved_incidents(
             for incident in incidents
         ]
     }
+
+@router.post("/send-test-email-alert")
+def send_test_email_alert():
+    email_result = send_security_alert_email(
+        source="test-source",
+        escalation_level="critical",
+        spike_detected=True,
+        timestamp=datetime.utcnow().isoformat()
+    )
+
+    return {
+        "status": "success",
+        "message": "Test email send attempted",
+        "email_result": email_result
+    }
