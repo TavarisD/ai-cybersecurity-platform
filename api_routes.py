@@ -31,6 +31,7 @@ from incident_correlation import (
     generate_correlation_summary
 )
 from threat_intelligence import build_threat_intelligence
+from incident_timeline import update_incident_timeline
 
 
 router = APIRouter()
@@ -1151,6 +1152,12 @@ def analyze_log_api(
     )
 
     correlation_data = generate_correlation_summary(indicator)
+
+    timeline_result = update_incident_timeline(
+        indicator,
+        ai_incident["attack_type"]
+    )
+
     threat_intel = build_threat_intelligence(
         source=indicator,
         attack_type=ai_incident["attack_type"],
@@ -1168,7 +1175,9 @@ def analyze_log_api(
     result["ai_severity"] = ai_incident["severity"]
     result["ai_summary"] = ai_incident["summary"]
     result["ai_generated_at"] = ai_incident["generated_at"]
+    
     result["correlation_analysis"] = correlation_data
+    result["timeline_intelligence"] = timeline_result
     result["threat_intelligence"] = threat_intel
 
     record = LogRecord(
