@@ -26,7 +26,10 @@ from datetime import datetime, timedelta
 from api_key_auth import get_user_by_api_key
 from email_sender import send_security_alert_email
 from incident_ai import generate_ai_incident_summary
-
+from incident_correlation import (
+    record_incident,
+    generate_correlation_summary
+)
 
 
 router = APIRouter()
@@ -1140,6 +1143,14 @@ def analyze_log_api(
         threat_score=score
     )
 
+    record_incident(
+        ip=indicator,
+        attack_type=ai_incident["attack_type"],
+        severity=ai_incident["severity"]
+    )
+
+    correlation_data = generate_correlation_summary(indicator)
+
     result["threat_score"] = score
     result["priority"] = priority
     result["severity"] = priority.upper()
@@ -1151,7 +1162,8 @@ def analyze_log_api(
     result["ai_severity"] = ai_incident["severity"]
     result["ai_summary"] = ai_incident["summary"]
     result["ai_generated_at"] = ai_incident["generated_at"]
-
+    result["correlation_analysis"] = correlation_data
+    
     record = LogRecord(
         user_id=user.id,
         raw_log=log,
