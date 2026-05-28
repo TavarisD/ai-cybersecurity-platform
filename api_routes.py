@@ -25,6 +25,7 @@ from fastapi import Header
 from datetime import datetime, timedelta
 from api_key_auth import get_user_by_api_key
 from email_sender import send_security_alert_email
+from incident_ai import generate_ai_incident_summary
 
 
 
@@ -1133,12 +1134,23 @@ def analyze_log_api(
     score = calculate_smart_score(raw, result, is_blacklisted, attacker_history)
     priority = calculate_priority(score)
 
+    ai_incident = generate_ai_incident_summary(
+        source=indicator,
+        log_text=log,
+        threat_score=score
+    )
+
     result["threat_score"] = score
     result["priority"] = priority
     result["severity"] = priority.upper()
     result["is_blacklisted"] = is_blacklisted
     result["attacker_history"] = attacker_history
     result["ip"] = indicator
+
+    result["ai_attack_type"] = ai_incident["attack_type"]
+    result["ai_severity"] = ai_incident["severity"]
+    result["ai_summary"] = ai_incident["summary"]
+    result["ai_generated_at"] = ai_incident["generated_at"]
 
     record = LogRecord(
         user_id=user.id,
