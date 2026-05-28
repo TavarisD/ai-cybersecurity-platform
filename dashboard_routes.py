@@ -769,7 +769,93 @@ Body:
                     ">
                         ${(parsedResult.severity || "low").toUpperCase()}
                     </span><br>
-                    <strong>Analysis:</strong> ${parsedResult.analysis || parsedResult.ai_analysis || "No analysis available"}<br>
+                    <strong>Analysis:</strong> ${parsedResult.analysis || parsedResult.ai_analysis || "No analysis available"}
+
+                    <br><br>
+
+                    <div style="
+                        background:#020617;
+                        border:1px solid #334155;
+                        border-radius:10px;
+                        padding:12px;
+                        margin-top:12px;
+                    ">
+                        <div style="
+                            color:#38bdf8;
+                            font-weight:bold;
+                            margin-bottom:10px;
+                        ">
+                            AI Threat Intelligence
+                        </div>
+
+                        <div>
+                            <strong>AI Attack Type:</strong>
+                            ${parsedResult.ai_attack_type || "Unknown"}
+                        </div>
+
+                        <div style="margin-top:6px;">
+                            <strong>AI Severity:</strong>
+                            <span style="
+                                color:
+                                    ${(parsedResult.ai_severity || "").toLowerCase() === "critical" ? "#ef4444" :
+                                    (parsedResult.ai_severity || "").toLowerCase() === "high" ? "#f97316" :
+                                    (parsedResult.ai_severity || "").toLowerCase() === "medium" ? "#eab308" :
+                                    "#22c55e"};
+                                font-weight:bold;
+                            ">
+                                ${(parsedResult.ai_severity || "LOW").toUpperCase()}
+                            </span>
+                        </div>
+
+                        <div style="margin-top:6px;">
+                            <strong>Threat Sophistication:</strong>
+                            ${parsedResult.threat_intelligence?.threat_actor_sophistication || "Unknown"}
+                        </div>
+
+                        <div style="margin-top:6px;">
+                            <strong>Incident Urgency:</strong>
+                            ${parsedResult.threat_intelligence?.incident_urgency || "Unknown"}
+                        </div>
+
+                        <div style="margin-top:10px;">
+                            <strong>Recommended Actions:</strong>
+                            <ul style="margin-top:6px;">
+                                ${
+                                    parsedResult.threat_intelligence?.recommended_actions?.map(action =>
+                                        `<li>${action}</li>`
+                                    ).join("") || "<li>No actions available</li>"
+                                }
+                            </ul>
+                        </div>
+
+                        <div style="margin-top:10px;">
+                            <strong>Correlation Summary:</strong>
+                            <div style="margin-top:6px;">
+                                Total Incidents:
+                                ${parsedResult.correlation_analysis?.total_incidents || 0}
+                            </div>
+
+                            <div style="margin-top:6px;">
+                                Campaign Detected:
+                                ${
+                                    parsedResult.correlation_analysis?.campaign_analysis?.campaign_detected
+                                        ? "YES"
+                                        : "NO"
+                                }
+                            </div>
+
+                            <div style="margin-top:6px;">
+                                Mixed Attack Behavior:
+                                ${
+                                    parsedResult.correlation_analysis?.mixed_attack_behavior?.mixed_attack_detected
+                                        ? "YES"
+                                        : "NO"
+                                }
+                            </div>
+                        </div>
+                    </div>
+
+                    <br>
                     <small>${log.created_at}</small>
                 `;
 
