@@ -50,8 +50,8 @@ Review this source in the SOC dashboard and investigate recent activity.
     message.set_content(body)
 
     try:
-        with smtplib.SMTP(smtp_host, smtp_port) as server:
-            server.starttls()
+        with smtplib.SMTP(smtp_host, smtp_port, timeout=10) as server:
+            server.starttls(timeout=10)
             server.login(smtp_username, smtp_password)
             server.send_message(message)
 
