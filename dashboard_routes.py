@@ -1197,6 +1197,29 @@ Body:
                                         </div>
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>IOC Enrichment:</strong>
+
+                                        <div style="margin-top:6px;">
+                                            Enriched IOC Count:
+                                            ${
+                                                parsedResult.ioc_enrichment?.ioc_count || 0
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Indicators:
+                                            ${
+                                                parsedResult.ioc_enrichment?.enriched_iocs
+                                                    ?.map(ioc =>
+                                                        `${ioc.indicator_value} (${ioc.risk_level})`
+                                                    )
+                                                    .join(", ")
+                                                || "None"
+                                            }
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
