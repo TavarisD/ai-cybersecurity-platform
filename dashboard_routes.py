@@ -1553,7 +1553,12 @@ Body:
                 if (data.type === "new_log") {
                     console.log("New log received:", data.log);
 
-                    await refreshDashboardSafely();
+                    await loadSourceAnalytics();
+                    await loadIngestionActivity();
+                    await loadIngestionErrors();
+                    await loadIncidentSummary();
+                    await loadIncidentQueue();
+                    await loadResolvedIncidentHistory();
                 }
             };
 
