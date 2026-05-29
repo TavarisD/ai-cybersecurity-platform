@@ -988,6 +988,33 @@ Body:
                                     </div>
                                 </div>
 
+                                <div style="margin-top:10px;">
+                                    <strong>Threat Actor Confidence:</strong>
+
+                                    <div style="margin-top:6px;">
+                                        Confidence Score:
+                                        ${
+                                            parsedResult.actor_confidence?.actor_confidence || 0
+                                        }
+                                    </div>
+
+                                    <div style="margin-top:6px;">
+                                        Confidence Level:
+                                        ${
+                                            parsedResult.actor_confidence?.confidence_level ||
+                                            "Low"
+                                        }
+                                    </div>
+
+                                    <div style="margin-top:6px;">
+                                        Analyst Assessment:
+                                        ${
+                                            parsedResult.actor_confidence?.analyst_assessment ||
+                                            "Limited evidence"
+                                        }
+                                    </div>
+                                </div>
+
                                 <div style="margin-top:6px;">
                                     Campaign Name:
                                     ${
