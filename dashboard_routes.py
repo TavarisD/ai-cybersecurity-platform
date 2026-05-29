@@ -1041,6 +1041,42 @@ Body:
                                         </div>
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>MITRE ATT&CK Mapping:</strong>
+
+                                        <div style="margin-top:6px;">
+                                            Technique ID:
+                                            ${
+                                                parsedResult.mitre_mapping?.mitre_technique_id ||
+                                                "T0000"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Technique:
+                                            ${
+                                                parsedResult.mitre_mapping?.mitre_technique_name ||
+                                                "Unknown Technique"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Tactic:
+                                            ${
+                                                parsedResult.mitre_mapping?.mitre_tactic ||
+                                                "Unknown"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Severity:
+                                            ${
+                                                parsedResult.mitre_mapping?.mitre_severity ||
+                                                "low"
+                                            }
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
