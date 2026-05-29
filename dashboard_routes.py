@@ -1178,6 +1178,25 @@ Body:
                                         </div>
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>Threat Reputation:</strong>
+
+                                        <div style="margin-top:6px;">
+                                            Reputation Score:
+                                            ${
+                                                parsedResult.threat_reputation?.reputation_score || 0
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Reputation Level:
+                                            ${
+                                                parsedResult.threat_reputation?.reputation_level ||
+                                                "low"
+                                            }
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
