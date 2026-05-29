@@ -32,6 +32,7 @@ from incident_correlation import (
 )
 from threat_intelligence import build_threat_intelligence
 from incident_timeline import update_incident_timeline
+from attacker_behavior import profile_attacker_behavior
 
 
 router = APIRouter()
@@ -1164,6 +1165,12 @@ def analyze_log_api(
         threat_score=score
     )
 
+    behavior_profile = profile_attacker_behavior(
+        timeline_result,
+        correlation_data,
+        score
+    )
+
     result["threat_score"] = score
     result["priority"] = priority
     result["severity"] = priority.upper()
@@ -1175,10 +1182,11 @@ def analyze_log_api(
     result["ai_severity"] = ai_incident["severity"]
     result["ai_summary"] = ai_incident["summary"]
     result["ai_generated_at"] = ai_incident["generated_at"]
-    
+
     result["correlation_analysis"] = correlation_data
     result["timeline_intelligence"] = timeline_result
     result["threat_intelligence"] = threat_intel
+    result["behavior_profile"] = behavior_profile
 
     record = LogRecord(
         user_id=user.id,
