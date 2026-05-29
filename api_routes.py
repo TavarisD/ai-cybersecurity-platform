@@ -44,6 +44,7 @@ from ioc_extractor import extract_iocs
 from threat_actor_fingerprint import generate_threat_fingerprint
 from threat_cluster_detector import detect_threat_cluster
 from threat_reputation import calculate_threat_reputation
+from ioc_enrichment import enrich_iocs
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -1228,6 +1229,8 @@ def analyze_log_api(
 
     ioc_data = extract_iocs(log)
 
+    ioc_enrichment = enrich_iocs(ioc_data)
+
     fingerprint = generate_threat_fingerprint(
         indicator,
         behavior_profile,
@@ -1273,6 +1276,7 @@ def analyze_log_api(
     result["executive_summary"] = executive_summary
     result["mitre_mapping"] = mitre_mapping
     result["ioc_data"] = ioc_data
+    result["ioc_enrichment"] = ioc_enrichment
     result["threat_fingerprint"] = fingerprint
     result["threat_cluster"] = threat_cluster
     result["threat_reputation"] = threat_reputation
