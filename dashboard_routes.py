@@ -875,6 +875,50 @@ Body:
                             </div>
                         </div>
 
+                        <div style="margin-top:10px;">
+                            <strong>Behavior Profile:</strong>
+
+                            <div style="margin-top:6px;">
+                                Behavior Type:
+                                ${
+                                    parsedResult.behavior_profile?.behavior_type ||
+                                    "unknown"
+                                }
+                            </div>
+
+                            <div style="margin-top:6px;">
+                                Persistence:
+                                ${
+                                    parsedResult.behavior_profile?.persistence_level ||
+                                    "low"
+                                }
+                            </div>
+
+                            <div style="margin-top:6px;">
+                                Aggression:
+                                ${
+                                    parsedResult.behavior_profile?.aggression_level ||
+                                    "low"
+                                }
+                            </div>
+
+                            <div style="margin-top:6px;">
+                                Repeat Offender:
+                                ${
+                                    parsedResult.behavior_profile?.repeat_offender
+                                        ? "YES"
+                                        : "NO"
+                                }
+                            </div>
+
+                            <div style="margin-top:6px;">
+                                Confidence:
+                                ${
+                                    parsedResult.behavior_profile?.confidence || 0
+                                }%
+                            </div>
+                        </div>
+
                     </div>
 
                     <br>
