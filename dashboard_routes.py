@@ -1098,6 +1098,51 @@ Body:
                                         </div>
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>Threat Actor Fingerprint:</strong>
+
+                                        <div style="margin-top:6px;">
+                                            Fingerprint ID:
+                                            ${
+                                                parsedResult.threat_fingerprint?.fingerprint_id ||
+                                                "unknown"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Repeat Offender:
+                                            ${
+                                                parsedResult.threat_fingerprint?.repeat_offender
+                                                    ? "Yes"
+                                                    : "No"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Attack Pattern:
+                                            ${
+                                                parsedResult.threat_fingerprint?.attack_pattern ||
+                                                "unknown_activity"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Aggression Level:
+                                            ${
+                                                parsedResult.threat_fingerprint?.aggression_level ||
+                                                "low"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Risk Classification:
+                                            ${
+                                                parsedResult.threat_fingerprint?.risk_classification ||
+                                                "low_risk"
+                                            }
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
