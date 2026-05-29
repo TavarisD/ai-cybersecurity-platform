@@ -1077,6 +1077,27 @@ Body:
                                         </div>
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>IOC Intelligence:</strong>
+
+                                        <div style="margin-top:6px;">
+                                            IOC Count:
+                                            ${
+                                                parsedResult.ioc_data?.ioc_count || 0
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Indicators:
+                                            ${
+                                                parsedResult.ioc_data?.iocs
+                                                    ?.map(ioc => `${ioc.indicator_type}: ${ioc.indicator_value}`)
+                                                    .join(", ")
+                                                || "None Detected"
+                                            }
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
