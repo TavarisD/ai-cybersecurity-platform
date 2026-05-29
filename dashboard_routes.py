@@ -921,6 +921,42 @@ Body:
                                 </div>
                             </div>
 
+                            <div style="margin-top:10px;">
+                                <strong>Campaign Attribution:</strong>
+
+                                <div style="margin-top:6px;">
+                                    Campaign Detected:
+                                    ${
+                                        parsedResult.campaign_attribution?.campaign_detected
+                                            ? "YES"
+                                            : "NO"
+                                    }
+                                </div>
+
+                                <div style="margin-top:6px;">
+                                    Campaign Name:
+                                    ${
+                                        parsedResult.campaign_attribution?.campaign_name ||
+                                        "Unknown Activity"
+                                    }
+                                </div>
+
+                                <div style="margin-top:6px;">
+                                    Confidence:
+                                    ${
+                                        parsedResult.campaign_attribution?.campaign_confidence || 0
+                                    }%
+                                </div>
+
+                                <div style="margin-top:6px;">
+                                    Latest Attack:
+                                    ${
+                                        parsedResult.campaign_attribution?.latest_attack_type ||
+                                        "unknown"
+                                    }
+                                </div>
+                            </div>
+
                             <div style="margin-top:6px;">
                                 Aggression:
                                 ${
