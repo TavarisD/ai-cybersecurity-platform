@@ -40,6 +40,7 @@ from threat_hunting_recommendations import generate_hunting_recommendations
 from threat_actor_confidence import calculate_actor_confidence
 from incident_executive_summary import generate_executive_summary
 from mitre_attack_mapper import map_to_mitre_attack
+from ioc_extractor import extract_iocs
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -1222,6 +1223,8 @@ def analyze_log_api(
         risk_classification
     )
 
+    ioc_data = extract_iocs(log)
+
       
 
     result["threat_score"] = score
@@ -1247,6 +1250,7 @@ def analyze_log_api(
     result["actor_confidence"] = actor_confidence
     result["executive_summary"] = executive_summary
     result["mitre_mapping"] = mitre_mapping
+    result["ioc_data"] = ioc_data
 
     record = LogRecord(
         user_id=user.id,
