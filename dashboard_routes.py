@@ -961,6 +961,33 @@ Body:
                                     </div>
                                 </div>
 
+                                <div style="margin-top:10px;">
+                                    <strong>Threat Hunting Recommendations:</strong>
+
+                                    <div style="margin-top:6px;">
+                                        Recommendation:
+                                        ${
+                                            parsedResult.hunting_recommendations?.hunt_recommendation ||
+                                            "Continue monitoring"
+                                        }
+                                    </div>
+
+                                    <div style="margin-top:6px;">
+                                        Priority:
+                                        ${
+                                            parsedResult.hunting_recommendations?.priority ||
+                                            "low"
+                                        }
+                                    </div>
+
+                                    <div style="margin-top:6px;">
+                                        Confidence:
+                                        ${
+                                            parsedResult.hunting_recommendations?.confidence || 0
+                                        }%
+                                    </div>
+                                </div>
+
                                 <div style="margin-top:6px;">
                                     Campaign Name:
                                     ${
