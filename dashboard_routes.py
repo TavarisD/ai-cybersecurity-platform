@@ -1220,6 +1220,24 @@ Body:
                                         </div>
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>Threat Narrative:</strong>
+
+                                        <div style="
+                                            margin-top:8px;
+                                            padding:10px;
+                                            background:#020617;
+                                            border:1px solid #334155;
+                                            border-radius:8px;
+                                            line-height:1.5;
+                                        ">
+                                            ${
+                                                parsedResult.threat_narrative?.narrative ||
+                                                "No narrative generated"
+                                            }
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
