@@ -37,6 +37,7 @@ from threat_risk_classifier import classify_threat_actor
 from threat_campaign_attribution import attribute_campaign
 from threat_escalation_predictor import predict_escalation
 from threat_hunting_recommendations import generate_hunting_recommendations
+from threat_actor_confidence import calculate_actor_confidence
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -1198,6 +1199,13 @@ def analyze_log_api(
         escalation_prediction
     )
 
+    actor_confidence = calculate_actor_confidence(
+        behavior_profile,
+        risk_classification,
+        campaign_attribution,
+        escalation_prediction
+    )
+
     result["threat_score"] = score
     result["priority"] = priority
     result["severity"] = priority.upper()
@@ -1218,6 +1226,7 @@ def analyze_log_api(
     result["campaign_attribution"] = campaign_attribution
     result["escalation_prediction"] = escalation_prediction
     result["hunting_recommendations"] = hunting_recommendations
+    result["actor_confidence"] = actor_confidence
 
     record = LogRecord(
         user_id=user.id,
