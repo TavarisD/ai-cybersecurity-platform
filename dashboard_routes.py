@@ -1006,6 +1006,41 @@ Body:
                                         }
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>Executive Summary:</strong>
+
+                                        <div style="margin-top:6px;">
+                                            Assessment:
+                                            ${
+                                                parsedResult.executive_summary?.executive_assessment ||
+                                                "Limited evidence"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Threat Level:
+                                            ${
+                                                parsedResult.executive_summary?.threat_level ||
+                                                "LOW"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Recommended Action:
+                                            ${
+                                                parsedResult.executive_summary?.recommended_action ||
+                                                "Continue monitoring"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Analyst Confidence:
+                                            ${
+                                                parsedResult.executive_summary?.analyst_confidence || 0
+                                            }
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
