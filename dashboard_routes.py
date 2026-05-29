@@ -757,10 +757,10 @@ Body:
 
                     <br><br>
 
-                    <button onclick="
+                    <button type="button" onclick="
                         const el=document.getElementById('${detailsId}');
-                        el.style.display=
-                        el.style.display==='none' ? 'block' : 'none';
+                        el.style.display =
+                        el.style.display === 'none' ? 'block' : 'none';
                     ">
                         View Details
                     </button>
