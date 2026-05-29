@@ -727,9 +727,12 @@ Body:
                     parsedResult = {};
                 }
 
+                const detailsId = "details-" + log.id;
+
                 item.innerHTML = `
                     <strong>Log:</strong> ${log.raw_log}<br>
-                    <strong>Source:</strong> 
+
+                    <strong>Source:</strong>
                     <span style="
                         background:#0f172a;
                         color:#38bdf8;
@@ -740,7 +743,29 @@ Body:
                         border:1px solid #38bdf8;
                     ">
                         ${(parsedResult.source || "manual").toUpperCase()}
-                    </span><br>
+                    </span>
+
+                    <br>
+
+                    <strong>Severity:</strong>
+                    ${(parsedResult.severity || "LOW").toUpperCase()}
+
+                    <br>
+
+                    <strong>Threat Score:</strong>
+                    ${parsedResult.threat_score || 0}
+
+                    <br><br>
+
+                    <button onclick="
+                        const el=document.getElementById('${detailsId}');
+                        el.style.display=
+                        el.style.display==='none' ? 'block' : 'none';
+                    ">
+                        View Details
+                    </button>
+
+                    <div id="${detailsId}" style="display:none;margin-top:15px;">
                     <strong>Ingestion:</strong> 
                     <span style="
                         background:${parsedResult.ingestion_method === "api_key_webhook" ? "#22c55e" : "#64748b"};
@@ -1361,6 +1386,8 @@ Body:
                     </div>
 
                     <br>
+                    </div>
+
                     <small>${log.created_at}</small>
                 `;
 
