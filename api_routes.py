@@ -42,6 +42,7 @@ from incident_executive_summary import generate_executive_summary
 from mitre_attack_mapper import map_to_mitre_attack
 from ioc_extractor import extract_iocs
 from threat_actor_fingerprint import generate_threat_fingerprint
+from threat_cluster_detector import detect_threat_cluster
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -1233,6 +1234,12 @@ def analyze_log_api(
         risk_classification
     )
 
+    threat_cluster = detect_threat_cluster(
+        fingerprint,
+        campaign_attribution,
+        correlation_data
+    )
+
       
 
     result["threat_score"] = score
@@ -1260,6 +1267,7 @@ def analyze_log_api(
     result["mitre_mapping"] = mitre_mapping
     result["ioc_data"] = ioc_data
     result["threat_fingerprint"] = fingerprint
+    result["threat_cluster"] = threat_cluster
 
     record = LogRecord(
         user_id=user.id,
