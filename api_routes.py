@@ -39,6 +39,7 @@ from threat_escalation_predictor import predict_escalation
 from threat_hunting_recommendations import generate_hunting_recommendations
 from threat_actor_confidence import calculate_actor_confidence
 from incident_executive_summary import generate_executive_summary
+from mitre_attack_mapper import map_to_mitre_attack
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -1215,6 +1216,12 @@ def analyze_log_api(
         hunting_recommendations
     )
 
+    mitre_mapping = map_to_mitre_attack(
+        ai_incident["attack_type"],
+        behavior_profile,
+        risk_classification
+    )
+
       
 
     result["threat_score"] = score
@@ -1239,6 +1246,7 @@ def analyze_log_api(
     result["hunting_recommendations"] = hunting_recommendations
     result["actor_confidence"] = actor_confidence
     result["executive_summary"] = executive_summary
+    result["mitre_mapping"] = mitre_mapping
 
     record = LogRecord(
         user_id=user.id,
