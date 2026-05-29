@@ -33,6 +33,7 @@ from incident_correlation import (
 from threat_intelligence import build_threat_intelligence
 from incident_timeline import update_incident_timeline
 from attacker_behavior import profile_attacker_behavior
+from threat_risk_classifier import classify_threat_actor
 
 
 router = APIRouter()
@@ -1171,6 +1172,11 @@ def analyze_log_api(
         score
     )
 
+    risk_classification = classify_threat_actor(
+        behavior_profile,
+        score
+    )
+
     result["threat_score"] = score
     result["priority"] = priority
     result["severity"] = priority.upper()
@@ -1187,6 +1193,7 @@ def analyze_log_api(
     result["timeline_intelligence"] = timeline_result
     result["threat_intelligence"] = threat_intel
     result["behavior_profile"] = behavior_profile
+    result["risk_classification"] = risk_classification
 
     record = LogRecord(
         user_id=user.id,
