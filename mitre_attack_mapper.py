@@ -1,33 +1,41 @@
-def map_to_mitre_attack(attack_type, behavior_profile, risk_classification):
-    technique_id = "T0000"
-    technique_name = "Unknown Technique"
-    tactic = "Unknown"
-    severity = "low"
+def map_to_mitre_attack(attack_type, behavior_profile=None, risk_classification=None):
+    attack = (attack_type or "").lower().strip()
 
-    if attack_type == "failed_login":
-        technique_id = "T1110"
-        technique_name = "Brute Force"
-        tactic = "Credential Access"
-        severity = "medium"
+    if "brute" in attack or "failed login" in attack or "credential" in attack:
+        return {
+            "mitre_technique_id": "T1110",
+            "mitre_technique_name": "Brute Force",
+            "mitre_tactic": "Credential Access",
+            "mitre_severity": "high"
+        }
 
-    if attack_type == "sql_injection":
-        technique_id = "T1190"
-        technique_name = "Exploit Public-Facing Application"
-        tactic = "Initial Access"
-        severity = "high"
+    if "sql" in attack or "injection" in attack:
+        return {
+            "mitre_technique_id": "T1190",
+            "mitre_technique_name": "Exploit Public-Facing Application",
+            "mitre_tactic": "Initial Access",
+            "mitre_severity": "critical"
+        }
 
-    if behavior_profile.get("behavior_type") == "multi_vector_attack":
-        technique_id = "T1595"
-        technique_name = "Active Scanning"
-        tactic = "Reconnaissance"
-        severity = "high"
+    if "phishing" in attack:
+        return {
+            "mitre_technique_id": "T1566",
+            "mitre_technique_name": "Phishing",
+            "mitre_tactic": "Initial Access",
+            "mitre_severity": "high"
+        }
 
-    if risk_classification.get("analyst_priority") == "Critical":
-        severity = "critical"
+    if "malware" in attack:
+        return {
+            "mitre_technique_id": "T1204",
+            "mitre_technique_name": "User Execution",
+            "mitre_tactic": "Execution",
+            "mitre_severity": "high"
+        }
 
     return {
-        "mitre_technique_id": technique_id,
-        "mitre_technique_name": technique_name,
-        "mitre_tactic": tactic,
-        "mitre_severity": severity
+        "mitre_technique_id": "T0000",
+        "mitre_technique_name": "Unknown Technique",
+        "mitre_tactic": "Unknown",
+        "mitre_severity": "low"
     }
