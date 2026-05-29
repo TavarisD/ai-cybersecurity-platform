@@ -1238,6 +1238,68 @@ Body:
                                         </div>
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>Intelligence Rollup:</strong>
+
+                                        <div style="
+                                            margin-top:8px;
+                                            padding:10px;
+                                            background:#020617;
+                                            border:1px solid #334155;
+                                            border-radius:8px;
+                                        ">
+                                            <div>
+                                                Overall Risk:
+                                                ${
+                                                    parsedResult.intelligence_rollup?.overall_risk ||
+                                                    "low_risk"
+                                                }
+                                            </div>
+
+                                            <div style="margin-top:6px;">
+                                                Reputation:
+                                                ${
+                                                    parsedResult.intelligence_rollup?.reputation_level ||
+                                                    "low"
+                                                }
+                                            </div>
+
+                                            <div style="margin-top:6px;">
+                                                Cluster:
+                                                ${
+                                                    parsedResult.intelligence_rollup?.cluster_name ||
+                                                    "unknown_cluster"
+                                                }
+                                            </div>
+
+                                            <div style="margin-top:6px;">
+                                                MITRE:
+                                                ${
+                                                    parsedResult.intelligence_rollup?.mitre_technique ||
+                                                    "Unknown Technique"
+                                                }
+                                            </div>
+
+                                            <div style="margin-top:6px;">
+                                                IOC Count:
+                                                ${
+                                                    parsedResult.intelligence_rollup?.ioc_count || 0
+                                                }
+                                            </div>
+
+                                            <div style="margin-top:10px;">
+                                                <strong>Executive Narrative:</strong>
+                                            </div>
+
+                                            <div style="margin-top:6px;">
+                                                ${
+                                                    parsedResult.intelligence_rollup?.executive_narrative ||
+                                                    "No narrative available"
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
