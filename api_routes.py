@@ -45,6 +45,7 @@ from threat_actor_fingerprint import generate_threat_fingerprint
 from threat_cluster_detector import detect_threat_cluster
 from threat_reputation import calculate_threat_reputation
 from ioc_enrichment import enrich_iocs
+from threat_narrative_generator import generate_threat_narrative
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -1250,6 +1251,13 @@ def analyze_log_api(
         actor_confidence
     )
 
+    threat_narrative = generate_threat_narrative(
+        risk_classification,
+        campaign_attribution,
+        escalation_prediction,
+        threat_reputation
+    )
+
       
 
     result["threat_score"] = score
@@ -1280,6 +1288,7 @@ def analyze_log_api(
     result["threat_fingerprint"] = fingerprint
     result["threat_cluster"] = threat_cluster
     result["threat_reputation"] = threat_reputation
+    result["threat_narrative"] = threat_narrative
 
     record = LogRecord(
         user_id=user.id,
