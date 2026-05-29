@@ -1143,6 +1143,41 @@ Body:
                                         </div>
                                     </div>
 
+                                    <div style="margin-top:10px;">
+                                        <strong>Threat Cluster Detection:</strong>
+
+                                        <div style="margin-top:6px;">
+                                            Cluster Name:
+                                            ${
+                                                parsedResult.threat_cluster?.cluster_name ||
+                                                "unknown_cluster"
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Cluster Confidence:
+                                            ${
+                                                parsedResult.threat_cluster?.cluster_confidence || 0
+                                            }%
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Related Incidents:
+                                            ${
+                                                parsedResult.threat_cluster?.related_incidents || 0
+                                            }
+                                        </div>
+
+                                        <div style="margin-top:6px;">
+                                            Active Cluster:
+                                            ${
+                                                parsedResult.threat_cluster?.cluster_active
+                                                    ? "YES"
+                                                    : "NO"
+                                            }
+                                        </div>
+                                    </div>
+
                                     <div style="margin-top:6px;">
                                         Analyst Assessment:
                                         ${
