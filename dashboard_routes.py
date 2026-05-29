@@ -853,6 +853,28 @@ Body:
                                 }
                             </div>
                         </div>
+
+                        <div style="margin-top:10px;">
+                            <strong>Timeline Intelligence:</strong>
+
+                            <div style="margin-top:6px;">
+                                Total Events:
+                                ${parsedResult.timeline_intelligence?.total_events || 0}
+                            </div>
+
+                            <div style="margin-top:6px;">
+                                Attack Types:
+                                ${parsedResult.timeline_intelligence?.unique_attack_types || 0}
+                            </div>
+
+                            <div style="margin-top:6px;">
+                                Escalation Level:
+                                ${
+                                    parsedResult.timeline_intelligence?.escalation_level || "low"
+                                }
+                            </div>
+                        </div>
+
                     </div>
 
                     <br>
