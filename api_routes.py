@@ -35,6 +35,7 @@ from incident_timeline import update_incident_timeline
 from attacker_behavior import profile_attacker_behavior
 from threat_risk_classifier import classify_threat_actor
 from threat_campaign_attribution import attribute_campaign
+from threat_escalation_predictor import predict_escalation
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -1184,6 +1185,12 @@ def analyze_log_api(
         timeline_result
     )
 
+    escalation_prediction = predict_escalation(
+        behavior_profile,
+        risk_classification,
+        campaign_attribution
+    )
+
     result["threat_score"] = score
     result["priority"] = priority
     result["severity"] = priority.upper()
@@ -1202,6 +1209,7 @@ def analyze_log_api(
     result["behavior_profile"] = behavior_profile
     result["risk_classification"] = risk_classification
     result["campaign_attribution"] = campaign_attribution
+    result["escalation_prediction"] = escalation_prediction
 
     record = LogRecord(
         user_id=user.id,
