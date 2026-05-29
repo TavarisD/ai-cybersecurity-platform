@@ -43,6 +43,7 @@ from mitre_attack_mapper import map_to_mitre_attack
 from ioc_extractor import extract_iocs
 from threat_actor_fingerprint import generate_threat_fingerprint
 from threat_cluster_detector import detect_threat_cluster
+from threat_reputation import calculate_threat_reputation
 
 router = APIRouter()
 stripe.api_key = os.getenv("STRIPE_SECRET_KEY")
@@ -1240,6 +1241,12 @@ def analyze_log_api(
         correlation_data
     )
 
+    threat_reputation = calculate_threat_reputation(
+        threat_cluster,
+        fingerprint,
+        actor_confidence
+    )
+
       
 
     result["threat_score"] = score
@@ -1268,6 +1275,7 @@ def analyze_log_api(
     result["ioc_data"] = ioc_data
     result["threat_fingerprint"] = fingerprint
     result["threat_cluster"] = threat_cluster
+    result["threat_reputation"] = threat_reputation
 
     record = LogRecord(
         user_id=user.id,
