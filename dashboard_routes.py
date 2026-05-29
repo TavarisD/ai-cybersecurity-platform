@@ -894,6 +894,33 @@ Body:
                                 }
                             </div>
 
+                            <div style="margin-top:10px;">
+                                <strong>Risk Classification:</strong>
+
+                                <div style="margin-top:6px;">
+                                    Classification:
+                                    ${
+                                        parsedResult.risk_classification?.risk_classification ||
+                                        "Low Risk"
+                                    }
+                                </div>
+
+                                <div style="margin-top:6px;">
+                                    Risk Score:
+                                    ${
+                                        parsedResult.risk_classification?.risk_score || 0
+                                    }
+                                </div>
+
+                                <div style="margin-top:6px;">
+                                    Analyst Priority:
+                                    ${
+                                        parsedResult.risk_classification?.analyst_priority ||
+                                        "Low"
+                                    }
+                                </div>
+                            </div>
+
                             <div style="margin-top:6px;">
                                 Aggression:
                                 ${
