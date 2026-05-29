@@ -757,15 +757,11 @@ Body:
 
                     <br><br>
 
-                    <button type="button" onclick="
-                        const el=document.getElementById('${detailsId}');
-                        el.style.display =
-                        el.style.display === 'none' ? 'block' : 'none';
-                    ">
+                    <button type="button" onclick="toggleLogDetails('${detailsId}')">
                         View Details
                     </button>
 
-                    <div id="${detailsId}" style="display:none;margin-top:15px;">
+                    <div id="${detailsId}" style="display:${openLogDetails.has(detailsId) ? "block" : "none"};margin-top:15px;">
                     <strong>Ingestion:</strong> 
                     <span style="
                         background:${parsedResult.ingestion_method === "api_key_webhook" ? "#22c55e" : "#64748b"};
@@ -1519,6 +1515,22 @@ Body:
             alert(data.message);
 
             loadBillingStatus();
+        }
+
+        let openLogDetails = new Set();
+
+        function toggleLogDetails(id) {
+            const el = document.getElementById(id);
+
+            if (!el) return;
+
+            if (el.style.display === "none") {
+                el.style.display = "block";
+                openLogDetails.add(id);
+            } else {
+                el.style.display = "none";
+                openLogDetails.delete(id);
+            }
         }
 
         let socket;
