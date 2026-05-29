@@ -933,6 +933,34 @@ Body:
                                     }
                                 </div>
 
+                                <div style="margin-top:10px;">
+                                    <strong>Escalation Prediction:</strong>
+
+                                    <div style="margin-top:6px;">
+                                        Escalation Likely:
+                                        ${
+                                            parsedResult.escalation_prediction?.escalation_likely
+                                                ? "YES"
+                                                : "NO"
+                                        }
+                                    </div>
+
+                                    <div style="margin-top:6px;">
+                                        Predicted Stage:
+                                        ${
+                                            parsedResult.escalation_prediction?.predicted_stage ||
+                                            "stable"
+                                        }
+                                    </div>
+
+                                    <div style="margin-top:6px;">
+                                        Confidence:
+                                        ${
+                                            parsedResult.escalation_prediction?.prediction_confidence || 0
+                                        }%
+                                    </div>
+                                </div>
+
                                 <div style="margin-top:6px;">
                                     Campaign Name:
                                     ${
