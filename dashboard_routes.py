@@ -3268,8 +3268,17 @@ def live_dashboard():
                         (log.severity || "").toLowerCase() === "medium" ? "medium" :
                         "low");
 
-                    const failed = log.features?.failed_login || 0;
-                    const sql = log.features?.sql_injection || 0;
+                    const rawLog = (log.log || "").toLowerCase();
+                    const attackType = (log.attack_type || "").toLowerCase();
+
+                    const failed =
+                        attackType.includes("failed") ||
+                        rawLog.includes("failed login") ||
+                        rawLog.includes("failed login attempts");
+
+                    const sql =
+                        attackType.includes("sql") ||
+                        rawLog.includes("sql injection");
 
                     if (failed) failedCount++;
                     if (sql) sqlCount++;
@@ -3283,7 +3292,7 @@ def live_dashboard():
                         badgeClass = "badge-medium";
                     }
 
-                    if ((log.severity || "LOW") === "HIGH") {
+                    if (["HIGH", "CRITICAL"].includes((log.severity || "LOW").toUpperCase())) {
                         highCount++;
                     }
 
