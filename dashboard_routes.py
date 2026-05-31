@@ -2309,6 +2309,20 @@ Body:
 
                 let incidents = data.incidents || [];
 
+                incidents.sort((a, b) => {
+                    const priority = {
+                        critical: 4,
+                        high: 3,
+                        elevated: 2,
+                        normal: 1
+                    };
+
+                    return (
+                        (priority[b.escalation_level] || 0) -
+                        (priority[a.escalation_level] || 0)
+                    );
+                });
+
                 if (incidentFilter === "open") {
                     incidents = incidents.filter(i =>
                         i.status === "email_pending"
@@ -2360,7 +2374,27 @@ Body:
                     row.style.borderRadius = "10px";
                     row.style.border = `1px solid ${borderColor}`;
 
+                    if (incident.escalation_level === "critical") {
+                        row.style.boxShadow =
+                            "0 0 18px rgba(220,38,38,0.45)";
+                    }
+
                     row.innerHTML = `
+
+                        ${incident.escalation_level === "critical" ? `
+                        <div style="
+                            background:#7f1d1d;
+                            border:2px solid #dc2626;
+                            color:white;
+                            padding:10px;
+                            border-radius:8px;
+                            margin-bottom:10px;
+                            font-weight:bold;
+                        ">
+                            🚨 CRITICAL INCIDENT - IMMEDIATE RESPONSE REQUIRED
+                        </div>
+                        ` : ""}
+                    
                         <div style="
                             display:flex;
                             justify-content:space-between;
