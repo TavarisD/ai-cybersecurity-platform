@@ -1224,10 +1224,17 @@ def analyze_log_api(
     )
 
     mitre_mapping = map_to_mitre_attack(
-        ai_incident["attack_type"],
-        behavior_profile,
-        risk_classification
-    )
+    ai_incident["attack_type"],
+    behavior_profile,
+    risk_classification
+)
+
+    if mitre_mapping.get("mitre_technique_id") == "T0000":
+        mitre_mapping = map_to_mitre_attack(
+            log,
+            behavior_profile,
+            risk_classification
+        )
 
     ioc_data = extract_iocs(log)
 
