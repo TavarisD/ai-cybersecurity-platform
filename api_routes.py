@@ -134,6 +134,20 @@ def log_email_alert_placeholder(
     cooldown_key = f"{source}:{escalation_level}"
     now = datetime.utcnow()
 
+    if db:
+        existing_active_alert = (
+            db.query(EmailAlertEvent)
+            .filter(
+                EmailAlertEvent.source == source,
+                EmailAlertEvent.escalation_level == escalation_level,
+                EmailAlertEvent.status.in_(["email_pending", "acknowledged"])
+            )
+            .first()
+        )
+
+        if existing_active_alert:
+            return    
+
     last_sent = email_alert_cooldowns.get(cooldown_key)
 
     if last_sent:
