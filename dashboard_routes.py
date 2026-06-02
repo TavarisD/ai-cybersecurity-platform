@@ -267,6 +267,15 @@ def dashboard():
             <button onclick="copyApiKey()">Copy API Key</button>
             <button onclick="regenerateApiKey()">Regenerate API Key</button>
 
+            <div style="
+                margin-top:-10px;
+                margin-bottom:15px;
+                color:#fbbf24;
+                font-size:13px;
+            ">
+                Warning: regenerating your API key will immediately disable your old key.
+            </div>
+
             <button onclick="window.open('/api-docs-page', '_blank')">
                 API Documentation
             </button>
