@@ -204,7 +204,24 @@ def dashboard():
             <button onclick="window.open('/api-docs-page', '_blank')">
                 API Documentation
             </button>
-            
+
+            <div style="
+                margin-top:20px;
+                background:#020617;
+                padding:15px;
+                border-radius:10px;
+                border:1px solid #38bdf8;
+            ">
+                <h3>Quick Start</h3>
+                <ol style="line-height:1.8;">
+                    <li>Reveal or copy your API key.</li>
+                    <li>Open the API Documentation page.</li>
+                    <li>Copy the PowerShell or curl example below.</li>
+                    <li>Send your first test log.</li>
+                    <li>Refresh the dashboard and confirm the log appears.</li>
+                </ol>
+            </div>
+
             <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
                 <h3>External Log Ingestion</h3>
                 <p>Send logs from external systems using your API key.</p>
