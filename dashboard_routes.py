@@ -11,7 +11,83 @@ from api_routes import should_blacklist, extract_indicator_from_log
 
 router = APIRouter()
 
+@router.get("/api-docs-page", response_class=HTMLResponse)
+def api_docs_page():
+    return """
+    <html>
+    <head>
+        <title>API Documentation</title>
+        <style>
+            body {
+                background: #0f172a;
+                color: white;
+                font-family: Arial;
+                padding: 40px;
+                max-width: 1000px;
+                margin: auto;
+            }
 
+            pre {
+                background: #1e293b;
+                padding: 15px;
+                border-radius: 8px;
+                overflow-x: auto;
+            }
+
+            h1,h2 {
+                color: #38bdf8;
+            }
+        </style>
+    </head>
+    <body>
+
+        <h1>AI Cybersecurity Platform API</h1>
+
+        <h2>Authentication</h2>
+
+        <p>
+        Use your API key in the X-API-Key header.
+        </p>
+
+        <pre>
+X-API-Key: sk_your_api_key
+        </pre>
+
+        <h2>Analyze Log</h2>
+
+        <pre>
+POST /api/analyze
+
+log=Multiple failed login attempts detected
+        </pre>
+
+        <h2>Webhook Ingestion</h2>
+
+        <pre>
+POST /webhook/log-api-key
+
+{
+  "event": "Multiple failed login attempts",
+  "source": "firewall",
+  "ip": "203.0.113.45",
+  "severity": "high"
+}
+        </pre>
+
+        <h2>Response Example</h2>
+
+        <pre>
+{
+  "threat_score": 100,
+  "priority": "critical",
+  "mitre_mapping": {...},
+  "ioc_data": {...}
+}
+        </pre>
+
+    </body>
+    </html>
+    """
 
 @router.get("/dashboard", response_class=HTMLResponse)
 def dashboard():
@@ -124,6 +200,11 @@ def dashboard():
             <button onclick="toggleApiKey()">Reveal / Hide API Key</button>
             <button onclick="copyApiKey()">Copy API Key</button>
             <button onclick="regenerateApiKey()">Regenerate API Key</button>
+
+            <button onclick="window.open('/api-docs-page', '_blank')">
+                API Documentation
+            </button>
+            
             <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
                 <h3>External Log Ingestion</h3>
                 <p>Send logs from external systems using your API key.</p>
