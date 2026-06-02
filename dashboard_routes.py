@@ -155,6 +155,59 @@ def onboarding_page():
     </html>
     """
 
+@router.get("/usage-analytics-page", response_class=HTMLResponse)
+def usage_analytics_page():
+    return """
+    <html>
+    <head>
+        <title>Usage Analytics</title>
+        <style>
+            body {
+                background:#0f172a;
+                color:white;
+                font-family:Arial;
+                padding:40px;
+                max-width:900px;
+                margin:auto;
+            }
+            .card {
+                background:#1e293b;
+                padding:20px;
+                border-radius:12px;
+                margin-bottom:20px;
+                border:1px solid #334155;
+            }
+            h1,h2 {
+                color:#38bdf8;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Usage Analytics</h1>
+
+        <div class="card">
+            <h2>Plan Usage</h2>
+            <p>View your current plan, daily API limit, usage count, and remaining requests from the main dashboard Billing / Plan section.</p>
+        </div>
+
+        <div class="card">
+            <h2>Ingestion Activity</h2>
+            <p>Your dashboard shows recent processed logs, ingestion source, severity, and timestamps.</p>
+        </div>
+
+        <div class="card">
+            <h2>Source Analytics</h2>
+            <p>Use Source Trend Analytics to monitor noisy sources, suspicious sources, spikes, and source health.</p>
+        </div>
+
+        <div class="card">
+            <h2>Upgrade Reminder</h2>
+            <p>Free users are limited to 20 logs per day. Pro users receive a higher daily limit.</p>
+        </div>
+    </body>
+    </html>
+    """
+
 @router.get("/dashboard", response_class=HTMLResponse)
 def dashboard():
     return """
@@ -299,6 +352,10 @@ def dashboard():
 
             <button onclick="window.open('/onboarding', '_blank')">
                 Open Customer Onboarding
+            </button>
+
+            <button onclick="window.open('/usage-analytics-page', '_blank')">
+                Open Usage Analytics
             </button>
 
             <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
