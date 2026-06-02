@@ -89,6 +89,72 @@ POST /webhook/log-api-key
     </html>
     """
 
+@router.get("/onboarding", response_class=HTMLResponse)
+def onboarding_page():
+    return """
+    <html>
+    <head>
+        <title>Customer Onboarding</title>
+        <style>
+            body {
+                background:#0f172a;
+                color:white;
+                font-family:Arial;
+                padding:40px;
+                max-width:900px;
+                margin:auto;
+            }
+            .card {
+                background:#1e293b;
+                padding:20px;
+                border-radius:12px;
+                margin-bottom:20px;
+                border:1px solid #334155;
+            }
+            h1,h2 {
+                color:#38bdf8;
+            }
+            button {
+                width:100%;
+                padding:12px;
+                border:none;
+                border-radius:8px;
+                background:#38bdf8;
+                color:black;
+                font-weight:bold;
+                cursor:pointer;
+                margin-top:10px;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Welcome to AI Cybersecurity Platform</h1>
+
+        <div class="card">
+            <h2>Step 1 — Get Your API Key</h2>
+            <p>Go to your dashboard and reveal or copy your API key.</p>
+            <button onclick="window.location.href='/dashboard'">Open Dashboard</button>
+        </div>
+
+        <div class="card">
+            <h2>Step 2 — Read the API Docs</h2>
+            <p>Review authentication, webhook ingestion, and example requests.</p>
+            <button onclick="window.open('/api-docs-page', '_blank')">Open API Docs</button>
+        </div>
+
+        <div class="card">
+            <h2>Step 3 — Send Your First Log</h2>
+            <p>Use the PowerShell or curl example from your dashboard to send a test log.</p>
+        </div>
+
+        <div class="card">
+            <h2>Step 4 — Check Results</h2>
+            <p>Return to your dashboard to see threat score, severity, MITRE mapping, IOC data, and incident status.</p>
+        </div>
+    </body>
+    </html>
+    """
+
 @router.get("/dashboard", response_class=HTMLResponse)
 def dashboard():
     return """
@@ -221,6 +287,10 @@ def dashboard():
                     <li>Refresh the dashboard and confirm the log appears.</li>
                 </ol>
             </div>
+
+            <button onclick="window.open('/onboarding', '_blank')">
+                Open Customer Onboarding
+            </button>
 
             <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
                 <h3>External Log Ingestion</h3>
