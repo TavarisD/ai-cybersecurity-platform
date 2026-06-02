@@ -208,6 +208,75 @@ def usage_analytics_page():
     </html>
     """
 
+@router.get("/admin-dashboard", response_class=HTMLResponse)
+def admin_dashboard(db: Session = Depends(get_db)):
+    total_customers = db.query(User).count()
+    free_users = db.query(User).filter(User.plan == "free").count()
+    pro_users = db.query(User).filter(User.plan == "pro").count()
+    total_logs = db.query(LogRecord).count()
+
+    return f"""
+    <html>
+    <head>
+        <title>Admin Dashboard</title>
+        <style>
+            body {{
+                background:#0f172a;
+                color:white;
+                font-family:Arial;
+                padding:40px;
+                max-width:1000px;
+                margin:auto;
+            }}
+            .grid {{
+                display:grid;
+                grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+                gap:20px;
+            }}
+            .card {{
+                background:#1e293b;
+                padding:20px;
+                border-radius:12px;
+                border:1px solid #334155;
+            }}
+            h1 {{
+                color:#38bdf8;
+            }}
+            .number {{
+                font-size:32px;
+                font-weight:bold;
+                color:#22c55e;
+            }}
+        </style>
+    </head>
+    <body>
+        <h1>Admin Dashboard</h1>
+
+        <div class="grid">
+            <div class="card">
+                <h2>Total Customers</h2>
+                <div class="number">{total_customers}</div>
+            </div>
+
+            <div class="card">
+                <h2>Free Users</h2>
+                <div class="number">{free_users}</div>
+            </div>
+
+            <div class="card">
+                <h2>Pro Users</h2>
+                <div class="number">{pro_users}</div>
+            </div>
+
+            <div class="card">
+                <h2>Total Logs Processed</h2>
+                <div class="number">{total_logs}</div>
+            </div>
+        </div>
+    </body>
+    </html>
+    """
+
 @router.get("/dashboard", response_class=HTMLResponse)
 def dashboard():
     return """
@@ -356,6 +425,10 @@ def dashboard():
 
             <button onclick="window.open('/usage-analytics-page', '_blank')">
                 Open Usage Analytics
+            </button>
+
+            <button onclick="window.open('/admin-dashboard', '_blank')">
+                Open Admin Dashboard
             </button>
 
             <div style="margin-top:20px; background:#0f172a; padding:15px; border-radius:10px; border:1px solid #334155;">
