@@ -1812,3 +1812,28 @@ def send_test_email_alert():
         "message": "Test email send attempted",
         "email_result": email_result
     }
+
+@router.post("/admin/promote-user/{user_id}")
+def promote_user(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    user.role = "admin"
+
+    db.commit()
+
+    return {
+        "status": "success",
+        "message": f"{user.email} promoted to admin"
+    }
