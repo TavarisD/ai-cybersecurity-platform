@@ -266,6 +266,7 @@ def admin_dashboard(
                 </td>
                 <td style="padding:10px;">
                     <button
+                        onclick="openCustomerManager('{user.id}', '{html.escape(user.email)}', '{user.plan}', '{getattr(user, "role", "user")}')"
                         style="
                             background:#1d4ed8;
                             color:white;
@@ -400,6 +401,16 @@ def admin_dashboard(
                     row.style.display = "none";
                 }}
             }});
+        }}
+
+        function openCustomerManager(userId, email, plan, role) {{
+            alert(
+                "Customer: " + email +
+                "\\nUser ID: " + userId +
+                "\\nPlan: " + plan +
+                "\\nRole: " + role +
+                "\\n\\nNext step: we will add Promote, Demote, Force Pro, Force Free, and Disable buttons."
+            );
         }}
         </script>
 
