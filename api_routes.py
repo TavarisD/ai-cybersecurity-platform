@@ -1896,3 +1896,31 @@ def admin_force_pro(
         "plan": user.plan,
         "billing_status": user.billing_status
     }
+
+@router.post("/admin/force-free/{user_id}")
+def admin_force_free(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    user.plan = "free"
+    user.billing_status = "inactive"
+
+    db.commit()
+
+    return {
+        "status": "success",
+        "message": f"{user.email} forced to Free",
+        "plan": user.plan,
+        "billing_status": user.billing_status
+    }
