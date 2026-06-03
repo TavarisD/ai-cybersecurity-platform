@@ -236,9 +236,31 @@ def admin_dashboard(
         customer_rows += f"""
             <tr class="customer-row" data-email="{html.escape(user.email)}" style="border-top:1px solid #334155;">
                 <td style="padding:10px;">{html.escape(user.email)}</td>
-                <td style="padding:10px;">{user.plan}</td>
+                <td style="padding:10px;">
+                    <span style="
+                        background:{'#22c55e' if user.plan == 'pro' else '#475569'};
+                        color:white;
+                        padding:4px 10px;
+                        border-radius:999px;
+                        font-size:12px;
+                        font-weight:bold;
+                    ">
+                        {user.plan.upper()}
+                    </span>
+                </td>
                 <td style="padding:10px;">{user.billing_status}</td>
-                <td style="padding:10px;">{getattr(user, "role", "user")}</td>
+                <td style="padding:10px;">
+                    <span style="
+                        background:{'#dc2626' if getattr(user, 'role', 'user') == 'admin' else '#334155'};
+                        color:white;
+                        padding:4px 10px;
+                        border-radius:999px;
+                        font-size:12px;
+                        font-weight:bold;
+                    ">
+                        {getattr(user, "role", "user").upper()}
+                    </span>
+                </td>
                 <td style="padding:10px;">{user.usage_count}</td>
             </tr>
         """
