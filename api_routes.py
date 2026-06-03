@@ -2098,3 +2098,49 @@ def admin_revenue_metrics(
         "conversion_rate": conversion_rate,
         "estimated_mrr": estimated_mrr
     }
+
+@router.get("/admin/growth-metrics")
+def admin_growth_metrics(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    users = db.query(User).all()
+
+    today = datetime.utcnow()
+    day_ago = today - timedelta(days=1)
+    week_ago = today - timedelta(days=7)
+
+    new_users_today = 0
+    new_users_week = 0
+
+    for user in users:
+        created = getattr(user, "created_at", None)
+
+        if not created:
+            continue
+
+        if created >= day_ago:
+            new_users_today += 1
+
+        if created >= week_ago:
+            new_users_week += 1
+
+    total_customers = len(users)
+
+    growth_rate = 0
+
+    if total_customers > 0:
+        growth_rate = round(
+            (new_users_week / total_customers) * 100,
+            2
+        )
+
+    return {
+        "status": "success",
+        "total_customers": total_customers,
+        "new_users_today": new_users_today,
+        "new_users_week": new_users_week,
+        "growth_rate": growth_rate
+    }
