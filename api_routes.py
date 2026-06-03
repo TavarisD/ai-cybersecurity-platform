@@ -1924,3 +1924,31 @@ def admin_force_free(
         "plan": user.plan,
         "billing_status": user.billing_status
     }
+
+@router.post("/admin/disable-user/{user_id}")
+def admin_disable_user(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    if user.id == current_user.id:
+        raise HTTPException(
+            status_code=400,
+            detail="You cannot disable your own admin account"
+        )
+
+    user.is_disabled = True
+
+    db.commit()
+
+    return {
+        "status": "success",
+        "message": f"{user.email} disabled"
+    }
