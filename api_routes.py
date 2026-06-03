@@ -1916,6 +1916,14 @@ def admin_force_pro(
     user.plan = "pro"
     user.billing_status = "active"
 
+    audit = AdminAuditLog(
+        admin_email=current_user.email,
+        action="force_pro",
+        target_user=user.email
+    )
+
+    db.add(audit)
+
     db.commit()
 
     return {
@@ -1943,6 +1951,14 @@ def admin_force_free(
 
     user.plan = "free"
     user.billing_status = "inactive"
+
+    audit = AdminAuditLog(
+        admin_email=current_user.email,
+        action="force_free",
+        target_user=user.email
+    )
+
+    db.add(audit)
 
     db.commit()
 
@@ -1974,6 +1990,14 @@ def admin_disable_user(
 
     user.is_disabled = True
 
+    audit = AdminAuditLog(
+        admin_email=current_user.email,
+        action="disable_user",
+        target_user=user.email
+    )
+
+    db.add(audit)
+
     db.commit()
 
     return {
@@ -1995,6 +2019,14 @@ def admin_enable_user(
         raise HTTPException(status_code=404, detail="User not found")
 
     user.is_disabled = False
+
+    audit = AdminAuditLog(
+        admin_email=current_user.email,
+        action="enable_user",
+        target_user=user.email
+    )
+
+    db.add(audit)
 
     db.commit()
 
