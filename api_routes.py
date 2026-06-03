@@ -1868,3 +1868,31 @@ def demote_user(
         "status": "success",
         "message": f"{user.email} demoted to user"
     }
+
+@router.post("/admin/force-pro/{user_id}")
+def admin_force_pro(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    user.plan = "pro"
+    user.billing_status = "active"
+
+    db.commit()
+
+    return {
+        "status": "success",
+        "message": f"{user.email} forced to Pro",
+        "plan": user.plan,
+        "billing_status": user.billing_status
+    }
