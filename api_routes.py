@@ -384,7 +384,8 @@ def register(user: UserCreate, db: Session = Depends(get_db)):
     new_user = User(
         email=user.email,
         hashed_password=hash_password(user.password),
-        api_key=api_key
+        api_key=api_key,
+        role="user"
     )
 
     db.add(new_user)

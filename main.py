@@ -48,6 +48,18 @@ with engine.connect() as conn:
     except:
         pass
 
+    try:
+        conn.execute(
+            text(
+                """
+                ALTER TABLE users
+                ADD COLUMN role VARCHAR DEFAULT 'user'
+                """
+            )
+        )
+    except:
+        pass
+
     conn.commit()
 app.include_router(dashboard_router)
 app.include_router(api_router)

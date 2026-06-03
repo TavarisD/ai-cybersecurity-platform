@@ -1,5 +1,5 @@
 import json
-from fastapi import APIRouter, Form, UploadFile, File, Depends
+from fastapi import APIRouter, Form, UploadFile, File, Depends, HTTPException
 from fastapi.responses import HTMLResponse
 import html
 from cyber_agent import analyze_security_log
@@ -10,6 +10,14 @@ from database import get_db
 from api_routes import should_blacklist, extract_indicator_from_log
 
 router = APIRouter()
+
+def require_admin_user(current_user: User):
+    if getattr(current_user, "role", "user") != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+    return current_user
 
 @router.get("/api-docs-page", response_class=HTMLResponse)
 def api_docs_page():
@@ -209,7 +217,11 @@ def usage_analytics_page():
     """
 
 @router.get("/admin-dashboard", response_class=HTMLResponse)
-def admin_dashboard(db: Session = Depends(get_db)):
+def admin_dashboard(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
     total_customers = db.query(User).count()
     free_users = db.query(User).filter(User.plan == "free").count()
     pro_users = db.query(User).filter(User.plan == "pro").count()

@@ -15,6 +15,7 @@ class User(Base):
 
     plan = Column(String, default="free")
     billing_status = Column(String, default="active")
+    role = Column(String, default="user")
 
 class LogRecord(Base):
     __tablename__ = "log_records"
