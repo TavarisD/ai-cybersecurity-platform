@@ -222,10 +222,26 @@ def admin_dashboard(
     db: Session = Depends(get_db)
 ):
     require_admin_user(current_user)
+
     total_customers = db.query(User).count()
     free_users = db.query(User).filter(User.plan == "free").count()
     pro_users = db.query(User).filter(User.plan == "pro").count()
     total_logs = db.query(LogRecord).count()
+
+    users = db.query(User).order_by(User.id.desc()).all()
+
+    customer_rows = ""
+
+    for user in users:
+        customer_rows += f"""
+            <tr style="border-top:1px solid #334155;">
+                <td style="padding:10px;">{html.escape(user.email)}</td>
+                <td style="padding:10px;">{user.plan}</td>
+                <td style="padding:10px;">{user.billing_status}</td>
+                <td style="padding:10px;">{getattr(user, "role", "user")}</td>
+                <td style="padding:10px;">{user.usage_count}</td>
+            </tr>
+        """
 
     return f"""
     <html>
@@ -237,7 +253,7 @@ def admin_dashboard(
                 color:white;
                 font-family:Arial;
                 padding:40px;
-                max-width:1000px;
+                max-width:1100px;
                 margin:auto;
             }}
             .grid {{
@@ -258,6 +274,16 @@ def admin_dashboard(
                 font-size:32px;
                 font-weight:bold;
                 color:#22c55e;
+            }}
+            table {{
+                width:100%;
+                border-collapse:collapse;
+                margin-top:15px;
+            }}
+            th {{
+                text-align:left;
+                color:#38bdf8;
+                padding:10px;
             }}
         </style>
     </head>
@@ -284,6 +310,25 @@ def admin_dashboard(
                 <h2>Total Logs Processed</h2>
                 <div class="number">{total_logs}</div>
             </div>
+        </div>
+
+        <div class="card" style="margin-top:25px;">
+            <h2>Customer Management</h2>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Plan</th>
+                        <th>Billing</th>
+                        <th>Role</th>
+                        <th>Usage</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {customer_rows}
+                </tbody>
+            </table>
         </div>
     </body>
     </html>
