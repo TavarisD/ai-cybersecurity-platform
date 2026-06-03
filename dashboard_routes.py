@@ -234,7 +234,7 @@ def admin_dashboard(
 
     for user in users:
         customer_rows += f"""
-            <tr style="border-top:1px solid #334155;">
+            <tr class="customer-row" data-email="{html.escape(user.email)}" style="border-top:1px solid #334155;">
                 <td style="padding:10px;">{html.escape(user.email)}</td>
                 <td style="padding:10px;">{user.plan}</td>
                 <td style="padding:10px;">{user.billing_status}</td>
@@ -315,6 +315,22 @@ def admin_dashboard(
         <div class="card" style="margin-top:25px;">
             <h2>Customer Management</h2>
 
+            <input
+                type="text"
+                id="customerSearch"
+                placeholder="Search customers by email..."
+                onkeyup="filterCustomers()"
+                style="
+                    width:100%;
+                    padding:12px;
+                    margin-top:10px;
+                    border-radius:8px;
+                    border:none;
+                    background:#0f172a;
+                    color:white;
+                "
+            >
+
             <table>
                 <thead>
                     <tr>
@@ -330,6 +346,24 @@ def admin_dashboard(
                 </tbody>
             </table>
         </div>
+
+        <script>
+        function filterCustomers() {{
+            const search = document.getElementById("customerSearch").value.toLowerCase();
+            const rows = document.querySelectorAll(".customer-row");
+
+            rows.forEach(row => {{
+                const email = row.dataset.email.toLowerCase();
+
+                if (email.includes(search)) {{
+                    row.style.display = "";
+                }} else {{
+                    row.style.display = "none";
+                }}
+            }});
+        }}
+        </script>
+
     </body>
     </html>
     """
