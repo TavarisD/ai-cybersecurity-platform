@@ -385,32 +385,142 @@ def admin_dashboard(
                     {customer_rows}
                 </tbody>
             </table>
+
+            <div id="customer-manager" style="
+                display:none;
+                margin-top:20px;
+                background:#020617;
+                padding:20px;
+                border-radius:12px;
+                border:1px solid #38bdf8;
+            ">
+                <h2>Customer Manager</h2>
+
+                <p><strong>Email:</strong> <span id="manager-email"></span></p>
+                <p><strong>User ID:</strong> <span id="manager-user-id"></span></p>
+                <p><strong>Plan:</strong> <span id="manager-plan"></span></p>
+                <p><strong>Role:</strong> <span id="manager-role"></span></p>
+
+                <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px; margin-top:15px;">
+                    <button onclick="runAdminAction('promote-user')" style="background:#2563eb;color:white;">Promote</button>
+                    <button onclick="runAdminAction('demote-user')" style="background:#64748b;color:white;">Demote</button>
+                    <button onclick="runAdminAction('force-pro')" style="background:#16a34a;color:white;">Force Pro</button>
+                    <button onclick="runAdminAction('force-free')" style="background:#ca8a04;color:white;">Force Free</button>
+                    <button onclick="runAdminAction('disable-user')" style="background:#dc2626;color:white;">Disable</button>
+                    <button onclick="runAdminAction('enable-user')" style="background:#22c55e;color:white;">Enable</button>
+                </div>
+
+                <div id="admin-action-result" style="margin-top:15px;"></div>
+            </div>
+
+            <div class="card" style="margin-top:25px;">
+                <h2>Admin Metrics</h2>
+                <button onclick="loadAdminMetrics()">Load Revenue / Growth / Audit Logs</button>
+                <div id="admin-metrics-box" style="margin-top:15px;"></div>
+            </div>
+
         </div>
 
         <script>
+        let selectedUserId = null;
+
         function filterCustomers() {{
             const search = document.getElementById("customerSearch").value.toLowerCase();
             const rows = document.querySelectorAll(".customer-row");
 
             rows.forEach(row => {{
                 const email = row.dataset.email.toLowerCase();
-
-                if (email.includes(search)) {{
-                    row.style.display = "";
-                }} else {{
-                    row.style.display = "none";
-                }}
+                row.style.display = email.includes(search) ? "" : "none";
             }});
         }}
 
         function openCustomerManager(userId, email, plan, role) {{
-            alert(
-                "Customer: " + email +
-                "\\nUser ID: " + userId +
-                "\\nPlan: " + plan +
-                "\\nRole: " + role +
-                "\\n\\nNext step: we will add Promote, Demote, Force Pro, Force Free, and Disable buttons."
-            );
+            selectedUserId = userId;
+
+            document.getElementById("customer-manager").style.display = "block";
+            document.getElementById("manager-email").innerText = email;
+            document.getElementById("manager-user-id").innerText = userId;
+            document.getElementById("manager-plan").innerText = plan;
+            document.getElementById("manager-role").innerText = role;
+            document.getElementById("admin-action-result").innerHTML = "";
+        }}
+
+        async function runAdminAction(action) {{
+            if (!selectedUserId) {{
+                alert("Select a customer first.");
+                return;
+            }}
+
+            const token = localStorage.getItem("token");
+
+            const response = await fetch("/admin/" + action + "/" + selectedUserId, {{
+                method: "POST",
+                headers: {{
+                    "Authorization": "Bearer " + token
+                }}
+            }});
+
+            const data = await response.json();
+
+            if (!response.ok) {{
+                document.getElementById("admin-action-result").innerHTML =
+                    "<div style='color:#f87171;font-weight:bold;'>" + (data.detail || "Action failed") + "</div>";
+                return;
+            }}
+
+            document.getElementById("admin-action-result").innerHTML =
+                "<div style='color:#22c55e;font-weight:bold;'>" + data.message + "</div>";
+        }}
+
+        async function loadAdminMetrics() {{
+            const token = localStorage.getItem("token");
+
+            const revenueRes = await fetch("/admin/revenue-metrics", {{
+                headers: {{
+                    "Authorization": "Bearer " + token
+                }}
+            }});
+
+            const growthRes = await fetch("/admin/growth-metrics", {{
+                headers: {{
+                    "Authorization": "Bearer " + token
+                }}
+            }});
+
+            const auditRes = await fetch("/admin/audit-logs", {{
+                headers: {{
+                    "Authorization": "Bearer " + token
+                }}
+            }});
+
+            const revenue = await revenueRes.json();
+            const growth = await growthRes.json();
+            const audit = await auditRes.json();
+
+            let auditHtml = "";
+
+            if (audit.logs && audit.logs.length > 0) {{
+                audit.logs.slice(0, 10).forEach(log => {{
+                    auditHtml +=
+                        "<div style='margin-top:8px;padding:8px;background:#0f172a;border-radius:8px;'>" +
+                        "<strong>" + log.action + "</strong> — " +
+                        log.target_user + "<br><small>" +
+                        log.admin_email + " | " + log.created_at +
+                        "</small></div>";
+                }});
+            }} else {{
+                auditHtml = "<div>No audit logs yet.</div>";
+            }}
+
+            document.getElementById("admin-metrics-box").innerHTML =
+                "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;'>" +
+                "<div class='card'><h3>MRR</h3><div class='number'>$" + revenue.estimated_mrr + "</div></div>" +
+                "<div class='card'><h3>Conversion</h3><div class='number'>" + revenue.conversion_rate + "%</div></div>" +
+                "<div class='card'><h3>Disabled</h3><div class='number'>" + revenue.disabled_users + "</div></div>" +
+                "<div class='card'><h3>New This Week</h3><div class='number'>" + growth.new_users_week + "</div></div>" +
+                "</div>" +
+                "<h3 style='margin-top:20px;'>Recent Admin Actions</h3>" +
+                auditHtml;
         }}
         </script>
 
