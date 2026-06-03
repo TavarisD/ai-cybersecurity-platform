@@ -273,6 +273,40 @@ def calculate_smart_score(raw: str, parsed: dict, is_blacklisted: bool, attacker
     # ---------------- FINAL ----------------
     return min(score, 100)
 
+def require_admin_user(current_user: User):
+    if getattr(current_user, "role", "user") != "admin":
+        raise HTTPException(
+            status_code=403,
+            detail="Admin access required"
+        )
+    return current_user
+
+@router.get("/admin/users")
+def admin_get_users(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    users = db.query(User).order_by(User.id.desc()).all()
+
+    return {
+        "status": "success",
+        "total_users": len(users),
+        "users": [
+            {
+                "id": user.id,
+                "email": user.email,
+                "plan": user.plan,
+                "billing_status": user.billing_status,
+                "role": getattr(user, "role", "user"),
+                "usage_count": user.usage_count,
+                "created": None
+            }
+            for user in users
+        ]
+    }
+
 @router.post("/ingest-log")
 def ingest_log(
     request: IngestLogRequest,
