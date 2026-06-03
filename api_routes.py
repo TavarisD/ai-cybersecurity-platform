@@ -1837,3 +1837,34 @@ def promote_user(
         "status": "success",
         "message": f"{user.email} promoted to admin"
     }
+
+@router.post("/admin/demote-user/{user_id}")
+def demote_user(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="User not found"
+        )
+
+    if user.id == current_user.id:
+        raise HTTPException(
+            status_code=400,
+            detail="You cannot demote your own admin account"
+        )
+
+    user.role = "user"
+
+    db.commit()
+
+    return {
+        "status": "success",
+        "message": f"{user.email} demoted to user"
+    }
