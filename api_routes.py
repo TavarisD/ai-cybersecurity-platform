@@ -2034,3 +2034,36 @@ def admin_enable_user(
         "status": "success",
         "message": f"{user.email} enabled"
     }
+
+@router.get("/admin/audit-logs")
+def get_admin_audit_logs(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    logs = (
+        db.query(AdminAuditLog)
+        .order_by(AdminAuditLog.id.desc())
+        .limit(100)
+        .all()
+    )
+
+    return {
+        "status": "success",
+        "total_logs": len(logs),
+        "logs": [
+            {
+                "id": log.id,
+                "admin_email": log.admin_email,
+                "action": log.action,
+                "target_user": log.target_user,
+                "created_at": (
+                    log.created_at.isoformat()
+                    if log.created_at
+                    else None
+                )
+            }
+            for log in logs
+        ]
+    }
