@@ -438,6 +438,12 @@ def login(user: UserLogin, db: Session = Depends(get_db)):
 
     if not db_user:
         raise HTTPException(status_code=400, detail="Invalid credentials")
+    
+    if db_user.is_disabled:
+        raise HTTPException(
+            status_code=403,
+            detail="Account has been disabled"
+        )
 
     if not verify_password(user.password, db_user.hashed_password):
         raise HTTPException(status_code=400, detail="Invalid credentials")
