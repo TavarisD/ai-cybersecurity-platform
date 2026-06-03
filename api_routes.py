@@ -1882,6 +1882,14 @@ def demote_user(
 
     user.role = "user"
 
+    audit = AdminAuditLog(
+        admin_email=current_user.email,
+        action="demote_user",
+        target_user=user.email
+    )
+
+    db.add(audit)
+
     db.commit()
 
     return {
