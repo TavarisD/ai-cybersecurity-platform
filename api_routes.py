@@ -2067,3 +2067,34 @@ def get_admin_audit_logs(
             for log in logs
         ]
     }
+
+@router.get("/admin/revenue-metrics")
+def admin_revenue_metrics(
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    users = db.query(User).all()
+
+    total_customers = len(users)
+    free_users = sum(1 for user in users if user.plan == "free")
+    pro_users = sum(1 for user in users if user.plan == "pro")
+    disabled_users = sum(1 for user in users if user.is_disabled)
+
+    conversion_rate = 0
+
+    if total_customers > 0:
+        conversion_rate = round((pro_users / total_customers) * 100, 2)
+
+    estimated_mrr = pro_users * 10
+
+    return {
+        "status": "success",
+        "total_customers": total_customers,
+        "free_users": free_users,
+        "pro_users": pro_users,
+        "disabled_users": disabled_users,
+        "conversion_rate": conversion_rate,
+        "estimated_mrr": estimated_mrr
+    }
