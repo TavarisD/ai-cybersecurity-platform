@@ -439,7 +439,7 @@ def dashboard():
                 Open Usage Analytics
             </button>
 
-            <button onclick="window.open('/admin-dashboard', '_blank')">
+            <button onclick="openAdminDashboard()">
                 Open Admin Dashboard
             </button>
 
@@ -872,6 +872,27 @@ Body:
     navigator.clipboard.writeText(example);
     alert("curl example copied!");
 }
+
+        async function openAdminDashboard() {
+            const token = localStorage.getItem("token");
+
+            const response = await fetch("/admin-dashboard", {
+                headers: {
+                    "Authorization": "Bearer " + token
+                }
+            });
+
+            if (!response.ok) {
+                alert("Admin access failed");
+                return;
+            }
+
+            const html = await response.text();
+
+            const newWindow = window.open("", "_blank");
+            newWindow.document.write(html);
+            newWindow.document.close();
+        }
 
         function logout() {
             localStorage.removeItem("token");
