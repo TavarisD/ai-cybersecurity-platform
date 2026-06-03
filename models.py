@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, DateTime, ForeignKey, Text
 from datetime import datetime
 from database import Base
+from sqlalchemy import Boolean
 
 class User(Base):
     __tablename__ = "users"
@@ -16,6 +17,8 @@ class User(Base):
     plan = Column(String, default="free")
     billing_status = Column(String, default="active")
     role = Column(String, default="user")
+
+    is_disabled = Column(Boolean, default=False)
 
 class LogRecord(Base):
     __tablename__ = "log_records"
