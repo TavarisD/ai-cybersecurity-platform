@@ -1952,3 +1952,25 @@ def admin_disable_user(
         "status": "success",
         "message": f"{user.email} disabled"
     }
+
+@router.post("/admin/enable-user/{user_id}")
+def admin_enable_user(
+    user_id: int,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db)
+):
+    require_admin_user(current_user)
+
+    user = db.query(User).filter(User.id == user_id).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    user.is_disabled = False
+
+    db.commit()
+
+    return {
+        "status": "success",
+        "message": f"{user.email} enabled"
+    }
