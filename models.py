@@ -55,3 +55,19 @@ class EmailAlertEvent(Base):
     resolved_at = Column(DateTime, nullable=True)
 
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class AdminAuditLog(Base):
+    __tablename__ = "admin_audit_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    admin_email = Column(String)
+
+    action = Column(String)
+
+    target_user = Column(String)
+
+    created_at = Column(
+        DateTime,
+        default=datetime.utcnow
+    )
