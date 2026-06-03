@@ -261,7 +261,23 @@ def admin_dashboard(
                         {getattr(user, "role", "user").upper()}
                     </span>
                 </td>
-                <td style="padding:10px;">{user.usage_count}</td>
+                <td style="padding:10px;">
+                    {user.usage_count}
+                </td>
+                <td style="padding:10px;">
+                    <button
+                        style="
+                            background:#1d4ed8;
+                            color:white;
+                            border:none;
+                            padding:6px 10px;
+                            border-radius:6px;
+                            cursor:pointer;
+                        "
+                    >
+                        Manage
+                    </button>
+                </td>
             </tr>
         """
 
@@ -361,6 +377,7 @@ def admin_dashboard(
                         <th>Billing</th>
                         <th>Role</th>
                         <th>Usage</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
