@@ -251,7 +251,7 @@ def admin_dashboard(
                 <td style="padding:10px;">{user.billing_status}</td>
                 <td style="padding:10px;">
                     <span style="
-                        background:{'#dc2626' if getattr(user, 'role', 'user') == 'admin' else '#334155'};
+                        background:{'#7c3aed' if getattr(user, 'role', 'user') == 'admin' else '#334155'};
                         color:white;
                         padding:4px 10px;
                         border-radius:999px;
@@ -262,7 +262,10 @@ def admin_dashboard(
                     </span>
                 </td>
                 <td style="padding:10px;">
-                    {user.usage_count}
+                    {user.usage_count} requests
+                </td>
+                <td style="padding:10px;">
+                    {getattr(user, "last_login_at", "Never")}
                 </td>
                 <td style="padding:10px;">
                     <button
@@ -276,7 +279,7 @@ def admin_dashboard(
                             cursor:pointer;
                         "
                     >
-                        Manage
+                        Manage User 
                     </button>
                 </td>
             </tr>
@@ -378,6 +381,7 @@ def admin_dashboard(
                         <th>Billing</th>
                         <th>Role</th>
                         <th>Usage</th>
+                        <th>Last Login</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
