@@ -228,6 +228,13 @@ def admin_dashboard(
     pro_users = db.query(User).filter(User.plan == "pro").count()
     total_logs = db.query(LogRecord).count()
 
+    active_customers = db.query(User).filter(User.usage_count > 0).count()
+    inactive_customers = db.query(User).filter(User.usage_count == 0).count()
+
+    top_customer = db.query(User).order_by(User.usage_count.desc()).first()
+    top_customer_email = top_customer.email if top_customer else "None"
+    top_customer_usage = top_customer.usage_count if top_customer else 0
+
     users = db.query(User).order_by(User.id.desc()).all()
 
     customer_rows = ""
@@ -295,7 +302,7 @@ def admin_dashboard(
                 color:white;
                 font-family:Arial;
                 padding:40px;
-                max-width:1100px;
+                max-width:1300px;
                 margin:auto;
             }}
             .grid {{
@@ -349,9 +356,23 @@ def admin_dashboard(
             </div>
 
             <div class="card">
-                <h2>Total Logs Processed</h2>
-                <div class="number">{total_logs}</div>
+            <h2>Active Customers</h2>
+            <div class="number">{active_customers}</div>
+        </div>
+
+        <div class="card">
+            <h2>Inactive Customers</h2>
+            <div class="number">{inactive_customers}</div>
+        </div>
+
+        <div class="card">
+            <h2>Top Customer</h2>
+            <div style="font-size:14px; color:#94a3b8; word-break:break-all;">
+                {html.escape(top_customer_email)}
             </div>
+            <div class="number">{top_customer_usage}</div>
+            <small>requests</small>
+        </div>
         </div>
 
         <div class="card" style="margin-top:25px;">
