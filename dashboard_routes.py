@@ -419,8 +419,19 @@ def admin_dashboard(
 
             <div class="card" style="margin-top:25px;">
                 <h2>Admin Metrics</h2>
-                <button onclick="loadAdminMetrics()">Load Revenue / Growth / Audit Logs</button>
-                <div id="admin-metrics-box" style="margin-top:15px;"></div>
+
+                <div id="admin-metrics-box" style="
+                    margin-top:15px;
+                    min-height:120px;
+                ">
+                    <div style="opacity:0.7;">
+                        Click below to load business metrics
+                    </div>
+                </div>
+
+                <button onclick="loadAdminMetrics()">
+                    Refresh Business Metrics
+                </button>
             </div>
 
         </div>
@@ -518,10 +529,10 @@ def admin_dashboard(
 
             document.getElementById("admin-metrics-box").innerHTML =
                 "<div style='display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;'>" +
-                "<div class='card'><h3>MRR</h3><div class='number'>$" + revenue.estimated_mrr + "</div></div>" +
-                "<div class='card'><h3>Conversion</h3><div class='number'>" + revenue.conversion_rate + "%</div></div>" +
-                "<div class='card'><h3>Disabled</h3><div class='number'>" + revenue.disabled_users + "</div></div>" +
-                "<div class='card'><h3>New This Week</h3><div class='number'>" + growth.new_users_week + "</div></div>" +
+                "<div class='card'><h3>Monthly Revenue</h3><div class='number'>$" + revenue.estimated_mrr + "</div></div>" +
+                "<div class='card'><h3>Conversion Rate</h3><div class='number'>" + revenue.conversion_rate + "%</div></div>" +
+                "<div class='card'><h3>Disabled Accounts</h3><div class='number'>" + revenue.disabled_users + "</div></div>" +
+                "<div class='card'><h3>New Customers</h3><div class='number'>" + growth.new_users_week + "</div></div>" +
                 "</div>" +
                 "<h3 style='margin-top:20px;'>Recent Admin Actions</h3>" +
                 auditHtml;
