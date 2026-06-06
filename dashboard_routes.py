@@ -343,26 +343,37 @@ def admin_dashboard(
             <div class="card">
                 <h2>Total Customers</h2>
                 <div class="number">{total_customers}</div>
+                <small>All registered accounts</small>
             </div>
 
             <div class="card">
                 <h2>Free Users</h2>
                 <div class="number">{free_users}</div>
+                <small>Trial / free-tier users</small>
             </div>
 
             <div class="card">
                 <h2>Pro Users</h2>
                 <div class="number">{pro_users}</div>
+                <small>Paying subscription users</small>
+            </div>
+
+            <div class="card">
+                <h2>Total Logs Processed</h2>
+                <div class="number">{total_logs}</div>
+                <small>All customer security logs</small>
             </div>
 
             <div class="card">
             <h2>Active Customers</h2>
             <div class="number">{active_customers}</div>
+            <small>Customers with usage</small>
         </div>
 
         <div class="card">
             <h2>Inactive Customers</h2>
             <div class="number">{inactive_customers}</div>
+            <small>No usage yet</small>
         </div>
 
         <div class="card">
