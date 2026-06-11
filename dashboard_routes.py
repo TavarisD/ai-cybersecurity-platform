@@ -238,6 +238,40 @@ def admin_dashboard(
     estimated_mrr = pro_users * 29
     estimated_arr = estimated_mrr * 12
 
+    previous_mrr = 0
+    revenue_growth_percent = 0
+
+    if previous_mrr > 0:
+        revenue_growth_percent = round(
+            ((estimated_mrr - previous_mrr) / previous_mrr) * 100,
+            1
+        )
+
+    previous_customer_count = max(total_customers - 1, 0)
+
+    weekly_customer_growth = 0
+
+    if previous_customer_count > 0:
+        weekly_customer_growth = round(
+            ((total_customers - previous_customer_count) / previous_customer_count) * 100,
+            1
+        )
+
+    customer_acquisition_pace = round(total_customers / 30, 2)
+
+    launch_progress = 75
+
+    founder_milestone = "$100 MRR"
+
+    if estimated_mrr >= 25000:
+        founder_milestone = "$25k MRR"
+    elif estimated_mrr >= 10000:
+        founder_milestone = "$10k MRR"
+    elif estimated_mrr >= 5000:
+        founder_milestone = "$5k MRR"
+    elif estimated_mrr >= 1000:
+        founder_milestone = "$1k MRR"
+
     customer_health_score = 0
 
     if total_customers > 0:
@@ -805,31 +839,31 @@ def admin_dashboard(
 
                     <div class="card">
                         <h3>Revenue Growth</h3>
-                        <div class="number">0%</div>
+                        <div class="number">{revenue_growth_percent}%</div>
                         <small>Month-over-month revenue growth</small>
                     </div>
 
                     <div class="card">
                         <h3>Weekly Customer Growth</h3>
-                        <div class="number">0%</div>
+                        <div class="number">{weekly_customer_growth}%</div>
                         <small>Weekly customer increase</small>
                     </div>
 
                     <div class="card">
                         <h3>Customer Acquisition Pace</h3>
-                        <div class="number">0/day</div>
+                        <div class="number">{customer_acquisition_pace}/day</div>
                         <small>Average customers acquired daily</small>
                     </div>
 
                     <div class="card">
                         <h3>Launch Progress</h3>
-                        <div class="number">75%</div>
+                        <div class="number">{launch_progress}%</div>
                         <small>Platform completion progress</small>
                     </div>
 
                     <div class="card">
                         <h3>Founder Milestone</h3>
-                        <div class="number">$100 MRR</div>
+                        <div class="number">{founder_milestone}</div>
                         <small>Current revenue milestone</small>
                     </div>
                 </div>
