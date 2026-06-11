@@ -508,6 +508,38 @@ def admin_dashboard(
                     LIVE MODE NOT ENABLED
                 </div>
 
+                <div style="
+                    margin-top:15px;
+                    margin-bottom:15px;
+                    display:grid;
+                    grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+                    gap:12px;
+                ">
+                    <div class="card">
+                        <h3>Live Secret Key</h3>
+                        <div class="number">Pending</div>
+                        <small>STRIPE_SECRET_KEY must be live mode</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Webhook Secret</h3>
+                        <div class="number">Pending</div>
+                        <small>Live webhook signing secret required</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Live Price ID</h3>
+                        <div class="number">Pending</div>
+                        <small>Replace test price ID with live price ID</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Checkout Test</h3>
+                        <div class="number">Pending</div>
+                        <small>Run one real checkout before launch</small>
+                    </div>
+                </div>
+
                 <ul style="line-height:1.8;">
                     <li>⚠️ Add Stripe live secret key to Railway</li>
                     <li>⚠️ Add Stripe live webhook secret to Railway</li>
