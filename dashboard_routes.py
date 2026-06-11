@@ -383,6 +383,48 @@ def admin_dashboard(
     <body>
         <h1>Admin Dashboard</h1>
 
+        <div class="card" style="margin-bottom:25px; border:1px solid #c084fc;">
+            <h2>Investor Executive Summary</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>Company Stage</h3>
+                    <div class="number">Pre-Launch</div>
+                    <small>Product built, live billing pending</small>
+                </div>
+
+                <div class="card">
+                    <h3>Current MRR</h3>
+                    <div class="number">${estimated_mrr}</div>
+                    <small>Monthly recurring revenue</small>
+                </div>
+
+                <div class="card">
+                    <h3>Launch Readiness</h3>
+                    <div class="number">{launch_readiness_score}%</div>
+                    <small>Current production readiness</small>
+                </div>
+
+                <div class="card">
+                    <h3>Next Revenue Milestone</h3>
+                    <div class="number">{founder_milestone}</div>
+                    <small>Founder revenue milestone tracker</small>
+                </div>
+
+                <div class="card">
+                    <h3>Estimated Valuation</h3>
+                    <div class="number">${estimated_arr * 10}</div>
+                    <small>Estimated using 10x ARR multiple</small>
+                </div>
+
+                <div class="card">
+                    <h3>Runway Status</h3>
+                    <div class="number">Lean</div>
+                    <small>Founder-led build, low overhead</small>
+                </div>
+            </div>
+        </div>
+
         <div class="card" style="margin-bottom:25px; border:1px solid #38bdf8;">
             <h2>Platform Status</h2>
             <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px;">
