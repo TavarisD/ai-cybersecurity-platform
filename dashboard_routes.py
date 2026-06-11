@@ -642,14 +642,6 @@ def admin_dashboard(
                     background:#450a0a;
                     border:1px solid #dc2626;
                 ">
-
-                <div style="
-                    margin-top:20px;
-                    padding:15px;
-                    border-radius:10px;
-                    background:#020617;
-                    border:1px solid #fbbf24;
-                ">
                     <h3>Live Billing Activation Checklist</h3>
 
                     <ul style="line-height:1.8;">
@@ -658,6 +650,25 @@ def admin_dashboard(
                         <li id="backup-status">⚠️ Backup / Recovery testing not completed</li>
                         <li id="customer-test-status">⚠️ Real customer subscription test not completed</li>
                     </ul>
+
+                    <div style="margin-top:15px;">
+                        <button onclick="markBillingChecklistComplete('tos-status', '✅ Terms of Service completed')">
+                            Mark Terms Complete
+                        </button>
+
+                        <button onclick="markBillingChecklistComplete('privacy-status', '✅ Privacy Policy completed')">
+                            Mark Privacy Complete
+                        </button>
+
+                        <button onclick="markBillingChecklistComplete('backup-status', '✅ Backup / Recovery testing completed')">
+                            Mark Backup Test Complete
+                        </button>
+
+                        <button onclick="markBillingChecklistComplete('customer-test-status', '✅ Real customer subscription test completed')">
+                            Mark Customer Test Complete
+                        </button>
+                    </div>
+
                 </div>
 
                 <div style="
@@ -943,6 +954,11 @@ def admin_dashboard(
                         recommendationBox.innerText = "Launch recommendation: Not ready for public launch. Resolve billing and policy blockers first.";
                         recommendationBox.style.border = "1px solid #dc2626";
                     }}
+        }}
+        function markBillingChecklistComplete(elementId, completedText) {{
+            const item = document.getElementById(elementId);
+            item.innerText = completedText;
+            item.style.color = "#22c55e";
         }}
         loadAdminMetrics();
         loadStripeEnvironmentStatus();
@@ -1417,8 +1433,8 @@ Body:
                                 margin-top:12px;
                                 padding:12px;
                                 border-radius:10px;
-                                background:#450a0a;
-                                border:1px solid #dc2626;
+                                background:#020617;
+                                border:1px solid #fbbf24;
                                 color:#fecaca;
                                 font-weight:bold;
                             ">
