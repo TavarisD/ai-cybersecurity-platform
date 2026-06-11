@@ -359,6 +359,8 @@ def admin_dashboard(
                 <div>
                     <strong>Billing Mode:</strong><br>
                     <span style="color:#fbbf24;font-weight:bold;">Test Mode</span>
+                    <br>
+                    <small>Do not accept real payments yet</small>
                 </div>
                 <div>
                     <strong>Launch Phase:</strong><br>
@@ -366,7 +368,9 @@ def admin_dashboard(
                 </div>
                 <div>
                     <strong>Next Action:</strong><br>
-                    <span style="color:#c084fc;font-weight:bold;">Stripe Live Billing</span>
+                    <span style="color:#c084fc;font-weight:bold;">Verify Stripe Live Keys</span>
+                    <br>
+                    <small>Production billing is the next launch gate</small>
                 </div>
             </div>
         </div>
