@@ -603,6 +603,7 @@ def admin_dashboard(
                 "<h3 style='margin-top:20px;'>Recent Admin Actions</h3>" +
                 auditHtml;
         }}
+        loadAdminMetrics();
         </script>
 
     </body>
