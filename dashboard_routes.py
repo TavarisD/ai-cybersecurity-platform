@@ -607,6 +607,18 @@ def admin_dashboard(
             <div class="card" style="margin-top:25px;">
                 <h2>Business Metrics</h2>
 
+                <div class="card" style="margin-bottom:15px; border:1px solid #38bdf8;">
+                    <h3>Revenue Trend</h3>
+                    <div class="number">Coming Soon</div>
+                    <small>Will show real Stripe revenue after live billing is enabled</small>
+                </div>
+
+                <div class="card" style="margin-bottom:15px; border:1px solid #22c55e;">
+                    <h3>Customer Growth Trend</h3>
+                    <div class="number">Tracking</div>
+                    <small>New customer growth is already connected through admin growth metrics</small>
+                </div>
+
                 <div id="admin-metrics-box" style="
                     margin-top:15px;
                     min-height:120px;
