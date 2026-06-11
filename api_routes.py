@@ -1518,6 +1518,29 @@ def regenerate_api_key(
         "api_key": new_key
     }
 
+@router.get("/admin/stripe-environment")
+def stripe_environment_status(
+    current_user: User = Depends(get_current_user)
+):
+    require_admin_user(current_user)
+
+    stripe_key = os.getenv("STRIPE_SECRET_KEY", "")
+    webhook_secret = os.getenv("STRIPE_WEBHOOK_SECRET", "")
+    price_id = os.getenv("STRIPE_PRICE_ID", "")
+
+    return {
+        "stripe_mode": "live" if stripe_key.startswith("sk_live_") else "test",
+        "live_secret_key": stripe_key.startswith("sk_live_"),
+        "webhook_secret_configured": bool(webhook_secret),
+        "price_id_configured": bool(price_id),
+        "live_price_id": price_id.startswith("price_"),
+        "ready_for_live_billing": (
+            stripe_key.startswith("sk_live_")
+            and bool(webhook_secret)
+            and price_id.startswith("price_")
+        )
+    }
+
 @router.post("/stripe-webhook")
 async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
     try:
