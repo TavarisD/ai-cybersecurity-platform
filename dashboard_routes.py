@@ -607,6 +607,10 @@ def admin_dashboard(
                         <li>⚠️ Stripe Live Mode</li>
                         <li>⚠️ Team Accounts</li>
                         <li>⚠️ Production Customer Testing</li>
+                        <li>⚠️ Customer Support Workflow</li>
+                        <li>⚠️ Backup / Recovery Testing</li>
+                        <li>⚠️ Terms of Service</li>
+                        <li>⚠️ Privacy Policy</li>
                     </ul>
                 </div>
 
