@@ -383,6 +383,52 @@ def admin_dashboard(
     <body>
         <h1>Admin Dashboard</h1>
 
+        <div class="card" style="
+            margin-bottom:25px;
+            border:2px solid #22c55e;
+            background:#020617;
+        ">
+            <h2>Founder Command Center</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <h3>Current Stage</h3>
+                    <div class="number">Pre-Launch</div>
+                    <small>Development complete, billing pending</small>
+                </div>
+
+                <div class="card">
+                    <h3>Launch Readiness</h3>
+                    <div class="number">{launch_readiness_score}%</div>
+                    <small>Overall platform readiness</small>
+                </div>
+
+                <div class="card">
+                    <h3>Current MRR</h3>
+                    <div class="number">${estimated_mrr}</div>
+                    <small>Monthly recurring revenue</small>
+                </div>
+
+                <div class="card">
+                    <h3>Estimated Valuation</h3>
+                    <div class="number">${estimated_arr * 10}</div>
+                    <small>Using 10x ARR multiple</small>
+                </div>
+
+                <div class="card">
+                    <h3>Next Goal</h3>
+                    <div class="number">1st Customer</div>
+                    <small>Acquire first paying subscriber</small>
+                </div>
+
+                <div class="card">
+                    <h3>Launch Gate</h3>
+                    <div class="number">Stripe</div>
+                    <small>Production billing activation</small>
+                </div>
+            </div>
+        </div>
+
         <div class="card" style="margin-bottom:25px; border:1px solid #c084fc;">
             <h2>Investor Executive Summary</h2>
 
