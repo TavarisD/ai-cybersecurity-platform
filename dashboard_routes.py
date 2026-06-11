@@ -486,6 +486,24 @@ def admin_dashboard(
         <div class="card" style="margin-top:25px; border:1px solid #22c55e;">
             <h2>Launch Checklist</h2>
 
+            <div style="
+                margin-bottom:20px;
+                padding:15px;
+                border-radius:10px;
+                background:#020617;
+                border:1px solid #fbbf24;
+            ">
+                <h3>Stripe Production Readiness</h3>
+
+                <ul style="line-height:1.8;">
+                    <li>⚠️ Add Stripe live secret key to Railway</li>
+                    <li>⚠️ Add Stripe live webhook secret to Railway</li>
+                    <li>⚠️ Create live Pro subscription product</li>
+                    <li>⚠️ Replace test price ID with live price ID</li>
+                    <li>⚠️ Test real checkout with a small payment</li>
+                </ul>
+            </div>
+
             <div class="grid">
                 <div class="card">
                     <h2>Stripe Production</h2>
