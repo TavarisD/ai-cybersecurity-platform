@@ -556,7 +556,7 @@ def admin_dashboard(
                     border:1px solid #3b82f6;
                 ">
                     <strong>Stripe Launch Score:</strong>
-                    0 / 4 Checks Complete
+                    <span id="stripe-launch-score">Loading...</span>
                 </div>
             </div>
 
@@ -855,8 +855,15 @@ def admin_dashboard(
             document.getElementById("stripe-price-status").innerText =
                 data.price_id_configured ? "PASS" : "FAIL";
 
-            document.getElementById("stripe-checkout-status").innerText =
-                data.ready_for_live_billing ? "READY" : "PENDING";
+            let stripeScore = 0;
+
+            if (data.live_secret_key) stripeScore++;
+            if (data.webhook_secret_configured) stripeScore++;
+            if (data.price_id_configured) stripeScore++;
+            if (data.ready_for_live_billing) stripeScore++;
+
+            document.getElementById("stripe-launch-score").innerText =
+                stripeScore + " / 4 Checks Complete";
         }}
         loadAdminMetrics();
         loadStripeEnvironmentStatus();
