@@ -908,6 +908,45 @@ def admin_dashboard(
                         <div class="number">{founder_milestone}</div>
                         <small>Current revenue milestone</small>
                     </div>
+
+                    <div class="card" style="grid-column:1 / -1; border:1px solid #c084fc;">
+                        <h3>Founder Revenue Progress</h3>
+
+                        <div style="margin-top:15px;">
+                            <strong>$100 MRR</strong>
+                            <div style="background:#020617;border-radius:999px;overflow:hidden;margin-top:6px;">
+                                <div style="width:{min(100, round((estimated_mrr / 100) * 100))}%;height:14px;background:#22c55e;"></div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:15px;">
+                            <strong>$1k MRR</strong>
+                            <div style="background:#020617;border-radius:999px;overflow:hidden;margin-top:6px;">
+                                <div style="width:{min(100, round((estimated_mrr / 1000) * 100))}%;height:14px;background:#38bdf8;"></div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:15px;">
+                            <strong>$5k MRR</strong>
+                            <div style="background:#020617;border-radius:999px;overflow:hidden;margin-top:6px;">
+                                <div style="width:{min(100, round((estimated_mrr / 5000) * 100))}%;height:14px;background:#c084fc;"></div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:15px;">
+                            <strong>$10k MRR</strong>
+                            <div style="background:#020617;border-radius:999px;overflow:hidden;margin-top:6px;">
+                                <div style="width:{min(100, round((estimated_mrr / 10000) * 100))}%;height:14px;background:#fbbf24;"></div>
+                            </div>
+                        </div>
+
+                        <div style="margin-top:15px;">
+                            <strong>$25k MRR</strong>
+                            <div style="background:#020617;border-radius:999px;overflow:hidden;margin-top:6px;">
+                                <div style="width:{min(100, round((estimated_mrr / 25000) * 100))}%;height:14px;background:#ef4444;"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
