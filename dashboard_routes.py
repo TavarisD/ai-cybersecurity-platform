@@ -349,6 +349,28 @@ def admin_dashboard(
     <body>
         <h1>Admin Dashboard</h1>
 
+        <div class="card" style="margin-bottom:25px; border:1px solid #38bdf8;">
+            <h2>Platform Status</h2>
+            <div style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px;">
+                <div>
+                    <strong>Status:</strong><br>
+                    <span style="color:#22c55e;font-weight:bold;">Operational</span>
+                </div>
+                <div>
+                    <strong>Billing Mode:</strong><br>
+                    <span style="color:#fbbf24;font-weight:bold;">Test Mode</span>
+                </div>
+                <div>
+                    <strong>Launch Phase:</strong><br>
+                    <span style="color:#38bdf8;font-weight:bold;">Pre-Production</span>
+                </div>
+                <div>
+                    <strong>Next Action:</strong><br>
+                    <span style="color:#c084fc;font-weight:bold;">Stripe Live Billing</span>
+                </div>
+            </div>
+        </div>
+
         <div class="grid">
             <div class="card">
                 <h2>Total Customers</h2>
