@@ -547,6 +547,17 @@ def admin_dashboard(
                     <li>⚠️ Replace test price ID with live price ID</li>
                     <li>⚠️ Test real checkout with a small payment</li>
                 </ul>
+
+                <div style="
+                    margin-top:15px;
+                    padding:12px;
+                    border-radius:8px;
+                    background:#172554;
+                    border:1px solid #3b82f6;
+                ">
+                    <strong>Stripe Launch Score:</strong>
+                    0 / 4 Checks Complete
+                </div>
             </div>
 
             <div class="grid">
