@@ -495,6 +495,19 @@ def admin_dashboard(
             ">
                 <h3>Stripe Production Readiness</h3>
 
+                <div style="
+                    margin-top:10px;
+                    margin-bottom:10px;
+                    padding:10px;
+                    border-radius:8px;
+                    background:#450a0a;
+                    border:1px solid #dc2626;
+                    color:#fecaca;
+                    font-weight:bold;
+                ">
+                    LIVE MODE NOT ENABLED
+                </div>
+
                 <ul style="line-height:1.8;">
                     <li>⚠️ Add Stripe live secret key to Railway</li>
                     <li>⚠️ Add Stripe live webhook secret to Railway</li>
