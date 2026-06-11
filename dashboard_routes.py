@@ -234,6 +234,11 @@ def admin_dashboard(
     top_customer = db.query(User).order_by(User.usage_count.desc()).first()
     top_customer_email = top_customer.email if top_customer else "None"
     top_customer_usage = top_customer.usage_count if top_customer else 0
+    conversion_rate = round((pro_users / total_customers) * 100, 2) if total_customers > 0 else 0
+    estimated_mrr = pro_users * 29
+    estimated_arr = estimated_mrr * 12
+
+    
 
     users = db.query(User).order_by(User.id.desc()).all()
 
@@ -384,6 +389,35 @@ def admin_dashboard(
             <div class="number">{top_customer_usage}</div>
             <small>requests</small>
         </div>
+    </div>
+        <div class="card" style="margin-top:25px;">
+            <h2>Founder Analytics</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <h2>Estimated MRR</h2>
+                    <div class="number">${estimated_mrr}</div>
+                    <small>Based on Pro users at $29/mo</small>
+                </div>
+
+                <div class="card">
+                    <h2>Estimated ARR</h2>
+                    <div class="number">${estimated_arr}</div>
+                    <small>Annualized recurring revenue</small>
+                </div>
+
+                <div class="card">
+                    <h2>Pro Conversion</h2>
+                    <div class="number">{conversion_rate}%</div>
+                    <small>Pro users / total customers</small>
+                </div>
+
+                <div class="card">
+                    <h2>Retention</h2>
+                    <div class="number">TBD</div>
+                    <small>Coming after real subscription history</small>
+                </div>
+            </div>
         </div>
 
         <div class="card" style="margin-top:25px;">
