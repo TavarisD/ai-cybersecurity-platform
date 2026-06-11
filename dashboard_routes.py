@@ -635,6 +635,18 @@ def admin_dashboard(
                     Checking launch recommendation...
                 </div>
 
+                <div id="launch-gate-status" style="
+                    margin-top:10px;
+                    padding:12px;
+                    border-radius:8px;
+                    background:#020617;
+                    border:1px solid #64748b;
+                    color:#e2e8f0;
+                    font-weight:bold;
+                ">
+                    Launch Gate: Checking...
+                </div>
+
                 <div style="
                     margin-top:20px;
                     padding:15px;
@@ -954,7 +966,21 @@ def admin_dashboard(
                         recommendationBox.innerText = "Launch recommendation: Not ready for public launch. Resolve billing and policy blockers first.";
                         recommendationBox.style.border = "1px solid #dc2626";
                     }}
+
+                    const launchGate = document.getElementById("launch-gate-status");
+
+                    if (data.ready_for_live_billing && launchReadiness >= 90) {{
+                        launchGate.innerText = "Launch Gate: READY FOR FINAL LIVE CHECKOUT TEST";
+                        launchGate.style.border = "1px solid #22c55e";
+                        launchGate.style.color = "#bbf7d0";
+                    }} else {{
+                        launchGate.innerText = "Launch Gate: BLOCKED — Complete Stripe live billing setup";
+                        launchGate.style.border = "1px solid #dc2626";
+                        launchGate.style.color = "#fecaca";
+                    }}
         }}
+
+
         let completedLaunchChecklistItems = 0;
 
         function markBillingChecklistComplete(elementId, completedText) {{
