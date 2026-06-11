@@ -614,13 +614,25 @@ def admin_dashboard(
                     </ul>
                 </div>
 
-                <div style="
+                <div id="launch-readiness-box" style="
                     margin-top:15px;
                     font-size:20px;
                     font-weight:bold;
                     color:#22c55e;
                 ">
                     Estimated Launch Readiness: <span id="dynamic-launch-readiness">Loading...</span>
+                </div>
+
+                <div id="launch-recommendation" style="
+                    margin-top:10px;
+                    padding:12px;
+                    border-radius:8px;
+                    background:#020617;
+                    border:1px solid #334155;
+                    color:#e2e8f0;
+                    font-weight:bold;
+                ">
+                    Checking launch recommendation...
                 </div>
 
                 <div style="
@@ -889,6 +901,23 @@ def admin_dashboard(
 
                 document.getElementById("dynamic-launch-readiness").innerText =
                     launchReadiness + "%";
+
+                    const readinessBox = document.getElementById("launch-readiness-box");
+                    const recommendationBox = document.getElementById("launch-recommendation");
+
+                    if (launchReadiness >= 90) {{
+                        readinessBox.style.color = "#22c55e";
+                        recommendationBox.innerText = "Launch recommendation: Nearly ready. Complete final Stripe live checkout test.";
+                        recommendationBox.style.border = "1px solid #22c55e";
+                    }} else if (launchReadiness >= 80) {{
+                        readinessBox.style.color = "#fbbf24";
+                        recommendationBox.innerText = "Launch recommendation: Almost ready. Finish Stripe live mode setup before accepting customers.";
+                        recommendationBox.style.border = "1px solid #fbbf24";
+                    }} else {{
+                        readinessBox.style.color = "#f87171";
+                        recommendationBox.innerText = "Launch recommendation: Not ready for public launch. Resolve billing and policy blockers first.";
+                        recommendationBox.style.border = "1px solid #dc2626";
+                    }}
         }}
         loadAdminMetrics();
         loadStripeEnvironmentStatus();
