@@ -622,6 +622,23 @@ def admin_dashboard(
                 ">
                     Estimated Launch Readiness: 85%
                 </div>
+
+                <div style="
+                    margin-top:20px;
+                    padding:15px;
+                    border-radius:10px;
+                    background:#450a0a;
+                    border:1px solid #dc2626;
+                ">
+                    <h3>Launch Blockers</h3>
+
+                    <ul style="line-height:1.8;">
+                        <li>Stripe still in test mode</li>
+                        <li>No real customer subscription test completed</li>
+                        <li>Terms of Service not published</li>
+                        <li>Privacy Policy not published</li>
+                    </ul>
+                </div>
         
         <div class="card" style="margin-top:25px;">
             <h2>Customer Management</h2>
