@@ -872,6 +872,36 @@ def admin_dashboard(
             <div class="card" style="margin-top:25px;">
                 <h2>Business Metrics</h2>
 
+                <div class="card" style="margin-bottom:15px; border:1px solid #c084fc;">
+                    <h3>SaaS Valuation Estimator</h3>
+
+                    <div class="grid">
+                        <div class="card">
+                            <h3>Current MRR</h3>
+                            <div class="number">${estimated_mrr}</div>
+                            <small>Monthly recurring revenue</small>
+                        </div>
+
+                        <div class="card">
+                            <h3>Annual Revenue</h3>
+                            <div class="number">${estimated_arr}</div>
+                            <small>Estimated ARR</small>
+                        </div>
+
+                        <div class="card">
+                            <h3>5x Valuation</h3>
+                            <div class="number">${estimated_arr * 5}</div>
+                            <small>Conservative SaaS multiple</small>
+                        </div>
+
+                        <div class="card">
+                            <h3>10x Valuation</h3>
+                            <div class="number">${estimated_arr * 10}</div>
+                            <small>Growth SaaS multiple</small>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="card" style="margin-bottom:15px; border:1px solid #38bdf8;">
                     <h3>Revenue Trend</h3>
                     <div class="number">Coming Soon</div>
