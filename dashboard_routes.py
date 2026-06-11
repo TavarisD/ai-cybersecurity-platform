@@ -509,6 +509,38 @@ def admin_dashboard(
             </div>
         </div>
 
+                <div style="
+                    margin-top:20px;
+                    padding:15px;
+                    border-radius:10px;
+                    background:#020617;
+                    border:1px solid #38bdf8;
+                ">
+                    <h3>Production Readiness Summary</h3>
+
+                    <ul style="line-height:1.8;">
+                        <li>✅ Authentication System</li>
+                        <li>✅ SaaS Billing System</li>
+                        <li>✅ Customer Dashboard</li>
+                        <li>✅ Admin Dashboard</li>
+                        <li>✅ Threat Intelligence Layer</li>
+                        <li>✅ Real-Time Ingestion</li>
+                        <li>✅ Email Alerting</li>
+                        <li>⚠️ Stripe Live Mode</li>
+                        <li>⚠️ Team Accounts</li>
+                        <li>⚠️ Production Customer Testing</li>
+                    </ul>
+                </div>
+
+                <div style="
+                    margin-top:15px;
+                    font-size:20px;
+                    font-weight:bold;
+                    color:#22c55e;
+                ">
+                    Estimated Launch Readiness: 85%
+                </div>
+        
         <div class="card" style="margin-top:25px;">
             <h2>Customer Management</h2>
 
