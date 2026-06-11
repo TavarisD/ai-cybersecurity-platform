@@ -517,25 +517,25 @@ def admin_dashboard(
                 ">
                     <div class="card">
                         <h3>Live Secret Key</h3>
-                        <div class="number">Pending</div>
+                        <div class="number" id="stripe-key-status">Pending</div>
                         <small>STRIPE_SECRET_KEY must be live mode</small>
                     </div>
 
                     <div class="card">
                         <h3>Webhook Secret</h3>
-                        <div class="number">Pending</div>
+                        <div class="number" id="stripe-webhook-status">Pending</div>
                         <small>Live webhook signing secret required</small>
                     </div>
 
                     <div class="card">
                         <h3>Live Price ID</h3>
-                        <div class="number">Pending</div>
+                        <div class="number" id="stripe-price-status">Pending</div>
                         <small>Replace test price ID with live price ID</small>
                     </div>
 
                     <div class="card">
                         <h3>Checkout Test</h3>
-                        <div class="number">Pending</div>
+                        <div class="number" id="stripe-checkout-status">Pending</div>
                         <small>Run one real checkout before launch</small>
                     </div>
                 </div>
