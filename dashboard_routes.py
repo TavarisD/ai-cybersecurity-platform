@@ -639,8 +639,8 @@ def admin_dashboard(
                     margin-top:20px;
                     padding:15px;
                     border-radius:10px;
-                    background:#450a0a;
-                    border:1px solid #dc2626;
+                    background:#020617;
+                    border:1px solid #fbbf24;
                 ">
                     <h3>Live Billing Activation Checklist</h3>
 
@@ -675,8 +675,8 @@ def admin_dashboard(
                     margin-top:20px;
                     padding:15px;
                     border-radius:10px;
-                    background:#450a0a;
-                    border:1px solid #dc2626;
+                    background:#020617;
+                    border:1px solid #fbbf24;
                 ">
                     <h3>Launch Blockers</h3>
 
@@ -955,10 +955,31 @@ def admin_dashboard(
                         recommendationBox.style.border = "1px solid #dc2626";
                     }}
         }}
+        let completedLaunchChecklistItems = 0;
+
         function markBillingChecklistComplete(elementId, completedText) {{
             const item = document.getElementById(elementId);
+
+            if (!item.innerText.startsWith("✅")) {{
+                completedLaunchChecklistItems++;
+            }}
+
             item.innerText = completedText;
             item.style.color = "#22c55e";
+
+            const currentText = document.getElementById("dynamic-launch-readiness").innerText;
+            let currentScore = parseInt(currentText.replace("%", ""));
+
+            if (!isNaN(currentScore)) {{
+                currentScore += 2;
+
+                if (currentScore > 99) {{
+                    currentScore = 99;
+                }}
+
+                document.getElementById("dynamic-launch-readiness").innerText =
+                    currentScore + "%";
+            }}
         }}
         loadAdminMetrics();
         loadStripeEnvironmentStatus();
