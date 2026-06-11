@@ -620,7 +620,7 @@ def admin_dashboard(
                     font-weight:bold;
                     color:#22c55e;
                 ">
-                    Estimated Launch Readiness: 85%
+                    Estimated Launch Readiness: <span id="dynamic-launch-readiness">Loading...</span>
                 </div>
 
                 <div style="
@@ -855,6 +855,9 @@ def admin_dashboard(
             document.getElementById("stripe-price-status").innerText =
                 data.price_id_configured ? "PASS" : "FAIL";
 
+            document.getElementById("stripe-checkout-status").innerText =
+                data.ready_for_live_billing ? "READY" : "PENDING";
+
             let stripeScore = 0;
 
             if (data.live_secret_key) stripeScore++;
@@ -864,6 +867,17 @@ def admin_dashboard(
 
             document.getElementById("stripe-launch-score").innerText =
                 stripeScore + " / 4 Checks Complete";
+
+                let launchReadiness = 75;
+
+                launchReadiness += stripeScore * 5;
+
+                if (launchReadiness > 95) {{
+                    launchReadiness = 95;
+                }}
+
+                document.getElementById("dynamic-launch-readiness").innerText =
+                    launchReadiness + "%";
         }}
         loadAdminMetrics();
         loadStripeEnvironmentStatus();
