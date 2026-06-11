@@ -479,6 +479,36 @@ def admin_dashboard(
             </div>
         </div>
 
+        <div class="card" style="margin-top:25px; border:1px solid #22c55e;">
+            <h2>Launch Checklist</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <h2>Stripe Production</h2>
+                    <div class="number">Pending</div>
+                    <small>Move from test mode to live billing</small>
+                </div>
+
+                <div class="card">
+                    <h2>Customer Onboarding</h2>
+                    <div class="number">Ready</div>
+                    <small>Docs, API key, onboarding page completed</small>
+                </div>
+
+                <div class="card">
+                    <h2>Team Accounts</h2>
+                    <div class="number">Next</div>
+                    <small>Add multi-user company accounts</small>
+                </div>
+
+                <div class="card">
+                    <h2>SOC Alert Center</h2>
+                    <div class="number">Ready</div>
+                    <small>Incident queue and resolved history completed</small>
+                </div>
+            </div>
+        </div>
+
         <div class="card" style="margin-top:25px;">
             <h2>Customer Management</h2>
 
