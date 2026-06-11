@@ -238,6 +238,13 @@ def admin_dashboard(
     estimated_mrr = pro_users * 29
     estimated_arr = estimated_mrr * 12
 
+    customer_health_score = 0
+
+    if total_customers > 0:
+        customer_health_score = round((active_customers / total_customers) * 100, 2)
+
+    launch_readiness_score = 75
+
     
 
     users = db.query(User).order_by(User.id.desc()).all()
@@ -416,6 +423,38 @@ def admin_dashboard(
                     <h2>Retention</h2>
                     <div class="number">TBD</div>
                     <small>Coming after real subscription history</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:25px;">
+            <h2>Executive Overview</h2>
+
+            <div class="grid">
+                <div class="card">
+                    <h2>Customer Health</h2>
+                    <div class="number">{customer_health_score}%</div>
+                    <small>Active customers / total customers</small>
+                </div>
+
+                <div class="card">
+                    <h2>Launch Readiness</h2>
+                    <div class="number">{launch_readiness_score}%</div>
+                    <small>Estimated based on completed platform phases</small>
+                </div>
+
+                <div class="card">
+                    <h2>Revenue Stage</h2>
+                    <div class="number">Test</div>
+                    <small>Stripe is still in test mode</small>
+                </div>
+
+                <div class="card">
+                    <h2>Next Milestone</h2>
+                    <div style="font-size:20px;font-weight:bold;color:#38bdf8;">
+                        Production Billing
+                    </div>
+                    <small>Move Stripe from test mode to live subscriptions</small>
                 </div>
             </div>
         </div>
