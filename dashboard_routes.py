@@ -624,7 +624,7 @@ def admin_dashboard(
                     min-height:120px;
                 ">
                     <div style="opacity:0.7;">
-                        Click below to load business metrics
+                        Loading business metrics...
                     </div>
                 </div>
 
@@ -733,7 +733,7 @@ def admin_dashboard(
                 "<div class='card'><h3>Disabled Accounts</h3><div class='number'>" + revenue.disabled_users + "</div></div>" +
                 "<div class='card'><h3>New Customers</h3><div class='number'>" + growth.new_users_week + "</div></div>" +
                 "</div>" +
-                "<h3 style='margin-top:20px;'>Recent Admin Actions</h3>" +
+                "<h3 style='margin-top:20px;color:#38bdf8;'>Recent Admin Actions</h3>" +
                 auditHtml;
         }}
         loadAdminMetrics();
