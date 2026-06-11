@@ -495,7 +495,7 @@ def admin_dashboard(
             ">
                 <h3>Stripe Production Readiness</h3>
 
-                <div style="
+                <div id="stripe-live-mode-banner" style="
                     margin-top:10px;
                     margin-bottom:10px;
                     padding:10px;
@@ -505,7 +505,7 @@ def admin_dashboard(
                     color:#fecaca;
                     font-weight:bold;
                 ">
-                    LIVE MODE NOT ENABLED
+                    Checking Stripe live mode...
                 </div>
 
                 <div style="
@@ -845,6 +845,17 @@ def admin_dashboard(
             }});
 
             const data = await response.json();
+
+            const liveBanner = document.getElementById("stripe-live-mode-banner");
+
+            if (data.live_secret_key) {{
+                liveBanner.innerText = "LIVE MODE ENABLED";
+                liveBanner.style.background = "#052e16";
+                liveBanner.style.border = "1px solid #22c55e";
+                liveBanner.style.color = "#bbf7d0";
+            }} else {{
+                liveBanner.innerText = "LIVE MODE NOT ENABLED";
+            }}
 
             document.getElementById("stripe-key-status").innerText =
                 data.live_secret_key ? "PASS" : "FAIL";
