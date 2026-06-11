@@ -802,6 +802,36 @@ def admin_dashboard(
                         <div class="number">Active</div>
                         <small>Production readiness checks enabled</small>
                     </div>
+
+                    <div class="card">
+                        <h3>Revenue Growth</h3>
+                        <div class="number">0%</div>
+                        <small>Month-over-month revenue growth</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Weekly Customer Growth</h3>
+                        <div class="number">0%</div>
+                        <small>Weekly customer increase</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Customer Acquisition Pace</h3>
+                        <div class="number">0/day</div>
+                        <small>Average customers acquired daily</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Launch Progress</h3>
+                        <div class="number">75%</div>
+                        <small>Platform completion progress</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Founder Milestone</h3>
+                        <div class="number">$100 MRR</div>
+                        <small>Current revenue milestone</small>
+                    </div>
                 </div>
             </div>
 
