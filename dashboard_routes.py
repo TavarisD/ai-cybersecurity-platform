@@ -786,6 +786,18 @@ def admin_dashboard(
                     </div>
 
                     <div class="card">
+                        <h3>Customer Growth</h3>
+                        <div class="number">{total_customers}</div>
+                        <small>Total registered customers</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Activation Rate</h3>
+                        <div class="number">{customer_health_score}%</div>
+                        <small>Customers actively using the platform</small>
+                    </div>
+
+                    <div class="card">
                         <h3>Launch Gate</h3>
                         <div class="number">Active</div>
                         <small>Production readiness checks enabled</small>
