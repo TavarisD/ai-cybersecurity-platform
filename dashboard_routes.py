@@ -245,8 +245,6 @@ def admin_dashboard(
 
     launch_readiness_score = 75
 
-    
-
     users = db.query(User).order_by(User.id.desc()).all()
 
     customer_rows = ""
@@ -298,7 +296,7 @@ def admin_dashboard(
                             cursor:pointer;
                         "
                     >
-                        Manage User 
+                    Manage User
                     </button>
                 </td>
             </tr>
@@ -523,7 +521,7 @@ def admin_dashboard(
             </div>
 
             <div class="card" style="margin-top:25px;">
-                <h2>Admin Metrics</h2>
+                <h2>Business Metrics</h2>
 
                 <div id="admin-metrics-box" style="
                     margin-top:15px;
@@ -535,7 +533,7 @@ def admin_dashboard(
                 </div>
 
                 <button onclick="loadAdminMetrics()">
-                    Refresh Business Metrics
+                    Reload Business Metrics
                 </button>
             </div>
 
