@@ -835,7 +835,31 @@ def admin_dashboard(
                 "<h3 style='margin-top:20px;color:#38bdf8;'>Recent Admin Actions</h3>" +
                 auditHtml;
         }}
+        async function loadStripeEnvironmentStatus() {{
+            const token = localStorage.getItem("token");
+
+            const response = await fetch("/admin/stripe-environment", {{
+                headers: {{
+                    "Authorization": "Bearer " + token
+                }}
+            }});
+
+            const data = await response.json();
+
+            document.getElementById("stripe-key-status").innerText =
+                data.live_secret_key ? "PASS" : "FAIL";
+
+            document.getElementById("stripe-webhook-status").innerText =
+                data.webhook_secret_configured ? "PASS" : "FAIL";
+
+            document.getElementById("stripe-price-status").innerText =
+                data.price_id_configured ? "PASS" : "FAIL";
+
+            document.getElementById("stripe-checkout-status").innerText =
+                data.ready_for_live_billing ? "READY" : "PENDING";
+        }}
         loadAdminMetrics();
+        loadStripeEnvironmentStatus();
         </script>
 
     </body>
