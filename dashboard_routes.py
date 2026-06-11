@@ -763,6 +763,36 @@ def admin_dashboard(
                 <div id="admin-action-result" style="margin-top:15px;"></div>
             </div>
 
+            <div class="card" style="margin-top:25px; border:1px solid #22c55e;">
+                <h2>Founder KPI Snapshot</h2>
+
+                <div class="grid">
+                    <div class="card">
+                        <h3>MRR Target</h3>
+                        <div class="number">$5,000</div>
+                        <small>Initial monthly revenue goal</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Current MRR</h3>
+                        <div class="number">${estimated_mrr}</div>
+                        <small>Based on current Pro users</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Customers Needed</h3>
+                        <div class="number">{max(0, 173 - pro_users)}</div>
+                        <small>Approx. Pro users needed for $5k/mo at $29</small>
+                    </div>
+
+                    <div class="card">
+                        <h3>Launch Gate</h3>
+                        <div class="number">Active</div>
+                        <small>Production readiness checks enabled</small>
+                    </div>
+                </div>
+            </div>
+
             <div class="card" style="margin-top:25px;">
                 <h2>Business Metrics</h2>
 
