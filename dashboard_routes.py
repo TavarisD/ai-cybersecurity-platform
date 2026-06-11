@@ -642,6 +642,31 @@ def admin_dashboard(
                     background:#450a0a;
                     border:1px solid #dc2626;
                 ">
+
+                <div style="
+                    margin-top:20px;
+                    padding:15px;
+                    border-radius:10px;
+                    background:#020617;
+                    border:1px solid #fbbf24;
+                ">
+                    <h3>Live Billing Activation Checklist</h3>
+
+                    <ul style="line-height:1.8;">
+                        <li id="tos-status">⚠️ Terms of Service not completed</li>
+                        <li id="privacy-status">⚠️ Privacy Policy not completed</li>
+                        <li id="backup-status">⚠️ Backup / Recovery testing not completed</li>
+                        <li id="customer-test-status">⚠️ Real customer subscription test not completed</li>
+                    </ul>
+                </div>
+
+                <div style="
+                    margin-top:20px;
+                    padding:15px;
+                    border-radius:10px;
+                    background:#450a0a;
+                    border:1px solid #dc2626;
+                ">
                     <h3>Launch Blockers</h3>
 
                     <ul style="line-height:1.8;">
