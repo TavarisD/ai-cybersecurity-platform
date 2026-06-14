@@ -4297,6 +4297,114 @@ def login_page():
     </html>
     """
 
+@router.get("/register-page", response_class=HTMLResponse)
+def register_page():
+    return """
+    <html>
+    <head>
+        <title>Create Account</title>
+        <style>
+            body {
+                background:#0f172a;
+                color:white;
+                font-family:Arial;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                height:100vh;
+                margin:0;
+            }
+            .card {
+                background:#1e293b;
+                padding:30px;
+                border-radius:12px;
+                width:360px;
+            }
+            input, button {
+                width:100%;
+                padding:12px;
+                margin-top:12px;
+                border-radius:8px;
+                border:none;
+            }
+            button {
+                background:#22c55e;
+                color:white;
+                font-weight:bold;
+                cursor:pointer;
+            }
+            a {
+                color:#38bdf8;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h2>Create Account</h2>
+
+            <input id="registerEmail" type="email" placeholder="Email">
+            <input id="registerPassword" type="password" placeholder="Password">
+            <input id="confirmPassword" type="password" placeholder="Confirm Password">
+
+            <button onclick="registerUser()">Create Account</button>
+
+            <p style="text-align:center;margin-top:18px;">
+                Already have an account?
+                <br>
+                <a href="/login-page">Back to Login</a>
+            </p>
+
+            <div id="registerResult" style="margin-top:15px;"></div>
+        </div>
+
+        <script>
+        async function registerUser() {
+            const email = document.getElementById("registerEmail").value;
+            const password = document.getElementById("registerPassword").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const resultBox = document.getElementById("registerResult");
+
+            if (!email || !password || !confirmPassword) {
+                resultBox.innerHTML = "<div style='color:#f87171;'>Please fill out all fields.</div>";
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                resultBox.innerHTML = "<div style='color:#f87171;'>Passwords do not match.</div>";
+                return;
+            }
+
+            const response = await fetch("/register", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    email: email,
+                    password: password
+                })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                resultBox.innerHTML =
+                    "<div style='color:#f87171;'>" + (data.detail || "Registration failed") + "</div>";
+                return;
+            }
+
+            resultBox.innerHTML =
+                "<div style='color:#22c55e;font-weight:bold;'>Account created successfully. Redirecting to login...</div>";
+
+            setTimeout(() => {
+                window.location.href = "/login-page";
+            }, 1200);
+        }
+        </script>
+    </body>
+    </html>
+    """
+
 @router.post("/upload-log", response_class=HTMLResponse)
 async def upload_log(
     file: UploadFile = File(...),
