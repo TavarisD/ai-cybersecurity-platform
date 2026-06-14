@@ -1388,6 +1388,22 @@ def dashboard():
         </div>
 
         <div class="card">
+            <h2>Customer Health</h2>
+
+            <div id="customer-health-status" style="
+                font-size:28px;
+                font-weight:bold;
+                color:#22c55e;
+            ">
+                Loading...
+            </div>
+
+            <small id="customer-health-description">
+                Calculating account engagement...
+            </small>
+        </div>
+
+        <div class="card">
             <h2>Billing / Plan</h2>
 
             <p>
@@ -2014,6 +2030,24 @@ Body:
             document.getElementById("userEmail").innerText = data.email;
             document.getElementById("totalLogs").innerText = data.total_logs;
             document.getElementById("anomalyCount").innerText = data.anomaly_count;
+            let healthStatus = "🔴 Inactive User";
+            let healthDescription = "No platform activity detected.";
+
+            if (data.total_logs > 0) {
+                healthStatus = "🟡 Needs Engagement";
+                healthDescription = "Customer has started using the platform.";
+            }
+
+            if (data.total_logs > 5 || data.anomaly_count > 0) {
+                healthStatus = "🟢 Healthy User";
+                healthDescription = "Customer is actively using platform features.";
+            }
+
+            document.getElementById("customer-health-status").innerText =
+                healthStatus;
+
+            document.getElementById("customer-health-description").innerText =
+                healthDescription;
             document.getElementById("current-plan").innerText = billing.plan;
             document.getElementById("billing-status").innerText = billing.billing_status;
 
@@ -2049,8 +2083,12 @@ Body:
                 `;
             }
 
-            document.getElementById("activation-progress").innerText =
-                "Activation Progress: " + activationScore + "%";
+            const activationProgressElement = document.getElementById("activation-progress");
+
+            if (activationProgressElement) {
+                activationProgressElement.innerText =
+                    "Activation Progress: " + activationScore + "%";
+            }
 
             document.getElementById("launch-checklist").innerHTML = `
                 <li>${data.total_logs > 0 ? "✅" : "⬜"} Upload first log</li>
@@ -4198,6 +4236,27 @@ def login_page():
             <input id="email" type="email" placeholder="Email">
             <input id="password" type="password" placeholder="Password">
             <button onclick="login()">Sign In</button>
+            <div style="
+                text-align:center;
+                margin-top:15px;
+            ">
+                <span style="color:#94a3b8;">
+                    Don't have an account?
+                </span>
+
+                <br><br>
+
+                <button
+                    type="button"
+                    onclick="window.location.href='/register-page'"
+                    style="
+                        background:#22c55e;
+                        color:white;
+                    "
+                >
+                    Create Account
+                </button>
+            </div>
             <div id="message"></div>
         </div>
 
