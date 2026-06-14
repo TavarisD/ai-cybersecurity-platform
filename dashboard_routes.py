@@ -2017,6 +2017,33 @@ Body:
             document.getElementById("current-plan").innerText = billing.plan;
             document.getElementById("billing-status").innerText = billing.billing_status;
 
+            let activationScore = 0;
+
+            if (data.total_logs > 0) {
+                activationScore += 40;
+            }
+
+            if (data.anomaly_count > 0) {
+                activationScore += 30;
+            }
+
+            activationScore += 30;
+
+            if (activationScore > 100) {
+                activationScore = 100;
+            }
+
+            document.getElementById("activation-progress").innerText =
+                "Activation Progress: " + activationScore + "%";
+
+            document.getElementById("launch-checklist").innerHTML = `
+                <li>${data.total_logs > 0 ? "✅" : "⬜"} Upload first log</li>
+                <li>${data.total_logs > 0 ? "✅" : "⬜"} Generate first analysis</li>
+                <li>✅ View dashboard metrics</li>
+                <li>${data.anomaly_count > 0 ? "✅" : "⬜"} Review incidents</li>
+                <li>⬜ Configure email alerts</li>
+            `;
+
             const percent = (billing.usage_count / billing.daily_limit) * 100;
 
             document.getElementById("usage-bar").style.width = percent + "%";
