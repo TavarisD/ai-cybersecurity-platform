@@ -2033,6 +2033,22 @@ Body:
                 activationScore = 100;
             }
 
+            if (activationScore === 100) {
+                document.getElementById("welcome-banner").innerHTML = `
+                    <h2>🎉 Account Activated</h2>
+                    <p>
+                        Your platform is fully activated and monitoring security activity.
+                    </p>
+                    <div style="
+                        color:#22c55e;
+                        font-weight:bold;
+                        margin-top:10px;
+                    ">
+                        Activation Complete ✓
+                    </div>
+                `;
+            }
+
             document.getElementById("activation-progress").innerText =
                 "Activation Progress: " + activationScore + "%";
 
