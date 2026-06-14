@@ -1336,6 +1336,36 @@ def dashboard():
     </head>
         <body>
         <h1>Cybersecurity AI Dashboard</h1>
+
+        <div id="welcome-banner" style="
+            background:#0f172a;
+            border:1px solid #22c55e;
+            padding:15px;
+            border-radius:10px;
+            margin-bottom:20px;
+        ">
+            <h2>Welcome to Cybersecurity AI Pro</h2>
+
+            <p>
+                Complete your first security analysis to activate your account.
+            </p>
+
+            <div id="activation-progress">
+                Activation Progress: 0%
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Getting Started Checklist</h3>
+
+            <ul id="launch-checklist">
+                <li>⬜ Upload first log</li>
+                <li>⬜ Generate first analysis</li>
+                <li>⬜ View dashboard metrics</li>
+                <li>⬜ Review incidents</li>
+                <li>⬜ Configure email alerts</li>
+            </ul>
+        </div>
         <a href="/live-dashboard" style="color:#38bdf8;">🔥 Go to Live monitor </a>
 
         <button onclick="logout()" style="
