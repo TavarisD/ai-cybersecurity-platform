@@ -135,6 +135,7 @@ def log_email_alert_placeholder(
     source: str,
     escalation_level: str,
     spike_detected: bool,
+    user_id: int | None = None,
     db: Session | None = None
 ):
     cooldown_key = f"{source}:{escalation_level}"
@@ -175,6 +176,7 @@ def log_email_alert_placeholder(
 
     if db:
         db_alert = EmailAlertEvent(
+            user_id=user_id,
             source=source,
             escalation_level=escalation_level,
             spike_detected=str(spike_detected).lower(),
@@ -1004,6 +1006,7 @@ def source_analytics(
                     source,
                     escalation_level,
                     spike_detected,
+                    current_user.id,
                     db
                 )
 
@@ -1680,11 +1683,15 @@ def test_email_alert(
 @router.post("/acknowledge-alert/{alert_id}")
 def acknowledge_alert(
     alert_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     alert = (
         db.query(EmailAlertEvent)
-        .filter(EmailAlertEvent.id == alert_id)
+        .filter(
+            EmailAlertEvent.id == alert_id,
+            EmailAlertEvent.user_id == current_user.id
+        )
         .first()
     )
 
@@ -1708,11 +1715,15 @@ def acknowledge_alert(
 @router.post("/resolve-alert/{alert_id}")
 def resolve_alert(
     alert_id: int,
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     alert = (
         db.query(EmailAlertEvent)
-        .filter(EmailAlertEvent.id == alert_id)
+        .filter(
+            EmailAlertEvent.id == alert_id,
+            EmailAlertEvent.user_id == current_user.id
+        )
         .first()
     )
 
@@ -1735,13 +1746,21 @@ def resolve_alert(
 
 @router.get("/incident-summary")
 def incident_summary(
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    total = db.query(EmailAlertEvent).count()
+    total = (
+        db.query(EmailAlertEvent)
+        .filter(
+            EmailAlertEvent.user_id == current_user.id
+        )
+        .count()
+    )
 
     active = (
         db.query(EmailAlertEvent)
         .filter(
+            EmailAlertEvent.user_id == current_user.id,
             EmailAlertEvent.status.in_(
                 ["email_pending", "acknowledged"]
             )
@@ -1752,6 +1771,7 @@ def incident_summary(
     resolved = (
         db.query(EmailAlertEvent)
         .filter(
+            EmailAlertEvent.user_id == current_user.id,
             EmailAlertEvent.status == "resolved"
         )
         .count()
@@ -1760,6 +1780,7 @@ def incident_summary(
     critical = (
         db.query(EmailAlertEvent)
         .filter(
+            EmailAlertEvent.user_id == current_user.id,
             EmailAlertEvent.escalation_level == "critical",
             EmailAlertEvent.status != "resolved"
         )
@@ -1775,11 +1796,15 @@ def incident_summary(
 
 @router.get("/incident-queue")
 def incident_queue(
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     incidents = (
         db.query(EmailAlertEvent)
-        .filter(EmailAlertEvent.status != "resolved")
+        .filter(
+            EmailAlertEvent.user_id == current_user.id,
+            EmailAlertEvent.status != "resolved"
+        )
         .order_by(EmailAlertEvent.id.desc())
         .limit(20)
         .all()
@@ -1805,11 +1830,15 @@ def incident_queue(
 
 @router.get("/resolved-incidents")
 def resolved_incidents(
+    current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
     incidents = (
         db.query(EmailAlertEvent)
-        .filter(EmailAlertEvent.status == "resolved")
+        .filter(
+            EmailAlertEvent.user_id == current_user.id,
+            EmailAlertEvent.status == "resolved"
+        )
         .order_by(EmailAlertEvent.id.desc())
         .limit(20)
         .all()

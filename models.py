@@ -42,6 +42,7 @@ class EmailAlertEvent(Base):
     __tablename__ = "email_alert_events"
 
     id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True, index=True)
 
     source = Column(String, nullable=False)
 
