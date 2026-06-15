@@ -1,5 +1,6 @@
 import asyncio
 from fastapi import APIRouter, Depends, HTTPException,  Request
+from fastapi.responses import RedirectResponse
 from sqlalchemy.orm import Session
 from sqlalchemy import text
 from database import get_db
@@ -729,7 +730,7 @@ def run_ai(task: str):
 
 @router.get("/")
 def home():
-    return {"message": "AI Cybersecurity platform is running!"}
+    return RedirectResponse(url="/login-page")
 
 @router.post("/analyze-log-user")
 def analyze_log_user(
