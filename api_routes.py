@@ -2197,27 +2197,3 @@ def admin_growth_metrics(
         "new_users_week": new_users_week,
         "growth_rate": growth_rate
     }
-
-@router.post("/admin/fix-email-alert-user-id-column")
-def fix_email_alert_user_id_column(
-    current_user: User = Depends(get_current_user),
-    db: Session = Depends(get_db)
-):
-    require_admin_user(current_user)
-
-    db.execute(text("""
-        ALTER TABLE email_alert_events
-        ADD COLUMN IF NOT EXISTS user_id INTEGER
-    """))
-
-    db.execute(text("""
-        CREATE INDEX IF NOT EXISTS ix_email_alert_events_user_id
-        ON email_alert_events(user_id)
-    """))
-
-    db.commit()
-
-    return {
-        "status": "success",
-        "message": "email_alert_events.user_id column verified/created"
-    }
