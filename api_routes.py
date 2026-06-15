@@ -1,6 +1,7 @@
 import asyncio
 from fastapi import APIRouter, Depends, HTTPException,  Request
 from sqlalchemy.orm import Session
+from sqlalchemy import text
 from database import get_db
 from models import (
     User,
@@ -2204,15 +2205,15 @@ def fix_email_alert_user_id_column(
 ):
     require_admin_user(current_user)
 
-    db.execute("""
+    db.execute(text("""
         ALTER TABLE email_alert_events
         ADD COLUMN IF NOT EXISTS user_id INTEGER
-    """)
+    """))
 
-    db.execute("""
+    db.execute(text("""
         CREATE INDEX IF NOT EXISTS ix_email_alert_events_user_id
         ON email_alert_events(user_id)
-    """)
+    """))
 
     db.commit()
 
