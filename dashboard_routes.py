@@ -1366,6 +1366,24 @@ def dashboard():
                 <li>⬜ Configure email alerts</li>
             </ul>
         </div>
+
+        <div class="card" style="border:1px solid #38bdf8;">
+            <h2>🚀 Quick Start Guide</h2>
+            <p>Follow these steps to start using the platform.</p>
+
+            <ol style="line-height:1.8;">
+                <li>Reveal or copy your API key</li>
+                <li>Open API Documentation</li>
+                <li>Send your first test log</li>
+                <li>Review threat score and incidents</li>
+                <li>Upgrade to Pro for higher usage limits</li>
+            </ol>
+
+            <button onclick="window.open('/api-docs-page', '_blank')">
+                Open API Docs
+            </button>
+        </div>
+
         <a href="/live-dashboard" style="color:#38bdf8;">🔥 Go to Live monitor </a>
 
         <button onclick="logout()" style="
