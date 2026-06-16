@@ -415,7 +415,7 @@ def admin_dashboard(
     if total_customers > 0:
         customer_health_score = round((active_customers / total_customers) * 100, 2)
 
-    launch_readiness_score = 75
+    launch_readiness_score = 80
 
     users = db.query(User).order_by(User.id.desc()).all()
 
@@ -869,8 +869,8 @@ def admin_dashboard(
                         <li>⚠️ Production Customer Testing</li>
                         <li>⚠️ Customer Support Workflow</li>
                         <li>⚠️ Backup / Recovery Testing</li>
-                        <li>⚠️ Terms of Service</li>
-                        <li>⚠️ Privacy Policy</li>
+                        <li>✅ Terms of Service</li>
+                        <li>✅ Privacy Policy</li>
                     </ul>
                 </div>
 
@@ -917,8 +917,8 @@ def admin_dashboard(
                     <h3>Live Billing Activation Checklist</h3>
 
                     <ul style="line-height:1.8;">
-                        <li id="tos-status">⚠️ Terms of Service not completed</li>
-                        <li id="privacy-status">⚠️ Privacy Policy not completed</li>
+                        <li id="tos-status">✅ Terms of Service completed</li>
+                        <li id="privacy-status">✅ Privacy Policy completed</li>
                         <li id="backup-status">⚠️ Backup / Recovery testing not completed</li>
                         <li id="customer-test-status">⚠️ Real customer subscription test not completed</li>
                     </ul>
@@ -955,8 +955,6 @@ def admin_dashboard(
                     <ul style="line-height:1.8;">
                         <li>Stripe still in test mode</li>
                         <li>No real customer subscription test completed</li>
-                        <li>Terms of Service not published</li>
-                        <li>Privacy Policy not published</li>
                     </ul>
                 </div>
         
