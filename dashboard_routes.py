@@ -216,6 +216,144 @@ def usage_analytics_page():
     </html>
     """
 
+@router.get("/terms", response_class=HTMLResponse)
+def terms_page():
+    return """
+    <html>
+    <head>
+        <title>Terms of Service</title>
+        <style>
+            body {
+                background:#0f172a;
+                color:white;
+                font-family:Arial;
+                padding:40px;
+                max-width:900px;
+                margin:auto;
+                line-height:1.7;
+            }
+            h1,h2 {
+                color:#38bdf8;
+            }
+            .card {
+                background:#1e293b;
+                padding:20px;
+                border-radius:12px;
+                border:1px solid #334155;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h1>Terms of Service</h1>
+
+            <p>
+                By using this platform, you agree to use it only for lawful cybersecurity monitoring,
+                log analysis, and security operations purposes.
+            </p>
+
+            <h2>Acceptable Use</h2>
+            <p>
+                Users may not use this platform to attack, exploit, scan, or disrupt systems they do not own
+                or have permission to test.
+            </p>
+
+            <h2>Service Availability</h2>
+            <p>
+                We aim to provide reliable access, but we do not guarantee uninterrupted service.
+            </p>
+
+            <h2>Billing</h2>
+            <p>
+                Paid subscriptions are billed through Stripe. Users are responsible for managing their subscription.
+            </p>
+
+            <h2>Security Disclaimer</h2>
+            <p>
+                This platform provides automated analysis and recommendations, but it does not replace professional
+                security review or incident response.
+            </p>
+
+            <p style="margin-top:30px;color:#94a3b8;">
+                Last updated: 2026
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+
+@router.get("/privacy", response_class=HTMLResponse)
+def privacy_page():
+    return """
+    <html>
+    <head>
+        <title>Privacy Policy</title>
+        <style>
+            body {
+                background:#0f172a;
+                color:white;
+                font-family:Arial;
+                padding:40px;
+                max-width:900px;
+                margin:auto;
+                line-height:1.7;
+            }
+            h1,h2 {
+                color:#38bdf8;
+            }
+            .card {
+                background:#1e293b;
+                padding:20px;
+                border-radius:12px;
+                border:1px solid #334155;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="card">
+            <h1>Privacy Policy</h1>
+
+            <p>
+                This platform collects account information, usage data, billing status, API activity,
+                and submitted security logs to provide cybersecurity analysis services.
+            </p>
+
+            <h2>Information We Collect</h2>
+            <p>
+                We may collect email address, account plan, API usage, submitted logs, alert activity,
+                and billing-related subscription status.
+            </p>
+
+            <h2>How We Use Information</h2>
+            <p>
+                Information is used to authenticate users, process security logs, generate alerts,
+                manage billing, improve the platform, and support customer accounts.
+            </p>
+
+            <h2>Security Logs</h2>
+            <p>
+                Logs submitted to the platform may contain technical security data such as IP addresses,
+                event messages, source systems, and severity labels.
+            </p>
+
+            <h2>Third-Party Services</h2>
+            <p>
+                We may use services such as Stripe for billing, Railway for hosting, and email services for alerts.
+            </p>
+
+            <h2>Data Responsibility</h2>
+            <p>
+                Users should avoid submitting unnecessary sensitive personal data inside logs.
+            </p>
+
+            <p style="margin-top:30px;color:#94a3b8;">
+                Last updated: 2026
+            </p>
+        </div>
+    </body>
+    </html>
+    """
+
 @router.get("/admin-dashboard", response_class=HTMLResponse)
 def admin_dashboard(
     current_user: User = Depends(get_current_user),
@@ -1378,10 +1516,6 @@ def dashboard():
                 <li>Review threat score and incidents</li>
                 <li>Upgrade to Pro for higher usage limits</li>
             </ol>
-
-            <button onclick="window.open('/api-docs-page', '_blank')">
-                Open API Docs
-            </button>
         </div>
 
         <a href="/live-dashboard" style="color:#38bdf8;">🔥 Go to Live monitor </a>
