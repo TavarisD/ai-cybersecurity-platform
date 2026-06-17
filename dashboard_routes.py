@@ -415,7 +415,7 @@ def admin_dashboard(
     if total_customers > 0:
         customer_health_score = round((active_customers / total_customers) * 100, 2)
 
-    launch_readiness_score = 80
+    launch_readiness_score = 90
 
     users = db.query(User).order_by(User.id.desc()).all()
 
@@ -561,8 +561,8 @@ def admin_dashboard(
 
                 <div class="card">
                     <h3>Launch Gate</h3>
-                    <div class="number">Stripe</div>
-                    <small>Production billing activation</small>
+                    <div class="number">Validation</div>
+                    <small>Backup testing and first customer validation</small>
                 </div>
             </div>
         </div>
@@ -618,9 +618,9 @@ def admin_dashboard(
                 </div>
                 <div>
                     <strong>Billing Mode:</strong><br>
-                    <span style="color:#fbbf24;font-weight:bold;">Test Mode</span>
+                    <span style="color:#22c55e;font-weight:bold;">Live Mode</span>
                     <br>
-                    <small>Do not accept real payments yet</small>
+                    <small>Production billing configured</small>
                 </div>
                 <div>
                     <strong>Launch Phase:</strong><br>
@@ -628,9 +628,9 @@ def admin_dashboard(
                 </div>
                 <div>
                     <strong>Next Action:</strong><br>
-                    <span style="color:#c084fc;font-weight:bold;">Verify Stripe Live Keys</span>
+                    <span style="color:#22c55e;font-weight:bold;">Billing Ready</span>
                     <br>
-                    <small>Production billing is the next launch gate</small>
+                    <small>Proceed to final launch validation</small>
                 </div>
             </div>
         </div>
@@ -729,16 +729,16 @@ def admin_dashboard(
 
                 <div class="card">
                     <h2>Revenue Stage</h2>
-                    <div class="number">Test</div>
-                    <small>Stripe is still in test mode</small>
+                    <div class="number">Live</div>
+                    <small>Production billing configured</small>
                 </div>
 
                 <div class="card">
                     <h2>Next Milestone</h2>
                     <div style="font-size:20px;font-weight:bold;color:#38bdf8;">
-                        Production Billing
+                        First Paying Customer
                     </div>
-                    <small>Move Stripe from test mode to live subscriptions</small>
+                    <small>Begin customer acquisition and onboarding</small>
                 </div>
             </div>
         </div>
@@ -823,8 +823,8 @@ def admin_dashboard(
             <div class="grid">
                 <div class="card">
                     <h2>Stripe Production</h2>
-                    <div class="number">Pending</div>
-                    <small>Move from test mode to live billing</small>
+                    <div class="number">Ready</div>
+                    <small>Live billing configured and tested</small>
                 </div>
 
                 <div class="card">
@@ -864,7 +864,7 @@ def admin_dashboard(
                         <li>✅ Threat Intelligence Layer</li>
                         <li>✅ Real-Time Ingestion</li>
                         <li>✅ Email Alerting</li>
-                        <li>⚠️ Stripe Live Mode</li>
+                        <li>✅ Stripe Live Mode</li>
                         <li>⚠️ Team Accounts</li>
                         <li>⚠️ Production Customer Testing</li>
                         <li>⚠️ Customer Support Workflow</li>
@@ -953,7 +953,6 @@ def admin_dashboard(
                     <h3>Launch Blockers</h3>
 
                     <ul style="line-height:1.8;">
-                        <li>Stripe still in test mode</li>
                         <li>No real customer subscription test completed</li>
                     </ul>
                 </div>
