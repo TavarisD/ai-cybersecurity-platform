@@ -4386,34 +4386,23 @@ def login_page():
             <input id="password" type="password" placeholder="Password">
             <button onclick="login()">Sign In</button>
 
+            <div style="margin-top:15px; text-align:center;">
+                <span style="color:#94a3b8;">Don't have an account?</span>
+                <br>
+                <button onclick="window.location.href='/register-page'" style="
+                    margin-top:10px;
+                    background:#22c55e;
+                    color:white;
+                ">
+                    Create Account
+                </button>
+            </div>
+
             <div style="margin-top:15px; text-align:center; font-size:13px;">
                 <a href="/terms" target="_blank" style="color:#38bdf8;">Terms</a>
                 <span style="color:#94a3b8;"> | </span>
                 <a href="/privacy" target="_blank" style="color:#38bdf8;">Privacy</a>
             </div>
-
-            <div style="
-                text-align:center;
-                margin-top:15px;
-            ">
-                <span style="color:#94a3b8;">
-                    Don't have an account?
-                </span>
-
-                <br><br>
-
-                <button
-                    type="button"
-                    onclick="window.location.href='/register-page'"
-                    style="
-                        background:#22c55e;
-                        color:white;
-                    "
-                >
-                    Create Account
-                </button>
-            </div>
-            <div id="message"></div>
         </div>
 
         <script>
