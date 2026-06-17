@@ -532,7 +532,7 @@ def admin_dashboard(
                 <div class="card">
                     <h3>Current Stage</h3>
                     <div class="number">Pre-Launch</div>
-                    <small>Development complete, billing pending</small>
+                    <small>Development complete, launch validation pending</small>
                 </div>
 
                 <div class="card">
@@ -574,7 +574,7 @@ def admin_dashboard(
                 <div class="card">
                     <h3>Company Stage</h3>
                     <div class="number">Pre-Launch</div>
-                    <small>Product built, live billing pending</small>
+                    <small>Product built, customer validation pending</small>
                 </div>
 
                 <div class="card">
