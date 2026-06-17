@@ -1,0 +1,16 @@
+1. Create a new Railway Postgres service
+
+2. Connect to the new database
+
+3. Restore using:
+
+psql "DATABASE_URL" < backup_file.sql
+
+4. Verify:
+- users
+- log_records
+- blacklist_entries
+- admin_audit_logs
+- email_alert_events
+
+5. Restart application
