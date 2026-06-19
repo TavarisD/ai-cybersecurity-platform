@@ -4624,8 +4624,18 @@ def register_page():
             const data = await response.json();
 
             if (!response.ok) {
-                resultBox.innerHTML =
-                    "<div style='color:#f87171;'>" + (data.detail || "Registration failed") + "</div>";
+                let errorMessage = "Registration failed";
+
+            if (typeof data.detail === "string") {
+                errorMessage = data.detail;
+            } else if (Array.isArray(data.detail)) {
+                errorMessage = data.detail.map(error => error.msg).join(", ");
+            } else if (data.detail) {
+                errorMessage = JSON.stringify(data.detail);
+            }
+
+            resultBox.innerHTML =
+                "<div style='color:#f87171;'>" + errorMessage + "</div>";
                 return;
             }
 
