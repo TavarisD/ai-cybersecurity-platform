@@ -4441,6 +4441,73 @@ def landing_page():
                 ✓ Secure Billing<br>
                 ✓ Cloud Hosted
             </div>
+
+            <div style="
+                margin-top:50px;
+                display:flex;
+                gap:25px;
+                justify-content:center;
+                flex-wrap:wrap;
+            ">
+
+                <div style="
+                    background:#1e293b;
+                    border:1px solid #334155;
+                    border-radius:10px;
+                    padding:25px;
+                    width:280px;
+                ">
+                    <h2>Free Plan</h2>
+
+                    <h1 style="color:#22c55e;">$0</h1>
+
+                    <p>Perfect for evaluation and testing.</p>
+
+                    ✓ 20 analyses per day<br>
+                    ✓ AI threat detection<br>
+                    ✓ Dashboard access<br>
+                    ✓ Incident tracking<br>
+
+                    <br>
+
+                    <button
+                        class="primary"
+                        onclick="window.location.href='/register-page'"
+                    >
+                        Start Free
+                    </button>
+                </div>
+
+                <div style="
+                    background:#1e293b;
+                    border:2px solid #38bdf8;
+                    border-radius:10px;
+                    padding:25px;
+                    width:280px;
+                ">
+                    <h2>Pro Plan</h2>
+
+                    <h1 style="color:#38bdf8;">$29/mo</h1>
+
+                    <p>For businesses and security professionals.</p>
+
+                    ✓ Unlimited analyses<br>
+                    ✓ Full AI monitoring<br>
+                    ✓ Incident intelligence<br>
+                    ✓ Priority support<br>
+                    ✓ Future premium features<br>
+
+                    <br>
+
+                    <button
+                        class="secondary"
+                        onclick="window.location.href='/register-page'"
+                    >
+                        Upgrade to Pro
+                    </button>
+                </div>
+
+            </div>
         </div>
     </body>
     </html>
