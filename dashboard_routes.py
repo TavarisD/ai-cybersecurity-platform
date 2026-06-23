@@ -867,7 +867,7 @@ def admin_dashboard(
                         <li>✅ Stripe Live Mode</li>
                         <li>⚠️ Team Accounts</li>
                         <li>⚠️ Production Customer Testing</li>
-                        <li>⚠️ Customer Support Workflow</li>
+                        <li>✅ Customer Support Workflow</li>
                         <li>⚠️ Backup / Recovery Testing</li>
                         <li>✅ Terms of Service</li>
                         <li>✅ Privacy Policy</li>
@@ -1995,7 +1995,7 @@ Body:
             </p>
 
             <a
-                href="mailto:support@support@aicyberplatform.com"
+                href="mailto:aicybersecurityplatform@gmail.com"
                 style="
                     color:#38bdf8;
                     font-weight:bold;
@@ -4348,6 +4348,101 @@ def analyze_log_form(
             <pre>{html.escape(json.dumps(result, indent=2))}</pre>
             <a href="/dashboard">Back to Dashboard</a>
         </body>
+    </html>
+    """
+
+@router.get("/", response_class=HTMLResponse)
+def landing_page():
+    return """
+    <html>
+    <head>
+        <title>AI Cybersecurity Platform</title>
+        <style>
+            body {
+                background:#0f172a;
+                color:white;
+                font-family:Arial;
+                margin:0;
+                padding:0;
+            }
+            .hero {
+                min-height:100vh;
+                display:flex;
+                flex-direction:column;
+                justify-content:center;
+                align-items:center;
+                text-align:center;
+                padding:40px;
+            }
+            h1 {
+                font-size:48px;
+                color:#38bdf8;
+                margin-bottom:15px;
+            }
+            p {
+                font-size:20px;
+                color:#cbd5e1;
+                max-width:700px;
+                line-height:1.6;
+            }
+            .buttons {
+                margin-top:30px;
+                display:flex;
+                gap:15px;
+                flex-wrap:wrap;
+                justify-content:center;
+            }
+            button {
+                padding:14px 24px;
+                border:none;
+                border-radius:8px;
+                font-weight:bold;
+                cursor:pointer;
+                font-size:16px;
+            }
+            .primary {
+                background:#22c55e;
+                color:white;
+            }
+            .secondary {
+                background:#38bdf8;
+                color:black;
+            }
+            .features {
+                margin-top:40px;
+                color:#94a3b8;
+                line-height:2;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="hero">
+            <h1>AI Cybersecurity Monitoring for Small Businesses</h1>
+
+            <p>
+                Detect threats, monitor logs, and investigate incidents
+                without hiring a full SOC team.
+            </p>
+
+            <div class="buttons">
+                <button class="primary" onclick="window.location.href='/register-page'">
+                    Start Free
+                </button>
+
+                <button class="secondary" onclick="window.location.href='/login-page'">
+                    Login
+                </button>
+            </div>
+
+            <div class="features">
+                ✓ AI Threat Analysis<br>
+                ✓ Real-Time Monitoring<br>
+                ✓ Incident Tracking<br>
+                ✓ Secure Billing<br>
+                ✓ Cloud Hosted
+            </div>
+        </div>
+    </body>
     </html>
     """
 
