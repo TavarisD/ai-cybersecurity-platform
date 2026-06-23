@@ -1986,6 +1986,26 @@ Body:
             </div>
         </div>
 
+        <div class="card" style="border:1px solid #38bdf8;">
+            <h2>Need Help?</h2>
+
+            <p>
+                Need assistance with billing, alerts, onboarding,
+                API integration, or account access?
+            </p>
+
+            <a
+                href="mailto:support@support@aicyberplatform.com"
+                style="
+                    color:#38bdf8;
+                    font-weight:bold;
+                    text-decoration:none;
+                "
+            >
+                Contact Support
+            </a>
+        </div>
+
         <div class="card">
             <h2>Recent Saved Logs</h2>
             <div id="logs"></div>
