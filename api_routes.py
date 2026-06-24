@@ -1412,8 +1412,16 @@ def analyze_log_api(
     }
 
 @router.post("/create-checkout-session")
-def create_checkout_session(user=Depends(get_current_user)):
+def create_checkout_session(
+    plan: str = "pro",
+    user=Depends(get_current_user)
+):
     try:
+        if plan == "unlimited_pro":
+            price_id = os.getenv("STRIPE_UNLIMITED_PRICE_ID")
+        else:
+            price_id = os.getenv("STRIPE_PRICE_ID")
+
         session = stripe.checkout.Session.create(
             payment_method_types=["card"],
             mode="subscription",
@@ -1421,10 +1429,11 @@ def create_checkout_session(user=Depends(get_current_user)):
             customer_email=user.email,
             metadata={
                 "user_id": str(user.id),
-                "email": user.email
+                "email": user.email,
+                "plan": plan
             },
             line_items=[{
-                "price": os.getenv("STRIPE_PRICE_ID"),
+                "price": price_id,
                 "quantity": 1,
             }],
             success_url=os.getenv("APP_URL") + "/dashboard",
@@ -1434,7 +1443,7 @@ def create_checkout_session(user=Depends(get_current_user)):
         return {"url": session.url}
 
     except Exception as e:
-        print("STRIPE ERROR:", str(e))  # 👈 IMPORTANT
+        print("STRIPE ERROR:", str(e))
         return {"error": str(e)}
 
 
@@ -1575,7 +1584,7 @@ async def stripe_webhook(request: Request, db: Session = Depends(get_db)):
                 user = db.query(User).filter(User.email == email).first()
 
             if user:
-                user.plan = "pro"
+                user.plan = metadata.get("plan", "pro")
                 user.billing_status = "active"
 
                 if hasattr(user, "stripe_subscription_id"):
