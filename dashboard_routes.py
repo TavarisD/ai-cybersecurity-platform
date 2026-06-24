@@ -2342,7 +2342,8 @@ Body:
                     </button>
                 `;
             }
-        }
+
+            
 
             const logsContainer = document.getElementById("logs");
             logsContainer.innerHTML = "";
