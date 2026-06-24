@@ -2267,16 +2267,42 @@ Body:
                 <li>⬜ Configure email alerts</li>
             `;
 
+            if (billing.plan === "unlimited_pro") {
+            document.getElementById("usage-bar").style.width = "100%";
+            document.getElementById("usage-text").innerText =
+                `${billing.usage_count} analyses used today — Unlimited plan`;
+
+            document.getElementById("pro-badge").innerHTML =
+                `<span style="color:#22c55e; font-weight:bold; margin-left:10px;">UNLIMITED PRO ✓</span>`;
+
+            document.getElementById("upgrade-section").innerHTML = `
+                <div style="color:#22c55e; font-weight:bold; margin-bottom:10px;">
+                    You are on Unlimited Pro.
+                </div>
+
+                <button onclick="downgradePlan()" style="
+                    background:#64748b;
+                    color:white;
+                    padding:12px;
+                    border:none;
+                    border-radius:8px;
+                    font-weight:bold;
+                    cursor:pointer;
+                ">
+                    Downgrade to Free
+                </button>
+            `;
+        } else {
             const percent = (billing.usage_count / billing.daily_limit) * 100;
 
             document.getElementById("usage-bar").style.width = percent + "%";
             document.getElementById("usage-text").innerText =
                 `${billing.usage_count} / ${billing.daily_limit} used (${billing.remaining} remaining)`;
 
-                if (billing.remaining <= 3 && billing.plan !== "pro") {
-                    document.getElementById("usage-text").innerHTML += 
-                        " ⚠️ <span style='color:#f87171; font-weight:bold;'>Almost at daily limit</span>";
-                }
+            if (billing.remaining <= 3 && billing.plan !== "pro") {
+                document.getElementById("usage-text").innerHTML += 
+                    " ⚠️ <span style='color:#f87171; font-weight:bold;'>Almost at daily limit</span>";
+            }
 
             if (billing.plan === "pro") {
                 document.getElementById("pro-badge").innerHTML =
@@ -2316,6 +2342,7 @@ Body:
                     </button>
                 `;
             }
+        }
 
             const logsContainer = document.getElementById("logs");
             logsContainer.innerHTML = "";
@@ -4491,7 +4518,7 @@ def landing_page():
 
                     <p>For businesses and security professionals.</p>
 
-                    ✓ Unlimited analyses<br>
+                    ✓ 1,000 analyses per day<br>
                     ✓ Full AI monitoring<br>
                     ✓ Incident intelligence<br>
                     ✓ Priority support<br>
@@ -4504,6 +4531,35 @@ def landing_page():
                         onclick="window.location.href='/register-page'"
                     >
                         Upgrade to Pro
+                    </button>
+                </div>
+
+                <div style="
+                    background:#1e293b;
+                    border:2px solid #22c55e;
+                    border-radius:10px;
+                    padding:25px;
+                    width:280px;
+                ">
+                    <h2>Unlimited Pro</h2>
+
+                    <h1 style="color:#22c55e;">$79/mo</h1>
+
+                    <p>For heavier usage and growing teams.</p>
+
+                    ✓ Unlimited analyses<br>
+                    ✓ Full AI monitoring<br>
+                    ✓ Incident intelligence<br>
+                    ✓ Priority support<br>
+                    ✓ Best for high-volume logs<br>
+
+                    <br>
+
+                    <button
+                        class="primary"
+                        onclick="window.location.href='/register-page'"
+                    >
+                        Start Unlimited
                     </button>
                 </div>
 

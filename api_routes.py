@@ -88,10 +88,12 @@ def check_and_update_usage(user: User, db: Session):
         DAILY_LIMIT = 20
     elif user.plan == "pro":
         DAILY_LIMIT = 1000
+    elif user.plan == "unlimited_pro":
+        DAILY_LIMIT = None
     else:
         DAILY_LIMIT = 20
 
-    if user.usage_count >= DAILY_LIMIT:
+    if DAILY_LIMIT is not None and user.usage_count >= DAILY_LIMIT:
         raise HTTPException(
             status_code=429,
             detail=f"Daily usage limit reached. Limit: {DAILY_LIMIT} logs/day."
@@ -208,7 +210,7 @@ async def broadcast_dashboard_update(log_text: str):
             app_state.clients.remove(client)
 
 def require_pro_plan(user: User):
-    if user.plan != "pro":
+    if user.plan not in ["pro", "unlimited_pro"]:
         raise HTTPException(
             status_code=403,
             detail="Upgrade to Pro to use this feature"
@@ -1489,15 +1491,20 @@ def billing_status(
 ):
     if current_user.plan == "pro":
         daily_limit = 1000
+        remaining = max(daily_limit - current_user.usage_count, 0)
+    elif current_user.plan == "unlimited_pro":
+        daily_limit = None
+        remaining = None
     else:
         daily_limit = 20
+        remaining = max(daily_limit - current_user.usage_count, 0)
 
     return {
         "plan": current_user.plan,
         "billing_status": current_user.billing_status,
         "usage_count": current_user.usage_count,
         "daily_limit": daily_limit,
-        "remaining": max(daily_limit - current_user.usage_count, 0)
+        "remaining": remaining
     }
 
 @router.get("/my-api-key")
