@@ -2337,8 +2337,21 @@ Body:
                         border-radius:8px;
                         font-weight:bold;
                         cursor:pointer;
+                        margin-bottom:10px;
                     ">
                         Upgrade to Pro 🚀
+                    </button>
+
+                    <button onclick="upgradeToUnlimitedPro()" style="
+                        background:#22c55e;
+                        color:white;
+                        padding:12px;
+                        border:none;
+                        border-radius:8px;
+                        font-weight:bold;
+                        cursor:pointer;
+                    ">
+                        Upgrade to Unlimited Pro ⭐
                     </button>
                 `;
             }
@@ -3121,7 +3134,11 @@ Body:
                         } else {
                             alert("Error creating checkout session");
                         }
-                    }            
+                    }
+
+                    async function upgradeToUnlimitedPro() {
+                            window.location.href = "/create-unlimited-checkout-session";
+                        }           
 
         async function upgradePlan() {
             const token = localStorage.getItem("token");
