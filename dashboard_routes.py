@@ -10,8 +10,10 @@ from database import get_db
 from api_routes import (
     should_blacklist,
     extract_indicator_from_log,
-    check_and_update_usage
+    check_and_update_usage,
+    classify_attack_type
 )
+from mitre_attack_mapper import map_to_mitre_attack
 
 router = APIRouter()
 
@@ -4337,8 +4339,19 @@ def analyze_log_form(
     current_user: User = Depends(get_current_user),
     db: Session = Depends(get_db)
 ):
-    result = analyze_security_log(log_text)
     check_and_update_usage(current_user, db)
+
+    result = analyze_security_log(log_text)
+
+    attack_type = classify_attack_type(log_text.lower())
+
+    mitre_mapping = map_to_mitre_attack(attack_type)
+
+    if mitre_mapping.get("mitre_technique_id") == "T0000":
+        mitre_mapping = map_to_mitre_attack(log_text)
+
+    result["attack_type"] = attack_type
+    result["mitre_mapping"] = mitre_mapping
 
     record = LogRecord(
         user_id=current_user.id,
