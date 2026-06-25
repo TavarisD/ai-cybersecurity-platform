@@ -7,7 +7,11 @@ from auth import get_current_user
 from models import User, LogRecord, BlacklistEntry
 from sqlalchemy.orm import Session
 from database import get_db
-from api_routes import should_blacklist, extract_indicator_from_log
+from api_routes import (
+    should_blacklist,
+    extract_indicator_from_log,
+    check_and_update_usage
+)
 
 router = APIRouter()
 
@@ -4334,6 +4338,7 @@ def analyze_log_form(
     db: Session = Depends(get_db)
 ):
     result = analyze_security_log(log_text)
+    check_and_update_usage(current_user, db)
 
     record = LogRecord(
         user_id=current_user.id,
